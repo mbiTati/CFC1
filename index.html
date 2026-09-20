@@ -4,27 +4,14 @@
 <meta charset="UTF-8">
 <title>CFC 1A — Entreprise — École Schulz Genève</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Cours, exercices et ressources — CFC 1A Entreprise — Semestre 1 2026-2027 — Tatiana Mbi">
-<link rel="icon" href="assets/images/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --noir:#0A0A0A;
-    --noir-2:#141414;
-    --gris-900:#1F1F1F;
-    --gris-800:#2A2A2A;
-    --gris-700:#3A3A3A;
-    --gris-600:#555;
-    --gris-500:#777;
-    --gris-400:#999;
-    --gris-300:#BBB;
-    --gris-200:#D4D4D4;
-    --gris-100:#E8E8E8;
-    --gris-50:#F4F4F4;
-    --blanc:#FFFFFF;
-    --blanc-casse:#FAFAFA;
+    --noir:#0A0A0A; --noir-2:#141414; --gris-900:#1F1F1F;
+    --gris-800:#2A2A2A; --gris-700:#3A3A3A; --gris-600:#555;
+    --gris-500:#777; --gris-400:#999; --gris-300:#BBB;
+    --gris-200:#D4D4D4; --gris-100:#E8E8E8; --gris-50:#F4F4F4;
+    --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
     --accent:#CE5078;
     --serif:'Cormorant Garamond', Georgia, serif;
     --sans:'Inter', Calibri, sans-serif;
@@ -32,348 +19,291 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    font-family:var(--sans);
-    background:var(--noir);
-    color:var(--blanc);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
+    font-family:var(--sans); background:var(--noir); color:var(--blanc);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
   }
 
   /* ============ NAVIGATION ============ */
   .nav{
     position:fixed; top:0; left:0; right:0;
-    background:rgba(10,10,10,.92);
+    background:rgba(10,10,10,.95);
     backdrop-filter:blur(20px);
     border-bottom:1px solid var(--gris-800);
-    z-index:100;
-    padding:1rem 2rem;
+    z-index:100; padding:1rem 2rem;
   }
   .nav-inner{
     max-width:1400px; margin:0 auto;
     display:flex; justify-content:space-between; align-items:center;
-    gap:2rem;
+    gap:2rem; flex-wrap:wrap;
   }
   .nav-brand{
     font-family:var(--serif); font-size:1.1rem;
     color:var(--blanc); font-weight:500;
-    letter-spacing:.02em;
     display:flex; align-items:center; gap:.7rem;
+    text-decoration:none;
   }
-  .nav-brand::before{
-    content:""; width:8px; height:8px; border-radius:50%;
-    background:var(--accent);
+  .nav-brand::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--accent);}
+  .nav-links{display:flex; gap:1.5rem; list-style:none; flex-wrap:wrap;}
+  .nav-links button{
+    background:transparent; border:none; cursor:pointer;
+    color:var(--gris-400); font-family:var(--sans);
+    font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+    font-weight:500; padding:.5rem .8rem; transition: color .3s;
   }
-  .nav-links{
-    display:flex; gap:2rem; list-style:none;
-  }
-  .nav-links a{
-    color:var(--gris-400); text-decoration:none;
-    font-size:.82rem; letter-spacing:.1em;
-    text-transform:uppercase; font-weight:500;
-    transition: color .3s;
-  }
-  .nav-links a:hover{color:var(--blanc);}
+  .nav-links button:hover, .nav-links button.active{color:var(--blanc);}
+
+  /* ============ PAGES ============ */
+  .page{display:none; min-height:100vh; padding-top:80px;}
+  .page.active{display:block;}
 
   /* ============ HERO ============ */
   .hero{
-    min-height:100vh;
-    display:flex; flex-direction:column;
-    justify-content:center;
-    padding:8rem 2rem 4rem;
-    position:relative;
-    overflow:hidden;
+    min-height:calc(100vh - 80px);
+    display:flex; flex-direction:column; justify-content:center;
+    padding:4rem 2rem; position:relative; overflow:hidden;
   }
   .hero::before{
-    content:"";
-    position:absolute; inset:0;
-    background:radial-gradient(circle at 30% 40%, rgba(206,80,120,.08), transparent 50%),
-               radial-gradient(circle at 80% 60%, rgba(255,255,255,.03), transparent 40%);
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 40%, rgba(206,80,120,.08), transparent 50%);
     pointer-events:none;
   }
-  .hero-inner{
-    max-width:1400px; margin:0 auto;
-    width:100%; position:relative;
-    z-index:1;
-  }
+  .hero-inner{max-width:1400px; margin:0 auto; width:100%; position:relative; z-index:1;}
   .hero-eyebrow{
-    font-size:.75rem; letter-spacing:.32em;
-    text-transform:uppercase; color:var(--gris-500);
-    margin-bottom:2rem;
+    font-size:.75rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:2rem;
     display:flex; align-items:center; gap:1rem;
   }
-  .hero-eyebrow::before{
-    content:""; width:40px; height:1px;
-    background:var(--gris-600);
-  }
+  .hero-eyebrow::before{content:""; width:40px; height:1px; background:var(--gris-600);}
   .hero h1{
-    font-family:var(--serif);
-    font-size:clamp(2.5rem, 6vw, 5.5rem);
-    font-weight:500; line-height:1.05;
-    letter-spacing:-.02em;
-    color:var(--blanc);
-    margin-bottom:2rem;
-    max-width:16ch;
+    font-family:var(--serif); font-size:clamp(2.5rem, 6vw, 5.5rem);
+    font-weight:500; line-height:1.05; letter-spacing:-.02em;
+    color:var(--blanc); margin-bottom:2rem; max-width:16ch;
   }
-  .hero h1 em{
-    font-style:italic;
-    color:var(--gris-400);
-    font-weight:400;
-  }
-  .hero-description{
-    font-size:1.1rem;
-    color:var(--gris-400);
-    max-width:60ch;
-    line-height:1.7;
-    margin-bottom:3rem;
-  }
-  .hero-meta{
-    display:flex; gap:3rem; flex-wrap:wrap;
-    padding-top:2rem;
-    border-top:1px solid var(--gris-800);
-  }
-  .hero-meta-item{
-    display:flex; flex-direction:column; gap:.4rem;
-  }
-  .hero-meta-item .label{
-    font-size:.68rem; letter-spacing:.24em;
-    text-transform:uppercase; color:var(--gris-500);
-    font-weight:600;
-  }
-  .hero-meta-item .value{
-    font-family:var(--serif); font-size:1.15rem;
-    color:var(--blanc); font-weight:500;
-  }
+  .hero h1 em{font-style:italic; color:var(--gris-400); font-weight:400;}
+  .hero-description{font-size:1.1rem; color:var(--gris-400); max-width:60ch; line-height:1.7; margin-bottom:3rem;}
+  .hero-meta{display:flex; gap:3rem; flex-wrap:wrap; padding-top:2rem; border-top:1px solid var(--gris-800);}
+  .hero-meta-item .label{font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gris-500); font-weight:600; display:block; margin-bottom:.4rem;}
+  .hero-meta-item .value{font-family:var(--serif); font-size:1.15rem; color:var(--blanc); font-weight:500;}
 
-  /* ============ SECTION ============ */
-  .section{
-    padding:6rem 2rem;
-    position:relative;
-  }
-  .section-inner{
-    max-width:1400px; margin:0 auto;
-  }
-  .section-header{
-    display:flex; justify-content:space-between;
-    align-items:flex-end;
-    margin-bottom:4rem;
-    gap:2rem;
-    flex-wrap:wrap;
-  }
-  .section-eyebrow{
-    font-size:.7rem; letter-spacing:.3em;
-    text-transform:uppercase; color:var(--gris-500);
-    margin-bottom:1rem;
-    display:flex; align-items:center; gap:.8rem;
-  }
-  .section-eyebrow::before{
-    content:""; width:24px; height:1px;
-    background:var(--accent);
-  }
-  .section h2{
-    font-family:var(--serif);
-    font-size:clamp(2rem, 4vw, 3rem);
-    font-weight:500; line-height:1.1;
-    letter-spacing:-.01em;
-    color:var(--blanc);
-  }
-  .section h2 em{
-    font-style:italic;
-    color:var(--gris-400);
-  }
-  .section-description{
-    font-size:.95rem; color:var(--gris-400);
-    max-width:50ch; margin-top:1rem;
-  }
+  /* ============ SECTIONS ============ */
+  .section{padding:5rem 2rem; max-width:1400px; margin:0 auto;}
+  .section-eyebrow{font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gris-500); margin-bottom:1rem; display:flex; align-items:center; gap:.8rem;}
+  .section-eyebrow::before{content:""; width:24px; height:1px; background:var(--accent);}
+  .section h2{font-family:var(--serif); font-size:clamp(2rem, 4vw, 3rem); font-weight:500; line-height:1.1; letter-spacing:-.01em; color:var(--blanc); margin-bottom:3rem;}
+  .section h2 em{font-style:italic; color:var(--gris-400);}
 
-  /* ============ GRILLE DES SÉQUENCES ============ */
-  .sequence-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
-    gap:1px;
-    background:var(--gris-800);
-    border:1px solid var(--gris-800);
-  }
+  /* ============ GRILLE SÉQUENCES ============ */
+  .sequence-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1px; background:var(--gris-800); border:1px solid var(--gris-800);}
   .sequence-card{
-    background:var(--noir);
-    padding:2rem 2rem 2.4rem;
-    text-decoration:none;
-    color:inherit;
-    display:flex;
-    flex-direction:column;
-    min-height:280px;
-    transition: all .4s cubic-bezier(.4,0,.2,1);
-    position:relative;
-    overflow:hidden;
+    background:var(--noir); padding:2rem; text-decoration:none; color:inherit;
+    display:flex; flex-direction:column; min-height:280px;
+    transition: all .4s; position:relative; overflow:hidden;
+    border:none; cursor:pointer; text-align:left; font-family:inherit;
   }
   .sequence-card::before{
-    content:"";
-    position:absolute; top:0; left:0;
-    width:100%; height:2px;
-    background:var(--accent);
-    transform:scaleX(0);
-    transform-origin:left;
-    transition: transform .5s;
+    content:""; position:absolute; top:0; left:0;
+    width:100%; height:2px; background:var(--accent);
+    transform:scaleX(0); transform-origin:left; transition: transform .5s;
   }
   .sequence-card:hover::before{transform:scaleX(1);}
-  .sequence-card:hover{
-    background:var(--gris-900);
-    transform:translateY(-4px);
-  }
-  .sequence-card .num{
-    font-family:var(--serif);
-    font-size:.9rem;
-    color:var(--gris-500);
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    margin-bottom:1.5rem;
-    font-weight:600;
-  }
-  .sequence-card .title{
-    font-family:var(--serif);
-    font-size:1.5rem;
-    line-height:1.2;
-    color:var(--blanc);
-    margin-bottom:1rem;
-    font-weight:500;
-    letter-spacing:-.01em;
-  }
-  .sequence-card .desc{
-    font-size:.88rem;
-    color:var(--gris-400);
-    line-height:1.6;
-    flex:1;
-  }
-  .sequence-card .arrow{
-    display:flex; align-items:center; gap:.6rem;
-    margin-top:1.5rem;
-    font-size:.75rem;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:var(--gris-500);
-    font-weight:600;
-    transition: all .3s;
-  }
-  .sequence-card:hover .arrow{
-    color:var(--blanc);
-    gap:1rem;
-  }
-  .sequence-card .arrow::after{
-    content:"→";
-    font-size:1rem;
-    transition: transform .3s;
-  }
-  .sequence-card:hover .arrow::after{
-    transform:translateX(4px);
-  }
+  .sequence-card:hover{background:var(--gris-900); transform:translateY(-4px);}
+  .sequence-card .num{font-family:var(--serif); font-size:.9rem; color:var(--gris-500); letter-spacing:.24em; text-transform:uppercase; margin-bottom:1.5rem; font-weight:600;}
+  .sequence-card .title{font-family:var(--serif); font-size:1.5rem; line-height:1.2; color:var(--blanc); margin-bottom:1rem; font-weight:500;}
+  .sequence-card .desc{font-size:.88rem; color:var(--gris-400); line-height:1.6; flex:1;}
+  .sequence-card .arrow{display:flex; align-items:center; gap:.6rem; margin-top:1.5rem; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gris-500); font-weight:600; transition: all .3s;}
+  .sequence-card:hover .arrow{color:var(--blanc); gap:1rem;}
+  .sequence-card .arrow::after{content:"→"; font-size:1rem;}
 
-  /* ============ CARTES RESSOURCES ============ */
-  .resources-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
-    gap:1.5rem;
-  }
-  .resource-card{
-    background:var(--gris-900);
-    border:1px solid var(--gris-800);
-    padding:2rem;
-    text-decoration:none;
-    color:inherit;
-    transition: all .35s;
-    position:relative;
-    overflow:hidden;
-  }
-  .resource-card:hover{
-    background:var(--gris-800);
-    border-color:var(--gris-600);
-    transform:translateY(-3px);
-  }
-  .resource-icon{
-    font-size:1.8rem;
-    margin-bottom:1rem;
-    display:block;
-  }
-  .resource-card h3{
-    font-family:var(--serif);
-    font-size:1.15rem;
-    color:var(--blanc);
-    margin-bottom:.5rem;
-    font-weight:500;
-  }
-  .resource-card p{
-    font-size:.85rem;
-    color:var(--gris-400);
-    line-height:1.6;
-  }
-
-  /* ============ FOOTER ============ */
-  .footer{
-    background:var(--noir);
-    border-top:1px solid var(--gris-800);
-    padding:4rem 2rem 2rem;
-    text-align:center;
-  }
-  .footer-inner{
-    max-width:1400px; margin:0 auto;
-  }
-  .footer-brand{
-    font-family:var(--serif);
-    font-size:1.5rem;
-    color:var(--blanc);
-    margin-bottom:1rem;
-    font-weight:500;
-  }
-  .footer-text{
-    font-size:.85rem;
-    color:var(--gris-500);
-    margin-bottom:2rem;
-    line-height:1.7;
-  }
-  .footer-links{
-    display:flex; gap:2rem; justify-content:center;
-    flex-wrap:wrap; margin-bottom:2rem;
-  }
-  .footer-links a{
-    color:var(--gris-400);
-    text-decoration:none;
-    font-size:.8rem;
-    letter-spacing:.1em;
-    text-transform:uppercase;
+  /* ============ SÉQUENCE DÉTAIL ============ */
+  .seq-detail{padding:3rem 2rem 5rem; max-width:1400px; margin:0 auto;}
+  .seq-back{
+    display:inline-flex; align-items:center; gap:.6rem;
+    background:transparent; border:none; cursor:pointer;
+    color:var(--gris-400); font-family:var(--sans);
+    font-size:.8rem; letter-spacing:.15em; text-transform:uppercase;
+    font-weight:500; padding:.5rem 0; margin-bottom:2rem;
     transition: color .3s;
   }
-  .footer-links a:hover{color:var(--blanc);}
-  .footer-copy{
-    font-size:.75rem;
-    color:var(--gris-600);
-    letter-spacing:.05em;
-    padding-top:2rem;
-    border-top:1px solid var(--gris-800);
+  .seq-back:hover{color:var(--blanc);}
+  .seq-back::before{content:"←"; font-size:1rem;}
+  .seq-header-detail{margin-bottom:3rem;}
+  .seq-header-detail .eyebrow{font-size:.72rem; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; font-weight:600;}
+  .seq-header-detail h1{font-family:var(--serif); font-size:clamp(2rem, 5vw, 3.5rem); font-weight:500; line-height:1.1; letter-spacing:-.02em; margin-bottom:1.5rem; color:var(--blanc);}
+  .seq-header-detail h1 em{font-style:italic; color:var(--gris-400); font-weight:400;}
+  .seq-header-detail p{font-size:1.05rem; color:var(--gris-400); max-width:60ch; line-height:1.7;}
+
+  .seq-actions{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1rem; margin-top:3rem;}
+  .action-btn{
+    background:var(--gris-900); border:1px solid var(--gris-800);
+    padding:1.5rem; cursor:pointer; text-align:left;
+    font-family:var(--sans); color:var(--blanc);
+    transition: all .35s; display:flex; flex-direction:column; gap:.5rem;
   }
+  .action-btn:hover{background:var(--gris-800); border-color:var(--gris-600); transform:translateY(-3px);}
+  .action-btn .type{font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gris-500); font-weight:600;}
+  .action-btn .title{font-family:var(--serif); font-size:1.15rem; font-weight:500;}
+  .action-btn .title::after{content:" →"; color:var(--gris-500); font-size:.9rem; transition: margin-left .3s; margin-left:.3rem;}
+  .action-btn:hover .title::after{color:var(--blanc); margin-left:.6rem;}
+
+  /* ============ SLIDESHOW ============ */
+  .slideshow{
+    display:none; position:fixed; inset:0; background:var(--noir);
+    z-index:200; overflow:hidden;
+  }
+  .slideshow.active{display:block;}
+  .slideshow-track{
+    display:flex; height:100%; width:100%;
+    transition: transform .8s cubic-bezier(.77,0,.175,1);
+  }
+  .slide-item{
+    flex:0 0 100vw; height:100vh; padding:5vh 7vw;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative; overflow-y:auto;
+  }
+  .slide-item .eyebrow{font-size:.72rem; letter-spacing:.32em; text-transform:uppercase; color:var(--gris-400); margin-bottom:1.5rem; font-weight:500; display:flex; align-items:center; gap:1rem;}
+  .slide-item .eyebrow::before{content:""; width:32px; height:1px; background:var(--gris-500);}
+  .slide-item h2{font-family:var(--serif); font-size:clamp(1.8rem,3.8vw,3rem); font-weight:500; line-height:1.1; color:var(--blanc); margin-bottom:1.5rem;}
+  .slide-item h2 em{font-style:italic; color:var(--gris-400);}
+  .slide-item p{font-size:clamp(.95rem,1.15vw,1.1rem); line-height:1.7; max-width:68ch; color:var(--gris-300); margin-bottom:1rem;}
+
+  .slide-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--gris-800); margin-top:2rem;}
+  .slide-card{background:var(--noir); padding:2rem 1.8rem;}
+  .slide-card .num{font-family:var(--serif); font-size:2.2rem; color:var(--blanc); font-weight:500;}
+  .slide-card h3{font-size:1.1rem; margin:.8rem 0 .5rem; color:var(--blanc); font-family:var(--sans); font-weight:600;}
+  .slide-card p{font-size:.88rem; color:var(--gris-400); line-height:1.5;}
+
+  .pyramid-list{margin-top:1.5rem; display:flex; flex-direction:column; gap:2px; max-width:760px;}
+  .prow{display:flex; align-items:center; gap:1rem; background:var(--gris-900); border-left:2px solid var(--gris-500); padding:1rem 1.3rem; font-size:.92rem; color:var(--gris-200);}
+
+  .slideshow-nav{
+    position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+    display:flex; gap:.6rem; z-index:210;
+  }
+  .slideshow-nav button{
+    width:50px; height:50px; border-radius:0;
+    border:1px solid var(--gris-500); background:var(--noir);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition: all .3s;
+  }
+  .slideshow-nav button:hover:not(:disabled){background:var(--blanc); border-color:var(--blanc);}
+  .slideshow-nav button:hover:not(:disabled) svg path{stroke:var(--noir);}
+  .slideshow-nav svg{width:16px; height:16px;}
+  .slideshow-nav svg path{stroke:var(--gris-300);}
+  .slideshow-nav button:disabled{opacity:.3; cursor:default;}
+
+  .close-slideshow{
+    position:fixed; top:2rem; right:2rem; z-index:210;
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid var(--gris-500); background:var(--noir);
+    color:var(--gris-300); cursor:pointer; font-size:1.3rem;
+    display:flex; align-items:center; justify-content:center;
+    transition: all .3s;
+  }
+  .close-slideshow:hover{border-color:var(--blanc); color:var(--blanc);}
+
+  .slide-counter{
+    position:fixed; top:2rem; left:2rem; z-index:210;
+    font-size:.75rem; letter-spacing:.2em; color:var(--gris-300);
+    font-weight:500;
+  }
+
+  /* ============ EXERCICES ============ */
+  .exercise-page{
+    display:none; position:fixed; inset:0;
+    background:var(--blanc-casse); z-index:200;
+    overflow-y:auto;
+  }
+  .exercise-page.active{display:block;}
+
+  .exercise-header{
+    background:var(--noir); color:var(--blanc);
+    padding:4rem 2rem 3rem; text-align:center;
+  }
+  .exercise-header .h-eyebrow{font-size:.7rem; letter-spacing:.32em; text-transform:uppercase; color:var(--gris-500); margin-bottom:1.4rem;}
+  .exercise-header h1{font-family:var(--serif); font-size:clamp(1.8rem,4vw,2.8rem); color:var(--blanc); font-weight:500;}
+  .exercise-header p{color:var(--gris-400); margin-top:.8rem; max-width:60ch; margin-left:auto; margin-right:auto; font-size:.92rem;}
+
+  .exercise-ident{
+    background:rgba(244,244,244,.95); border-bottom:1px solid var(--gris-200);
+    padding:1.2rem 2rem; position:sticky; top:0; z-index:40; backdrop-filter:blur(10px);
+  }
+  .exercise-ident-inner{max-width:900px; margin:0 auto; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; justify-content:space-between;}
+  .exercise-ident-fields{display:flex; gap:1rem; flex-wrap:wrap; flex:1;}
+  .exercise-ident-field{display:flex; flex-direction:column; gap:.3rem; min-width:160px;}
+  .exercise-ident-field label{font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gris-500); font-weight:600;}
+  .exercise-ident-field input{border:none; border-bottom:1.5px solid var(--noir); background:transparent; padding:.4rem 0; font-family:var(--sans); font-size:.88rem; color:var(--noir); outline:none; font-weight:500;}
+  .exercise-ident-status{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gris-600); font-weight:600; padding:.5rem 1rem; border:1px solid var(--gris-300); background:var(--blanc);}
+  .exercise-ident-status.ok{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .exercise-ident-status.missing{background:#FEF2F2; color:#991B1B; border-color:#FCA5A5;}
+
+  .exercise-content{max-width:900px; margin:0 auto; padding:3rem 1.5rem 10rem;}
+  .exercise-item{background:var(--blanc); padding:2.2rem; margin-bottom:2rem; border:1px solid var(--gris-200);}
+  .exercise-item .badge{display:inline-block; color:var(--gris-600); font-size:.65rem; font-weight:600; letter-spacing:.24em; text-transform:uppercase; border-bottom:1px solid var(--noir); padding-bottom:.4rem; margin-bottom:1rem;}
+  .exercise-item h2{font-family:var(--serif); font-size:1.5rem; color:var(--noir); margin-bottom:.6rem; font-weight:500;}
+  .exercise-item .consigne{background:var(--gris-50); padding:1rem 1.3rem; font-size:.88rem; margin-bottom:1.5rem; color:var(--gris-700); border-left:2px solid var(--noir);}
+
+  .qcm-q{margin-bottom:1.4rem; padding:1.2rem; background:var(--gris-50);}
+  .qcm-q .q-text{font-weight:600; margin-bottom:.9rem; color:var(--noir); font-size:.92rem;}
+  .qcm-opt{display:block; width:100%; text-align:left; padding:.8rem 1rem; margin-bottom:.4rem; background:var(--blanc); border:1px solid var(--gris-200); cursor:pointer; font-family:var(--sans); font-size:.88rem; transition:.2s; color:var(--noir);}
+  .qcm-opt:hover{border-color:var(--noir);}
+  .qcm-opt.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc); font-weight:500;}
+  .qcm-opt.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600); text-decoration:line-through;}
+  .qcm-opt:disabled{cursor:default; opacity:.85;}
+
+  .vf-item{display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; background:var(--gris-50); margin-bottom:.5rem; gap:1rem; flex-wrap:wrap;}
+  .vf-item .vf-text{flex:1; font-size:.9rem; color:var(--noir); min-width:200px;}
+  .vf-btns{display:flex; gap:.4rem;}
+  .vf-btn{padding:.5rem 1rem; border:1px solid var(--gris-300); background:var(--blanc); cursor:pointer; font-family:var(--sans); font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em; transition:.2s; color:var(--noir);}
+  .vf-btn:hover{border-color:var(--noir);}
+  .vf-btn.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc);}
+  .vf-btn.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600);}
+  .vf-btn:disabled{cursor:default;}
+
+  .fill-text{font-size:.95rem; line-height:2.2; padding:1.4rem; background:var(--gris-50); color:var(--noir);}
+  .fill-input{border:none; border-bottom:1px solid var(--noir); background:transparent; padding:.2rem .5rem; font-family:var(--sans); font-size:.9rem; color:var(--noir); min-width:110px; text-align:center; font-weight:600; outline:none; transition:.2s;}
+  .fill-input:focus{border-bottom-width:2px;}
+  .fill-input.correct{border-bottom-color:#16A34A; color:#16A34A;}
+  .fill-input.incorrect{border-bottom-color:#DC2626; color:#DC2626;}
+
+  .btn{font-family:var(--sans); font-size:.75rem; font-weight:600; padding:.9rem 1.6rem; border:1px solid var(--noir); cursor:pointer; background:var(--noir); color:var(--blanc); transition: all .3s; letter-spacing:.18em; text-transform:uppercase;}
+  .btn:hover{background:transparent; color:var(--noir);}
+  .btn.ghost{background:transparent; color:var(--noir); border:1px solid var(--gris-400);}
+  .btn.ghost:hover{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .btn-row{display:flex; gap:.8rem; margin-top:1.5rem; flex-wrap:wrap;}
+
+  .feedback{margin-top:1rem; padding:1rem 1.3rem; font-size:.85rem; display:none;}
+  .feedback.show{display:block;}
+  .feedback.success{background:var(--noir); color:var(--blanc);}
+  .feedback.error{background:var(--gris-100); color:var(--gris-700);}
+
+  .exercise-bar{
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--noir); color:var(--blanc);
+    padding:1rem 1.5rem; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem; flex-wrap:wrap;
+  }
+  .exercise-score{display:flex; align-items:center; gap:1rem;}
+  .exercise-score .num{font-family:var(--serif); font-size:1.6rem; color:var(--blanc); font-weight:500;}
+  .exercise-score .label{font-size:.6rem; opacity:.65; letter-spacing:.24em; text-transform:uppercase;}
+  .send-btn{font-family:var(--sans); font-size:.72rem; font-weight:700; padding:.9rem 1.6rem; border:1px solid var(--blanc); cursor:pointer; background:var(--blanc); color:var(--noir); transition: all .3s; letter-spacing:.15em; text-transform:uppercase; display:flex; align-items:center; gap:.5rem;}
+  .send-btn:hover{background:transparent; color:var(--blanc);}
+  .send-btn:disabled{opacity:.4; cursor:not-allowed;}
+  .send-btn.sent{background:#16A34A; border-color:#16A34A; color:var(--blanc);}
 
   /* ============ RESPONSIVE ============ */
   @media (max-width:800px){
-    .nav{padding:.8rem 1rem;}
-    .nav-links{display:none;}
-    .hero{padding:6rem 1.5rem 3rem;}
+    .nav{padding:.7rem 1rem;}
+    .nav-links{gap:.5rem;}
+    .nav-links button{font-size:.68rem; padding:.4rem .5rem;}
+    .hero{padding:3rem 1.5rem;}
     .hero-meta{gap:1.5rem;}
-    .section{padding:4rem 1.5rem;}
-    .section-header{margin-bottom:2.5rem;}
+    .section{padding:3rem 1.5rem;}
     .sequence-grid{grid-template-columns:1fr;}
-    .sequence-card{padding:1.6rem;}
+    .seq-actions{grid-template-columns:1fr;}
+    .slide-cards{grid-template-columns:1fr;}
+    .slide-item{padding:6vh 5vw;}
   }
-
-  /* ============ ANIMATIONS ============ */
-  .fade-in{
-    opacity:0;
-    transform:translateY(20px);
-    animation: fadeUp .8s cubic-bezier(.4,0,.2,1) forwards;
-  }
-  @keyframes fadeUp{
-    to{opacity:1; transform:translateY(0);}
-  }
-  .delay-1{animation-delay:.1s;}
-  .delay-2{animation-delay:.2s;}
-  .delay-3{animation-delay:.3s;}
-  .delay-4{animation-delay:.4s;}
 </style>
 </head>
 <body>
@@ -381,293 +311,836 @@
 <!-- ============ NAVIGATION ============ -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-brand" style="text-decoration:none;">CFC 1A · Entreprise</a>
-    <ul class="nav-links">
-      <li><a href="#sequences">Séquences</a></li>
-      <li><a href="#ressources">Ressources</a></li>
-      <li><a href="#evaluations">Évaluations</a></li>
-      <li><a href="mailto:mbi.tatiana@gmail.com">Contact</a></li>
-    </ul>
+    <a href="#" class="nav-brand" onclick="showPage('home'); return false;">CFC 1A · Entreprise</a>
+    <div class="nav-links">
+      <button onclick="showPage('home')" id="navHome">Accueil</button>
+      <button onclick="showPage('seq1')" id="navSeq1">Séquence 1</button>
+      <button onclick="showPage('seq2')" id="navSeq2">Séquence 2</button>
+      <button onclick="showPage('seq3')" id="navSeq3">Séquence 3</button>
+    </div>
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow fade-in">École Schulz Genève · 2026-2027</div>
-    <h1 class="fade-in delay-1">
-      On n'improvise pas<br>
-      une année.<br>
-      <em>On l'organise.</em>
-    </h1>
-    <p class="hero-description fade-in delay-2">
-      Cours, exercices interactifs et ressources pour le cours d'Entreprise de la classe CFC 1A.
-      Chaque séquence est accompagnée de supports HTML, de cas pratiques et d'évaluations.
-    </p>
-    <div class="hero-meta fade-in delay-3">
-      <div class="hero-meta-item">
-        <span class="label">Classe</span>
-        <span class="value">CFC 1A</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="label">Matière</span>
-        <span class="value">Entreprise</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="label">Semestre</span>
-        <span class="value">1 · 14 séquences</span>
-      </div>
-      <div class="hero-meta-item">
-        <span class="label">Enseignante</span>
-        <span class="value">Tatiana Mbi</span>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ============ PAGE ACCUEIL ============ -->
+<div class="page active" id="page-home">
 
-<!-- ============ SÉQUENCES ============ -->
-<section class="section" id="sequences">
-  <div class="section-inner">
-    <div class="section-header">
-      <div>
-        <div class="section-eyebrow">Programme du semestre</div>
-        <h2>Les 14 <em>séquences</em></h2>
-        <p class="section-description">
-          Chaque séquence couvre un chapitre du référentiel EC1c. Cliquez sur une carte pour accéder aux supports.
-        </p>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">École Schulz Genève · 2026-2027</div>
+      <h1>On n'improvise pas<br>une année.<br><em>On l'organise.</em></h1>
+      <p class="hero-description">
+        Cours, exercices interactifs et ressources pour le cours d'Entreprise de la classe CFC 1A.
+        Cliquez sur une séquence pour accéder aux supports.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><span class="label">Classe</span><span class="value">CFC 1A</span></div>
+        <div class="hero-meta-item"><span class="label">Matière</span><span class="value">Entreprise</span></div>
+        <div class="hero-meta-item"><span class="label">Semestre</span><span class="value">1 · 14 séquences</span></div>
+        <div class="hero-meta-item"><span class="label">Enseignante</span><span class="value">Tatiana Mbi</span></div>
       </div>
     </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">Programme du semestre</div>
+    <h2>Les <em>séquences</em></h2>
 
     <div class="sequence-grid">
-
-      <!-- S1 -->
-      <a href="sequence1/index.html" class="sequence-card">
+      <button class="sequence-card" onclick="showPage('seq1')">
         <div class="num">Séquence 01</div>
         <div class="title">Rentrée de classe</div>
         <div class="desc">Découvrir le fonctionnement du cours, le projet annuel et voter pour la sortie de classe.</div>
         <div class="arrow">Ouvrir la séquence</div>
-      </a>
+      </button>
 
-      <!-- S2 -->
-      <a href="sequence2/index.html" class="sequence-card">
+      <button class="sequence-card" onclick="showPage('seq2')">
         <div class="num">Séquence 02</div>
         <div class="title">Me situer dans l'organisation</div>
         <div class="desc">Comprendre ce qu'est une entreprise et situer sa place au sein d'une organisation.</div>
         <div class="arrow">Ouvrir la séquence</div>
-      </a>
+      </button>
 
-      <!-- S3 -->
-      <a href="sequence3/index.html" class="sequence-card">
+      <button class="sequence-card" onclick="showPage('seq3')">
         <div class="num">Séquence 03</div>
         <div class="title">Organisation structurelle et fonctionnelle</div>
-        <div class="desc">Explorer les volets structurel et procédural, les fonctions, les liens hiérarchiques et les types de structures.</div>
+        <div class="desc">Volets structurel et procédural, les 9 fonctions, les liens hiérarchiques et les types de structures.</div>
         <div class="arrow">Ouvrir la séquence</div>
-      </a>
+      </button>
 
-      <!-- S4 -->
-      <a href="sequence4/index.html" class="sequence-card">
+      <button class="sequence-card" onclick="alert('Séquence 4 à venir')">
         <div class="num">Séquence 04</div>
         <div class="title">Les fonctions de l'entreprise</div>
-        <div class="desc">Approfondir les 9 fonctions de l'entreprise et leurs rôles respectifs.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
+        <div class="desc">Approfondir les 9 fonctions et leurs rôles respectifs. (À venir)</div>
+        <div class="arrow">Bientôt disponible</div>
+      </button>
+    </div>
+  </section>
 
-      <!-- S5 -->
-      <a href="sequence5/index.html" class="sequence-card">
-        <div class="num">Séquence 05</div>
-        <div class="title">Planifier, prioriser, traiter les tâches</div>
-        <div class="desc">Découvrir les méthodes ALPES, ABC et la méthode des grenouilles.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
+</div>
 
-      <!-- S6 -->
-      <a href="sequence6/index.html" class="sequence-card">
-        <div class="num">Séquence 06</div>
-        <div class="title">Gestion du temps et projet</div>
-        <div class="desc">Auto-analyse de sa gestion du temps, en lien avec le projet de sortie.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
+<!-- ============ PAGE SÉQUENCE 1 ============ -->
+<div class="page" id="page-seq1">
+  <div class="seq-detail">
+    <button class="seq-back" onclick="showPage('home')">Retour à l'accueil</button>
+    <div class="seq-header-detail">
+      <div class="eyebrow">Séquence 01 · Rentrée</div>
+      <h1>Rentrée de <em>classe</em></h1>
+      <p>Découvrir le fonctionnement du cours, le projet annuel et voter pour la sortie de classe. Poser les bases du travail de l'année.</p>
+    </div>
 
-      <!-- S7 -->
-      <a href="sequence7/index.html" class="sequence-card">
-        <div class="num">Séquence 07</div>
-        <div class="title">Planifier et organiser un événement</div>
-        <div class="desc">Les 5 étapes d'un événement professionnel et le diagramme de Gantt.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S8 -->
-      <a href="sequence8/index.html" class="sequence-card">
-        <div class="num">Séquence 08</div>
-        <div class="title">Application à un cas réel</div>
-        <div class="desc">Finaliser l'organisation de la sortie en équipes-projet.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S9 -->
-      <a href="sequence9/index.html" class="sequence-card">
-        <div class="num">Séquence 09</div>
-        <div class="title">Sortie de classe</div>
-        <div class="desc">Observer une organisation réelle aux Automnales de Palexpo.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S10 -->
-      <a href="sequence10/index.html" class="sequence-card">
-        <div class="num">Séquence 10</div>
-        <div class="title">Exploitation de la sortie</div>
-        <div class="desc">Analyser l'organisation observée et la relier aux chapitres 1 à 3.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S11 -->
-      <a href="sequence11/index.html" class="sequence-card">
-        <div class="num">Séquence 11</div>
-        <div class="title">Communiquer les résultats</div>
-        <div class="desc">Présentations orales par équipes-projet et introduction à la charte graphique.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S12 -->
-      <a href="sequence12/index.html" class="sequence-card">
-        <div class="num">Séquence 12</div>
-        <div class="title">Structurer le classement</div>
-        <div class="desc">Types de classement physique et numérique, GED.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S13 -->
-      <a href="sequence13/index.html" class="sequence-card">
-        <div class="num">Séquence 13</div>
-        <div class="title">Bilan du semestre</div>
-        <div class="desc">Évaluer ses propres progrès depuis la rentrée.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
-      <!-- S14 -->
-      <a href="sequence14/index.html" class="sequence-card">
-        <div class="num">Séquence 14</div>
-        <div class="title">Consolidation avant examens</div>
-        <div class="desc">Révisions des chapitres 1 à 5 et questions-réponses.</div>
-        <div class="arrow">Ouvrir la séquence</div>
-      </a>
-
+    <div class="seq-actions">
+      <button class="action-btn" onclick="openSlideshow('seq1')">
+        <div class="type">🎬 Diaporama</div>
+        <div class="title">Présentation de rentrée</div>
+      </button>
+      <button class="action-btn" onclick="openExercises('seq1')">
+        <div class="type">📝 Exercices</div>
+        <div class="title">Fiche de rentrée</div>
+      </button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ============ RESSOURCES ============ -->
-<section class="section" id="ressources" style="background:var(--noir-2);">
-  <div class="section-inner">
-    <div class="section-header">
+<!-- ============ PAGE SÉQUENCE 2 ============ -->
+<div class="page" id="page-seq2">
+  <div class="seq-detail">
+    <button class="seq-back" onclick="showPage('home')">Retour à l'accueil</button>
+    <div class="seq-header-detail">
+      <div class="eyebrow">Séquence 02 · Chapitre 1 · Domaine 1</div>
+      <h1>Me situer dans <em>l'organisation</em></h1>
+      <p>Découvrir ce qu'est une entreprise, comprendre l'intérêt pour elle d'être organisée et situer sa place au sein d'une organisation.</p>
+    </div>
+
+    <div class="seq-actions">
+      <button class="action-btn" onclick="openSlideshow('seq2')">
+        <div class="type">🎬 Diaporama</div>
+        <div class="title">Présentation — L'entreprise</div>
+      </button>
+      <button class="action-btn" onclick="openExercises('seq2')">
+        <div class="type">📝 Exercices</div>
+        <div class="title">Exercices interactifs</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE SÉQUENCE 3 ============ -->
+<div class="page" id="page-seq3">
+  <div class="seq-detail">
+    <button class="seq-back" onclick="showPage('home')">Retour à l'accueil</button>
+    <div class="seq-header-detail">
+      <div class="eyebrow">Séquence 03 · Chapitre 1 · Domaine 1</div>
+      <h1>Organisation structurelle<br>et <em>fonctionnelle</em></h1>
+      <p>Explorer les deux volets de l'organisation d'une entreprise — structurel et procédural — à travers les notions d'organigramme, de fonctions et de types de structures.</p>
+    </div>
+
+    <div class="seq-actions">
+      <button class="action-btn" onclick="openSlideshow('seq3')">
+        <div class="type">🎬 Diaporama</div>
+        <div class="title">Présentation — Organisation</div>
+      </button>
+      <button class="action-btn" onclick="openExercises('seq3')">
+        <div class="type">📝 Exercices</div>
+        <div class="title">Exercices interactifs</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDESHOW ============ -->
+<div class="slideshow" id="slideshow">
+  <div class="slide-counter" id="slideCounter">01 / 06</div>
+  <button class="close-slideshow" onclick="closeSlideshow()">×</button>
+
+  <div class="slideshow-track" id="slideshowTrack">
+    <!-- Slides injectées par JS -->
+  </div>
+
+  <div class="slideshow-nav">
+    <button id="prevSlide" onclick="prevSlide()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button id="nextSlide" onclick="nextSlide()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ EXERCICES ============ -->
+<div class="exercise-page" id="exercisePage">
+  <div class="exercise-header">
+    <div class="h-eyebrow" id="exEyebrow">Séquence 01 · Exercices</div>
+    <h1 id="exTitle">Exercices de la séquence</h1>
+    <p id="exSubtitle">Complétez tous les exercices puis cliquez sur « Envoyer à Mme Mbi ».</p>
+  </div>
+
+  <div class="exercise-ident">
+    <div class="exercise-ident-inner">
+      <div class="exercise-ident-fields">
+        <div class="exercise-ident-field">
+          <label>Nom</label>
+          <input type="text" id="exName" placeholder="Votre nom">
+        </div>
+        <div class="exercise-ident-field">
+          <label>Prénom</label>
+          <input type="text" id="exFirstName" placeholder="Votre prénom">
+        </div>
+        <div class="exercise-ident-field">
+          <label>Classe</label>
+          <input type="text" id="exClass" value="CFC 1A" readonly>
+        </div>
+      </div>
+      <div class="exercise-ident-status" id="exStatus">Identifiez-vous</div>
+    </div>
+  </div>
+
+  <div class="exercise-content" id="exerciseContent">
+    <!-- Exercices injectés par JS -->
+  </div>
+
+  <div class="exercise-bar">
+    <div class="exercise-score">
       <div>
-        <div class="section-eyebrow">Ressources générales</div>
-        <h2>Documents et <em>outils</em></h2>
+        <div class="label">Score</div>
+        <div class="num" id="exScore">0 / 0</div>
       </div>
     </div>
-
-    <div class="resources-grid">
-      <a href="evaluations/index.html" class="resource-card">
-        <span class="resource-icon">📊</span>
-        <h3>Évaluations et corrigés</h3>
-        <p>Tests, quiz et grilles d'évaluation pour toutes les séquences.</p>
-      </a>
-      <a href="ressources/index.html" class="resource-card">
-        <span class="resource-icon">📚</span>
-        <h3>Ressources générales</h3>
-        <p>Manuel, référentiel EC1c, documents complémentaires.</p>
-      </a>
-      <a href="sequence3/fiche-organigramme.html" class="resource-card">
-        <span class="resource-icon">📐</span>
-        <h3>Fiche organigramme</h3>
-        <p>Fiche vierge à imprimer pour créer des organigrammes.</p>
-      </a>
-      <a href="sequence3/cas-pratiques.html" class="resource-card">
-        <span class="resource-icon">💼</span>
-        <h3>Cas pratiques</h3>
-        <p>SportScents, GreenTech SA, EventScents — exercices interactifs.</p>
-      </a>
-    </div>
+    <button class="send-btn" id="sendBtn" onclick="sendExercises()" disabled>
+      Envoyer à Mme Mbi
+    </button>
   </div>
-</section>
 
-<!-- ============ ÉVALUATIONS ============ -->
-<section class="section" id="evaluations">
-  <div class="section-inner">
-    <div class="section-header">
-      <div>
-        <div class="section-eyebrow">Évaluation</div>
-        <h2>Modalités et <em>critères</em></h2>
-      </div>
-    </div>
-
-    <div class="resources-grid">
-      <a href="evaluations/index.html" class="resource-card">
-        <span class="resource-icon">🎯</span>
-        <h3>Plan d'évaluation</h3>
-        <p>Vue d'ensemble des évaluations formatives et sommatives.</p>
-      </a>
-      <a href="evaluations/index.html" class="resource-card">
-        <span class="resource-icon">📋</span>
-        <h3>Grilles de notation</h3>
-        <p>Critères objectifs pour chaque type d'évaluation.</p>
-      </a>
-      <a href="evaluations/index.html" class="resource-card">
-        <span class="resource-icon">📝</span>
-        <h3>Tests et corrigés</h3>
-        <p>Tests de validation et corrigés réservés à l'enseignante.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">CFC 1A · Entreprise</div>
-    <p class="footer-text">
-      École Schulz Genève · Semestre 1 · 2026-2027<br>
-      Enseignante : Tatiana Mbi
-    </p>
-    <div class="footer-links">
-      <a href="#sequences">Séquences</a>
-      <a href="#ressources">Ressources</a>
-      <a href="#evaluations">Évaluations</a>
-      <a href="mailto:mbi.tatiana@gmail.com">Contact</a>
-    </div>
-    <div class="footer-copy">
-      © 2026-2027 · CFC 1A · Tous droits réservés
-    </div>
-  </div>
-</footer>
+  <button class="close-slideshow" onclick="closeExercises()" style="top:1rem; right:1rem;">×</button>
+</div>
 
 <script>
-  // Smooth scroll pour les ancres
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', e=>{
-      const href = a.getAttribute('href');
-      if(href === '#' || href.length < 2) return;
-      const target = document.querySelector(href);
-      if(target){
-        e.preventDefault();
-        target.scrollIntoView({behavior:'smooth', block:'start'});
+/* ============ EMAIL ============ */
+const TEACHER_EMAIL = 'mbi.tatiana@gmail.com';
+
+/* ============ NAVIGATION ENTRE PAGES ============ */
+function showPage(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+pageId).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  const navBtn = document.getElementById('nav'+pageId.charAt(0).toUpperCase()+pageId.slice(1));
+  if(navBtn) navBtn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ============ SLIDESHOWS ============ */
+const slideshows = {
+  seq1: [
+    {
+      eyebrow: "École Schulz Genève · CFC 1A",
+      title: "On n'improvise pas<br>une année.<br><em>On l'organise.</em>",
+      text: "Bienvenue dans le cours d'Entreprise. Aujourd'hui, on découvre le programme, le projet annuel et on vote pour notre sortie de classe."
+    },
+    {
+      eyebrow: "Pour commencer",
+      title: "Brisons la glace",
+      text: "Chacun·e se présente en une phrase pour chaque carte.",
+      cards: [
+        {num:"01", title:"Un fait sur moi", desc:"Quelque chose que la classe ne devine pas."},
+        {num:"02", title:"Mon objectif pour l'année", desc:"Ce que je veux réussir d'ici juin."},
+        {num:"03", title:"Mon mot-clé", desc:"Le mot qui résume mon état d'esprit pour cette rentrée."}
+      ]
+    },
+    {
+      eyebrow: "Pourquoi ce cours",
+      title: "Votre pyramide d'organisation",
+      text: "Savoir s'organiser est une compétence pour la vie.",
+      pyramid: [
+        "Optimiser son temps — la clé pour éviter le stress",
+        "Établir des priorités — distinguer l'essentiel du secondaire",
+        "Améliorer la concentration — moins de distractions, plus de résultats",
+        "Réduire le stress — un esprit organisé est un esprit serein",
+        "Préparer l'avenir professionnel — discipline et responsabilité"
+      ]
+    },
+    {
+      eyebrow: "Notre fil rouge",
+      title: "Cette année, on organise un vrai événement.",
+      text: "Chaque chapitre va nourrir un seul et même projet : organiser, de A à Z, une sortie de classe réelle.",
+      pyramid: [
+        "Ch.1 — Se situer dans l'organisation",
+        "Ch.2 — Planifier, prioriser, traiter les tâches",
+        "Ch.3 — Planifier et organiser un événement"
+      ]
+    },
+    {
+      eyebrow: "Aujourd'hui · 1h30",
+      title: "Le premier cours",
+      text: "Voici le déroulé de la séance.",
+      pyramid: [
+        "15 min — Brise-glace",
+        "15 min — Pourquoi ce cours",
+        "15 min — Vote de la sortie",
+        "20 min — Chemin jusqu'à la sortie",
+        "25 min — Lancement du Chapitre 1"
+      ]
+    },
+    {
+      eyebrow: "C'est parti",
+      title: "Alors,<br><em>on commence ?</em>",
+      text: "Bonne année scolaire à toutes et à tous !"
+    }
+  ],
+  seq2: [
+    {
+      eyebrow: "Séquence 02 · Chapitre 1",
+      title: "Me situer dans<br><em>l'organisation</em>",
+      text: "Aujourd'hui, on découvre ce qu'est une entreprise et pourquoi il est essentiel de l'organiser."
+    },
+    {
+      eyebrow: "Accroche",
+      title: "C'est quoi une entreprise ?",
+      text: "Avant de commencer, brainstormez : quels mots vous viennent à l'esprit quand vous entendez « entreprise » ?"
+    },
+    {
+      eyebrow: "Introduction",
+      title: "L'entreprise, un ensemble organisé",
+      text: "L'entreprise est un ensemble d'éléments organisés orienté vers un objectif commercial.",
+      pyramid: [
+        "👥 Les collaborateurs",
+        "📋 Les tâches",
+        "🛠️ Les moyens matériels",
+        "💬 Les informations"
+      ]
+    },
+    {
+      eyebrow: "Le but",
+      title: "Pourquoi organiser ?",
+      text: "Organiser une entreprise, c'est faire en sorte que les collaborateurs effectuent des tâches à l'aide de moyens matériels et d'informations de la façon la plus rationnelle possible.",
+      pyramid: [
+        "🎯 Efficacité",
+        "⚖️ Stabilité",
+        "🔗 Cohérence",
+        "🎯 Un degré OPTIMAL d'organisation"
+      ]
+    },
+    {
+      eyebrow: "Exercice en groupe",
+      title: "Sur-organisée vs sous-organisée",
+      text: "En 2 groupes, discutez des avantages et inconvénients de chaque extrême.",
+      cards: [
+        {num:"A", title:"Sur-organisée", desc:"Trop de règles, trop de procédures. Quels avantages ? Quels inconvénients ?"},
+        {num:"B", title:"Sous-organisée", desc:"Trop peu de règles, désordre. Quels avantages ? Quels inconvénients ?"}
+      ]
+    },
+    {
+      eyebrow: "Synthèse",
+      title: "À retenir",
+      text: "L'entreprise est un ensemble d'éléments organisés. Le but de l'organisation est l'efficacité, la stabilité et la cohérence."
+    }
+  ],
+  seq3: [
+    {
+      eyebrow: "Séquence 03 · Chapitre 1",
+      title: "Organisation structurelle<br>et <em>fonctionnelle</em>",
+      text: "Aujourd'hui, on explore les deux volets de l'organisation et les types de structures."
+    },
+    {
+      eyebrow: "Les avantages",
+      title: "Pourquoi être structuré ?",
+      text: "Une organisation structurée apporte des bénéfices concrets.",
+      pyramid: [
+        "⏱️ Gain de temps",
+        "🎯 Clarté des rôles",
+        "📈 Efficacité",
+        "😌 Réduction du stress",
+        "🤝 Meilleure coordination"
+      ]
+    },
+    {
+      eyebrow: "Vocabulaire",
+      title: "Structurelle vs procédurale",
+      text: "L'organisation comprend deux volets complémentaires.",
+      cards: [
+        {num:"🏛️", title:"Structurelle", desc:"« QUI fait QUOI ? » — Postes, fonctions, départements, organigrammes."},
+        {num:"⚙️", title:"Procédurale", desc:"« COMMENT on le fait ? » — Processus, procédures, méthodes de travail."}
+      ]
+    },
+    {
+      eyebrow: "Les fonctions",
+      title: "Les 9 fonctions de l'entreprise",
+      text: "Chaque entreprise regroupe ses activités en fonctions principales.",
+      cards: [
+        {num:"🎯", title:"Direction", desc:"Pilotage, stratégie, objectifs"},
+        {num:"📢", title:"Communication", desc:"Interne et externe"},
+        {num:"💰", title:"Finance", desc:"Comptabilité, trésorerie"},
+        {num:"📦", title:"Achat", desc:"Fournisseurs, négociation"},
+        {num:"🏭", title:"Production", desc:"Fabrication, qualité"},
+        {num:"📈", title:"Marketing", desc:"Étude de marché, publicité"},
+        {num:"👥", title:"RH", desc:"Recrutement, formation"},
+        {num:"🚚", title:"Logistique", desc:"Flux, stocks, maintenance"},
+        {num:"📁", title:"Administration", desc:"Secrétariat, archivage"}
+      ]
+    },
+    {
+      eyebrow: "Les liens",
+      title: "Les 3 types de liens",
+      text: "Dans un organigramme, on distingue 3 types de liens.",
+      pyramid: [
+        "🔻 Lien vertical — Relation d'autorité (Directeur → Chef)",
+        "↔️ Lien horizontal — Collaboration entre pairs (Finance ↔ Achat)",
+        "💡 Lien de conseil — Expertise sans autorité (Juridique → Marketing)"
+      ]
+    },
+    {
+      eyebrow: "Les structures",
+      title: "Les 3 types de structures",
+      text: "Chaque entreprise choisit sa structure selon sa taille et son activité.",
+      cards: [
+        {num:"🏛️", title:"Fonctionnelle", desc:"PME, monoproduit. Simplicité, spécialisation."},
+        {num:"🌍", title:"Divisionnelle", desc:"Diversification, international. Autonomie, réactivité."},
+        {num:"🔲", title:"Matricielle", desc:"Grande entreprise diversifiée. Flexibilité, double compétence."}
+      ]
+    },
+    {
+      eyebrow: "Synthèse",
+      title: "À retenir",
+      text: "Deux volets (structurelle / procédurale), 9 fonctions, 3 types de liens, 3 types de structures."
+    }
+  ]
+};
+
+let currentSlide = 0;
+let currentShow = null;
+
+function openSlideshow(seqId){
+  currentShow = seqId;
+  currentSlide = 0;
+  renderSlideshow();
+  document.getElementById('slideshow').classList.add('active');
+}
+
+function renderSlideshow(){
+  const slides = slideshows[currentShow];
+  const track = document.getElementById('slideshowTrack');
+  track.innerHTML = slides.map(s=>{
+    let content = '';
+    if(s.cards){
+      content = `<div class="slide-cards">${s.cards.map(c=>`
+        <div class="slide-card">
+          <div class="num">${c.num}</div>
+          <h3>${c.title}</h3>
+          <p>${c.desc}</p>
+        </div>
+      `).join('')}</div>`;
+    } else if(s.pyramid){
+      content = `<div class="pyramid-list">${s.pyramid.map(p=>`
+        <div class="prow">${p}</div>
+      `).join('')}</div>`;
+    }
+    return `
+      <div class="slide-item">
+        <div class="eyebrow">${s.eyebrow}</div>
+        <h2>${s.title}</h2>
+        <p>${s.text}</p>
+        ${content}
+      </div>
+    `;
+  }).join('');
+  updateSlideshow();
+}
+
+function updateSlideshow(){
+  const track = document.getElementById('slideshowTrack');
+  track.style.transform = `translateX(-${currentSlide*100}vw)`;
+  const total = slideshows[currentShow].length;
+  document.getElementById('slideCounter').textContent = String(currentSlide+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  document.getElementById('prevSlide').disabled = currentSlide===0;
+  document.getElementById('nextSlide').disabled = currentSlide===total-1;
+}
+
+function nextSlide(){
+  if(currentSlide < slideshows[currentShow].length-1){
+    currentSlide++;
+    updateSlideshow();
+  }
+}
+
+function prevSlide(){
+  if(currentSlide > 0){
+    currentSlide--;
+    updateSlideshow();
+  }
+}
+
+function closeSlideshow(){
+  document.getElementById('slideshow').classList.remove('active');
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(!document.getElementById('slideshow').classList.contains('active')) return;
+  if(e.key==='ArrowRight' || e.key===' '){e.preventDefault(); nextSlide();}
+  if(e.key==='ArrowLeft'){e.preventDefault(); prevSlide();}
+  if(e.key==='Escape') closeSlideshow();
+});
+
+/* ============ EXERCICES ============ */
+const exercises = {
+  seq1: {
+    eyebrow: "Séquence 01 · Exercices",
+    title: "Fiche de rentrée",
+    subtitle: "Complétez votre fiche personnelle et envoyez-la à Mme Mbi.",
+    items: [
+      {
+        type: 'text',
+        badge: '01 · Ma présentation',
+        title: "Un fait sur moi",
+        consigne: "Quelque chose que la classe ne devine pas.",
+        placeholder: "Ex : J'ai déjà voyagé dans 5 pays différents..."
+      },
+      {
+        type: 'text',
+        badge: '02 · Mon objectif',
+        title: "Mon objectif pour l'année",
+        consigne: "Ce que je veux réussir d'ici juin.",
+        placeholder: "Ex : Décrocher mon CFC avec une moyenne supérieure à 5..."
+      },
+      {
+        type: 'text',
+        badge: '03 · Mon mot-clé',
+        title: "Mon mot-clé",
+        consigne: "Le mot qui résume mon état d'esprit pour cette rentrée.",
+        placeholder: "Ex : Détermination, curiosité, motivation..."
+      },
+      {
+        type: 'qcm',
+        badge: '04 · Choix de la sortie',
+        title: "Quelle sortie préférez-vous ?",
+        consigne: "Sélectionnez votre option.",
+        questions: [
+          {q: "Votre choix :", opts: ["Les Automnales (Palexpo, 6-15 nov 2026)", "Musée Patek Philippe (Plainpalais)"], correct: 0}
+        ]
       }
+    ]
+  },
+  seq2: {
+    eyebrow: "Séquence 02 · Exercices",
+    title: "L'entreprise, un ensemble organisé",
+    subtitle: "4 exercices pour tester votre compréhension.",
+    items: [
+      {
+        type: 'qcm',
+        badge: '01 · QCM',
+        title: "Connaître les bases",
+        consigne: "Répondez aux 4 questions suivantes.",
+        questions: [
+          {q: "Quels sont les 4 éléments qui composent une entreprise ?",
+           opts: ["Collaborateurs, tâches, moyens matériels, informations", "Produits, clients, argent, bâtiments", "Patrons, employés, syndicats, machines", "Ventes, achats, production, marketing"],
+           correct: 0},
+          {q: "Quel est le but de l'organisation d'une entreprise ?",
+           opts: ["Maximiser les profits", "Efficacité, stabilité, cohérence", "Réduire les employés", "Augmenter les heures"],
+           correct: 1},
+          {q: "Que signifie une entreprise « sous-organisée » ?",
+           opts: ["Trop de règles", "Manque de structure et d'organisation", "Trop de réunions", "Trop grande"],
+           correct: 1},
+          {q: "Une entreprise sur-organisée est toujours plus efficace.",
+           opts: ["Vrai", "Faux"],
+           correct: 1}
+        ]
+      },
+      {
+        type: 'vf',
+        badge: '02 · Vrai/Faux',
+        title: "Distinguer le vrai du faux",
+        consigne: "Indiquez si chaque affirmation est vraie ou fausse.",
+        items: [
+          {t: "L'entreprise est un ensemble d'éléments organisés.", v:true},
+          {t: "Une entreprise sur-organisée est toujours plus efficace.", v:false},
+          {t: "Le but de l'organisation est l'efficacité, la stabilité et la cohérence.", v:true},
+          {t: "Il faut viser un degré optimal d'organisation.", v:true}
+        ]
+      },
+      {
+        type: 'fill',
+        badge: '03 · Texte à trous',
+        title: "Compléter la définition",
+        consigne: "Mots disponibles : organisés, collaborateurs, efficacité, informations, cohérence.",
+        text: `Une entreprise est un ensemble d'éléments <input class="fill-input" data-answer="organisés" placeholder="?"> orienté vers un objectif commercial. Ses éléments sont les <input class="fill-input" data-answer="collaborateurs" placeholder="?">, les tâches, les moyens matériels et les <input class="fill-input" data-answer="informations" placeholder="?">. Le but de l'organisation est l'<input class="fill-input" data-answer="efficacité" placeholder="?">, la stabilité et la <input class="fill-input" data-answer="cohérence" placeholder="?">.`,
+        hasCheck: true
+      }
+    ]
+  },
+  seq3: {
+    eyebrow: "Séquence 03 · Exercices",
+    title: "Organisation structurelle et fonctionnelle",
+    subtitle: "5 exercices interactifs. Envoyez vos réponses à Mme Mbi.",
+    items: [
+      {
+        type: 'qcm',
+        badge: '01 · QCM',
+        title: "Connaître les bases",
+        consigne: "Répondez aux 5 questions suivantes.",
+        questions: [
+          {q: "Quelle est la question à laquelle répond l'organisation structurelle ?",
+           opts: ["Comment on le fait ?", "Qui fait quoi ?", "Pourquoi ?", "Quand ?"],
+           correct: 1},
+          {q: "Que représente un lien vertical dans un organigramme ?",
+           opts: ["Une collaboration", "Une autorité hiérarchique", "Un conseil", "Une amitié"],
+           correct: 1},
+          {q: "Combien de fonctions principales avons-nous vues ?",
+           opts: ["5", "6", "8", "9"],
+           correct: 3},
+          {q: "Quelle fonction gère le recrutement ?",
+           opts: ["Finance", "Marketing", "RH", "Logistique"],
+           correct: 2},
+          {q: "Quelle structure est adaptée aux grandes entreprises diversifiées ?",
+           opts: ["Fonctionnelle", "Divisionnelle", "Matricielle", "Linéaire"],
+           correct: 2}
+        ]
+      },
+      {
+        type: 'vf',
+        badge: '02 · Vrai/Faux',
+        title: "Distinguer le vrai du faux",
+        consigne: "Indiquez si chaque affirmation est vraie ou fausse.",
+        items: [
+          {t: "L'organisation structurelle répond à la question « qui fait quoi ? ».", v:true},
+          {t: "Un lien de conseil implique une autorité hiérarchique.", v:false},
+          {t: "La fonction RH gère le recrutement et la formation.", v:true},
+          {t: "La structure divisionnelle est adaptée aux PME monoproduit.", v:false},
+          {t: "Un lien horizontal représente une collaboration entre pairs.", v:true}
+        ]
+      },
+      {
+        type: 'fill',
+        badge: '03 · Texte à trous',
+        title: "Compléter la synthèse",
+        consigne: "Mots disponibles : structurelle, procédurale, verticaux, horizontaux, conseil, efficacité.",
+        text: `L'organisation d'une entreprise comprend deux volets : l'organisation <input class="fill-input" data-answer="structurelle" placeholder="?"> qui répond à la question « qui fait quoi ? », et l'organisation <input class="fill-input" data-answer="procédurale" placeholder="?"> qui répond à la question « comment on le fait ? ». Dans un organigramme, on distingue trois types de liens : les liens <input class="fill-input" data-answer="verticaux" placeholder="?"> qui représentent l'autorité, les liens <input class="fill-input" data-answer="horizontaux" placeholder="?"> qui représentent la collaboration, et les liens de <input class="fill-input" data-answer="conseil" placeholder="?"> qui représentent l'expertise sans autorité. Le but de l'organisation est l'<input class="fill-input" data-answer="efficacité" placeholder="?">, la stabilité et la cohérence.`,
+        hasCheck: true
+      }
+    ]
+  }
+};
+
+let currentExercise = null;
+let exScore = 0;
+let exTotal = 0;
+
+function openExercises(seqId){
+  currentExercise = seqId;
+  const ex = exercises[seqId];
+  document.getElementById('exEyebrow').textContent = ex.eyebrow;
+  document.getElementById('exTitle').textContent = ex.title;
+  document.getElementById('exSubtitle').textContent = ex.subtitle;
+  renderExercises(ex);
+  document.getElementById('exercisePage').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function closeExercises(){
+  document.getElementById('exercisePage').classList.remove('active');
+}
+
+function renderExercises(ex){
+  exScore = 0;
+  exTotal = 0;
+  const container = document.getElementById('exerciseContent');
+  container.innerHTML = ex.items.map((item, idx)=>{
+    if(item.type === 'qcm'){
+      exTotal += item.questions.length;
+      return `
+        <div class="exercise-item">
+          <div class="badge">${item.badge}</div>
+          <h2>${item.title}</h2>
+          <div class="consigne">${item.consigne}</div>
+          ${item.questions.map((q, qi)=>`
+            <div class="qcm-q">
+              <div class="q-text">${qi+1}. ${q.q}</div>
+              ${q.opts.map((o, oi)=>`
+                <button class="qcm-opt" onclick="answerQCM(this, ${oi === q.correct}, '${o.replace(/'/g,'')}')">${o}</button>
+              `).join('')}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if(item.type === 'vf'){
+      exTotal += item.items.length;
+      return `
+        <div class="exercise-item">
+          <div class="badge">${item.badge}</div>
+          <h2>${item.title}</h2>
+          <div class="consigne">${item.consigne}</div>
+          ${item.items.map((it, ii)=>`
+            <div class="vf-item">
+              <div class="vf-text">${ii+1}. ${it.t}</div>
+              <div class="vf-btns">
+                <button class="vf-btn" onclick="answerVF(this, true, ${it.v})">Vrai</button>
+                <button class="vf-btn" onclick="answerVF(this, false, ${it.v})">Faux</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if(item.type === 'fill'){
+      exTotal += (item.text.match(/data-answer/g) || []).length;
+      return `
+        <div class="exercise-item">
+          <div class="badge">${item.badge}</div>
+          <h2>${item.title}</h2>
+          <div class="consigne">${item.consigne}</div>
+          <div class="fill-text">${item.text}</div>
+          <div class="btn-row">
+            <button class="btn" onclick="checkFill(this)">Vérifier mes réponses</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      `;
+    } else if(item.type === 'text'){
+      exTotal += 1;
+      return `
+        <div class="exercise-item">
+          <div class="badge">${item.badge}</div>
+          <h2>${item.title}</h2>
+          <div class="consigne">${item.consigne}</div>
+          <textarea placeholder="${item.placeholder}" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--gris-200); font-family:var(--sans); font-size:.9rem; outline:none;" oninput="checkText(this)"></textarea>
+        </div>
+      `;
+    }
+    return '';
+  }).join('');
+  updateExScore();
+}
+
+function answerQCM(btn, isCorrect, answer){
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.qcm-opt').forEach(b=>b.disabled = true);
+  if(isCorrect){
+    btn.classList.add('correct');
+    exScore++;
+  } else {
+    btn.classList.add('incorrect');
+  }
+  updateExScore();
+}
+
+function answerVF(btn, val, correct){
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.vf-btn').forEach(b=>b.disabled = true);
+  const isCorrect = val === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    exScore++;
+  } else {
+    btn.classList.add('incorrect');
+  }
+  updateExScore();
+}
+
+function checkText(textarea){
+  if(textarea.value.trim().length > 5 && !textarea.dataset.scored){
+    textarea.dataset.scored = 'true';
+    exScore++;
+    updateExScore();
+  }
+}
+
+function checkFill(btn){
+  const container = btn.closest('.exercise-item');
+  const inputs = container.querySelectorAll('.fill-input');
+  let correct = 0;
+  inputs.forEach(inp=>{
+    const ans = inp.dataset.answer.toLowerCase();
+    const val = inp.value.trim().toLowerCase();
+    if(val === ans){
+      inp.classList.add('correct');
+      inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect');
+      inp.classList.remove('correct');
+    }
+  });
+  exScore += correct;
+  updateExScore();
+  const fb = container.querySelector('.feedback');
+  fb.className = 'feedback show ' + (correct === inputs.length ? 'success' : 'error');
+  fb.textContent = `${correct}/${inputs.length} bonnes réponses.`;
+}
+
+function updateExScore(){
+  document.getElementById('exScore').textContent = `${exScore} / ${exTotal}`;
+  const name = document.getElementById('exName').value.trim();
+  const firstName = document.getElementById('exFirstName').value.trim();
+  const hasIdentity = name && firstName;
+  const status = document.getElementById('exStatus');
+  if(!hasIdentity){
+    status.textContent = 'Identifiez-vous';
+    status.className = 'exercise-ident-status missing';
+  } else if(exScore < exTotal){
+    status.textContent = `Progression : ${exScore}/${exTotal}`;
+    status.className = 'exercise-ident-status';
+  } else {
+    status.textContent = 'Prêt à envoyer';
+    status.className = 'exercise-ident-status ok';
+  }
+  document.getElementById('sendBtn').disabled = !(hasIdentity && exScore > 0);
+}
+
+document.getElementById('exName').addEventListener('input', updateExScore);
+document.getElementById('exFirstName').addEventListener('input', updateExScore);
+
+function sendExercises(){
+  const name = document.getElementById('exName').value.trim();
+  const firstName = document.getElementById('exFirstName').value.trim();
+  const className = document.getElementById('exClass').value.trim();
+  if(!name || !firstName){
+    alert('Veuillez renseigner votre nom et prénom.');
+    return;
+  }
+
+  const subject = `[CFC 1A] ${currentExercise.toUpperCase()} — ${name} ${firstName} — Score : ${exScore}/${exTotal}`;
+  let body = `RÉSULTATS — ${currentExercise.toUpperCase()}\n`;
+  body += `============================================\n\n`;
+  body += `ÉLÈVE : ${name} ${firstName}\n`;
+  body += `CLASSE : ${className}\n`;
+  body += `DATE : ${new Date().toLocaleString('fr-CH')}\n\n`;
+  body += `SCORE : ${exScore} / ${exTotal}\n\n`;
+  body += `--------------------------------------------\n\n`;
+
+  // Récupération des réponses
+  document.querySelectorAll('.exercise-item').forEach((item, idx)=>{
+    body += `EXERCICE ${idx+1} — ${item.querySelector('h2').textContent}\n\n`;
+    item.querySelectorAll('.qcm-q').forEach(q=>{
+      body += `  ${q.querySelector('.q-text').textContent}\n`;
+      const selected = q.querySelector('.qcm-opt.correct');
+      const chosen = q.querySelector('.qcm-opt.incorrect');
+      if(selected) body += `    ✓ ${selected.textContent}\n`;
+      else if(chosen) body += `    ✗ ${chosen.textContent}\n`;
     });
+    item.querySelectorAll('.vf-item').forEach(v=>{
+      body += `  ${v.querySelector('.vf-text').textContent}\n`;
+      const btn = v.querySelector('.vf-btn.correct') || v.querySelector('.vf-btn.incorrect');
+      if(btn) body += `    → ${btn.textContent}\n`;
+    });
+    item.querySelectorAll('.fill-input').forEach(inp=>{
+      body += `  [${inp.dataset.answer}] → ${inp.value || '(vide)'}\n`;
+    });
+    item.querySelectorAll('textarea').forEach(ta=>{
+      if(ta.value.trim()) body += `  Réponse : ${ta.value}\n`;
+    });
+    body += `\n`;
   });
 
-  // Animation au scroll
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add('fade-in');
-      }
-    });
-  }, {threshold:.1});
+  body += `--------------------------------------------\nFin du rapport — Envoyé depuis l'application HTML.\n`;
 
-  document.querySelectorAll('.sequence-card, .resource-card').forEach(el=>{
-    observer.observe(el);
-  });
+  window.location.href = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  const btn = document.getElementById('sendBtn');
+  btn.classList.add('sent');
+  btn.textContent = '✓ Envoyé';
+  setTimeout(()=>{
+    btn.classList.remove('sent');
+    btn.textContent = 'Envoyer à Mme Mbi';
+  }, 3000);
+}
+
+/* ============ INIT ============ */
+showPage('home');
 </script>
-
 </body>
 </html>
