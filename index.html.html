@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CFC 1A — Entreprise — École Schulz Genève</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Cours, exercices et ressources — CFC 1A Entreprise — Semestre 1 2026-2027 — Tatiana Mbi">
+<link rel="icon" href="assets/images/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A;
+    --noir-2:#141414;
+    --gris-900:#1F1F1F;
+    --gris-800:#2A2A2A;
+    --gris-700:#3A3A3A;
+    --gris-600:#555;
+    --gris-500:#777;
+    --gris-400:#999;
+    --gris-300:#BBB;
+    --gris-200:#D4D4D4;
+    --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4;
+    --blanc:#FFFFFF;
+    --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--noir);
+    color:var(--blanc);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ============ NAVIGATION ============ */
+  .nav{
+    position:fixed; top:0; left:0; right:0;
+    background:rgba(10,10,10,.92);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--gris-800);
+    z-index:100;
+    padding:1rem 2rem;
+  }
+  .nav-inner{
+    max-width:1400px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center;
+    gap:2rem;
+  }
+  .nav-brand{
+    font-family:var(--serif); font-size:1.1rem;
+    color:var(--blanc); font-weight:500;
+    letter-spacing:.02em;
+    display:flex; align-items:center; gap:.7rem;
+  }
+  .nav-brand::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--accent);
+  }
+  .nav-links{
+    display:flex; gap:2rem; list-style:none;
+  }
+  .nav-links a{
+    color:var(--gris-400); text-decoration:none;
+    font-size:.82rem; letter-spacing:.1em;
+    text-transform:uppercase; font-weight:500;
+    transition: color .3s;
+  }
+  .nav-links a:hover{color:var(--blanc);}
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:center;
+    padding:8rem 2rem 4rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 40%, rgba(206,80,120,.08), transparent 50%),
+               radial-gradient(circle at 80% 60%, rgba(255,255,255,.03), transparent 40%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    max-width:1400px; margin:0 auto;
+    width:100%; position:relative;
+    z-index:1;
+  }
+  .hero-eyebrow{
+    font-size:.75rem; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--gris-500);
+    margin-bottom:2rem;
+    display:flex; align-items:center; gap:1rem;
+  }
+  .hero-eyebrow::before{
+    content:""; width:40px; height:1px;
+    background:var(--gris-600);
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-size:clamp(2.5rem, 6vw, 5.5rem);
+    font-weight:500; line-height:1.05;
+    letter-spacing:-.02em;
+    color:var(--blanc);
+    margin-bottom:2rem;
+    max-width:16ch;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--gris-400);
+    font-weight:400;
+  }
+  .hero-description{
+    font-size:1.1rem;
+    color:var(--gris-400);
+    max-width:60ch;
+    line-height:1.7;
+    margin-bottom:3rem;
+  }
+  .hero-meta{
+    display:flex; gap:3rem; flex-wrap:wrap;
+    padding-top:2rem;
+    border-top:1px solid var(--gris-800);
+  }
+  .hero-meta-item{
+    display:flex; flex-direction:column; gap:.4rem;
+  }
+  .hero-meta-item .label{
+    font-size:.68rem; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--gris-500);
+    font-weight:600;
+  }
+  .hero-meta-item .value{
+    font-family:var(--serif); font-size:1.15rem;
+    color:var(--blanc); font-weight:500;
+  }
+
+  /* ============ SECTION ============ */
+  .section{
+    padding:6rem 2rem;
+    position:relative;
+  }
+  .section-inner{
+    max-width:1400px; margin:0 auto;
+  }
+  .section-header{
+    display:flex; justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:4rem;
+    gap:2rem;
+    flex-wrap:wrap;
+  }
+  .section-eyebrow{
+    font-size:.7rem; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--gris-500);
+    margin-bottom:1rem;
+    display:flex; align-items:center; gap:.8rem;
+  }
+  .section-eyebrow::before{
+    content:""; width:24px; height:1px;
+    background:var(--accent);
+  }
+  .section h2{
+    font-family:var(--serif);
+    font-size:clamp(2rem, 4vw, 3rem);
+    font-weight:500; line-height:1.1;
+    letter-spacing:-.01em;
+    color:var(--blanc);
+  }
+  .section h2 em{
+    font-style:italic;
+    color:var(--gris-400);
+  }
+  .section-description{
+    font-size:.95rem; color:var(--gris-400);
+    max-width:50ch; margin-top:1rem;
+  }
+
+  /* ============ GRILLE DES SÉQUENCES ============ */
+  .sequence-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:1px;
+    background:var(--gris-800);
+    border:1px solid var(--gris-800);
+  }
+  .sequence-card{
+    background:var(--noir);
+    padding:2rem 2rem 2.4rem;
+    text-decoration:none;
+    color:inherit;
+    display:flex;
+    flex-direction:column;
+    min-height:280px;
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+    position:relative;
+    overflow:hidden;
+  }
+  .sequence-card::before{
+    content:"";
+    position:absolute; top:0; left:0;
+    width:100%; height:2px;
+    background:var(--accent);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition: transform .5s;
+  }
+  .sequence-card:hover::before{transform:scaleX(1);}
+  .sequence-card:hover{
+    background:var(--gris-900);
+    transform:translateY(-4px);
+  }
+  .sequence-card .num{
+    font-family:var(--serif);
+    font-size:.9rem;
+    color:var(--gris-500);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    margin-bottom:1.5rem;
+    font-weight:600;
+  }
+  .sequence-card .title{
+    font-family:var(--serif);
+    font-size:1.5rem;
+    line-height:1.2;
+    color:var(--blanc);
+    margin-bottom:1rem;
+    font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .sequence-card .desc{
+    font-size:.88rem;
+    color:var(--gris-400);
+    line-height:1.6;
+    flex:1;
+  }
+  .sequence-card .arrow{
+    display:flex; align-items:center; gap:.6rem;
+    margin-top:1.5rem;
+    font-size:.75rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--gris-500);
+    font-weight:600;
+    transition: all .3s;
+  }
+  .sequence-card:hover .arrow{
+    color:var(--blanc);
+    gap:1rem;
+  }
+  .sequence-card .arrow::after{
+    content:"→";
+    font-size:1rem;
+    transition: transform .3s;
+  }
+  .sequence-card:hover .arrow::after{
+    transform:translateX(4px);
+  }
+
+  /* ============ CARTES RESSOURCES ============ */
+  .resources-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:1.5rem;
+  }
+  .resource-card{
+    background:var(--gris-900);
+    border:1px solid var(--gris-800);
+    padding:2rem;
+    text-decoration:none;
+    color:inherit;
+    transition: all .35s;
+    position:relative;
+    overflow:hidden;
+  }
+  .resource-card:hover{
+    background:var(--gris-800);
+    border-color:var(--gris-600);
+    transform:translateY(-3px);
+  }
+  .resource-icon{
+    font-size:1.8rem;
+    margin-bottom:1rem;
+    display:block;
+  }
+  .resource-card h3{
+    font-family:var(--serif);
+    font-size:1.15rem;
+    color:var(--blanc);
+    margin-bottom:.5rem;
+    font-weight:500;
+  }
+  .resource-card p{
+    font-size:.85rem;
+    color:var(--gris-400);
+    line-height:1.6;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer{
+    background:var(--noir);
+    border-top:1px solid var(--gris-800);
+    padding:4rem 2rem 2rem;
+    text-align:center;
+  }
+  .footer-inner{
+    max-width:1400px; margin:0 auto;
+  }
+  .footer-brand{
+    font-family:var(--serif);
+    font-size:1.5rem;
+    color:var(--blanc);
+    margin-bottom:1rem;
+    font-weight:500;
+  }
+  .footer-text{
+    font-size:.85rem;
+    color:var(--gris-500);
+    margin-bottom:2rem;
+    line-height:1.7;
+  }
+  .footer-links{
+    display:flex; gap:2rem; justify-content:center;
+    flex-wrap:wrap; margin-bottom:2rem;
+  }
+  .footer-links a{
+    color:var(--gris-400);
+    text-decoration:none;
+    font-size:.8rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    transition: color .3s;
+  }
+  .footer-links a:hover{color:var(--blanc);}
+  .footer-copy{
+    font-size:.75rem;
+    color:var(--gris-600);
+    letter-spacing:.05em;
+    padding-top:2rem;
+    border-top:1px solid var(--gris-800);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:800px){
+    .nav{padding:.8rem 1rem;}
+    .nav-links{display:none;}
+    .hero{padding:6rem 1.5rem 3rem;}
+    .hero-meta{gap:1.5rem;}
+    .section{padding:4rem 1.5rem;}
+    .section-header{margin-bottom:2.5rem;}
+    .sequence-grid{grid-template-columns:1fr;}
+    .sequence-card{padding:1.6rem;}
+  }
+
+  /* ============ ANIMATIONS ============ */
+  .fade-in{
+    opacity:0;
+    transform:translateY(20px);
+    animation: fadeUp .8s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes fadeUp{
+    to{opacity:1; transform:translateY(0);}
+  }
+  .delay-1{animation-delay:.1s;}
+  .delay-2{animation-delay:.2s;}
+  .delay-3{animation-delay:.3s;}
+  .delay-4{animation-delay:.4s;}
+</style>
+</head>
+<body>
+
+<!-- ============ NAVIGATION ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand" style="text-decoration:none;">CFC 1A · Entreprise</a>
+    <ul class="nav-links">
+      <li><a href="#sequences">Séquences</a></li>
+      <li><a href="#ressources">Ressources</a></li>
+      <li><a href="#evaluations">Évaluations</a></li>
+      <li><a href="mailto:mbi.tatiana@gmail.com">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-in">École Schulz Genève · 2026-2027</div>
+    <h1 class="fade-in delay-1">
+      On n'improvise pas<br>
+      une année.<br>
+      <em>On l'organise.</em>
+    </h1>
+    <p class="hero-description fade-in delay-2">
+      Cours, exercices interactifs et ressources pour le cours d'Entreprise de la classe CFC 1A.
+      Chaque séquence est accompagnée de supports HTML, de cas pratiques et d'évaluations.
+    </p>
+    <div class="hero-meta fade-in delay-3">
+      <div class="hero-meta-item">
+        <span class="label">Classe</span>
+        <span class="value">CFC 1A</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Matière</span>
+        <span class="value">Entreprise</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Semestre</span>
+        <span class="value">1 · 14 séquences</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Enseignante</span>
+        <span class="value">Tatiana Mbi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SÉQUENCES ============ -->
+<section class="section" id="sequences">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Programme du semestre</div>
+        <h2>Les 14 <em>séquences</em></h2>
+        <p class="section-description">
+          Chaque séquence couvre un chapitre du référentiel EC1c. Cliquez sur une carte pour accéder aux supports.
+        </p>
+      </div>
+    </div>
+
+    <div class="sequence-grid">
+
+      <!-- S1 -->
+      <a href="sequence1/index.html" class="sequence-card">
+        <div class="num">Séquence 01</div>
+        <div class="title">Rentrée de classe</div>
+        <div class="desc">Découvrir le fonctionnement du cours, le projet annuel et voter pour la sortie de classe.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S2 -->
+      <a href="sequence2/index.html" class="sequence-card">
+        <div class="num">Séquence 02</div>
+        <div class="title">Me situer dans l'organisation</div>
+        <div class="desc">Comprendre ce qu'est une entreprise et situer sa place au sein d'une organisation.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S3 -->
+      <a href="sequence3/index.html" class="sequence-card">
+        <div class="num">Séquence 03</div>
+        <div class="title">Organisation structurelle et fonctionnelle</div>
+        <div class="desc">Explorer les volets structurel et procédural, les fonctions, les liens hiérarchiques et les types de structures.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S4 -->
+      <a href="sequence4/index.html" class="sequence-card">
+        <div class="num">Séquence 04</div>
+        <div class="title">Les fonctions de l'entreprise</div>
+        <div class="desc">Approfondir les 9 fonctions de l'entreprise et leurs rôles respectifs.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S5 -->
+      <a href="sequence5/index.html" class="sequence-card">
+        <div class="num">Séquence 05</div>
+        <div class="title">Planifier, prioriser, traiter les tâches</div>
+        <div class="desc">Découvrir les méthodes ALPES, ABC et la méthode des grenouilles.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S6 -->
+      <a href="sequence6/index.html" class="sequence-card">
+        <div class="num">Séquence 06</div>
+        <div class="title">Gestion du temps et projet</div>
+        <div class="desc">Auto-analyse de sa gestion du temps, en lien avec le projet de sortie.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S7 -->
+      <a href="sequence7/index.html" class="sequence-card">
+        <div class="num">Séquence 07</div>
+        <div class="title">Planifier et organiser un événement</div>
+        <div class="desc">Les 5 étapes d'un événement professionnel et le diagramme de Gantt.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S8 -->
+      <a href="sequence8/index.html" class="sequence-card">
+        <div class="num">Séquence 08</div>
+        <div class="title">Application à un cas réel</div>
+        <div class="desc">Finaliser l'organisation de la sortie en équipes-projet.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S9 -->
+      <a href="sequence9/index.html" class="sequence-card">
+        <div class="num">Séquence 09</div>
+        <div class="title">Sortie de classe</div>
+        <div class="desc">Observer une organisation réelle aux Automnales de Palexpo.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S10 -->
+      <a href="sequence10/index.html" class="sequence-card">
+        <div class="num">Séquence 10</div>
+        <div class="title">Exploitation de la sortie</div>
+        <div class="desc">Analyser l'organisation observée et la relier aux chapitres 1 à 3.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S11 -->
+      <a href="sequence11/index.html" class="sequence-card">
+        <div class="num">Séquence 11</div>
+        <div class="title">Communiquer les résultats</div>
+        <div class="desc">Présentations orales par équipes-projet et introduction à la charte graphique.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S12 -->
+      <a href="sequence12/index.html" class="sequence-card">
+        <div class="num">Séquence 12</div>
+        <div class="title">Structurer le classement</div>
+        <div class="desc">Types de classement physique et numérique, GED.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S13 -->
+      <a href="sequence13/index.html" class="sequence-card">
+        <div class="num">Séquence 13</div>
+        <div class="title">Bilan du semestre</div>
+        <div class="desc">Évaluer ses propres progrès depuis la rentrée.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+      <!-- S14 -->
+      <a href="sequence14/index.html" class="sequence-card">
+        <div class="num">Séquence 14</div>
+        <div class="title">Consolidation avant examens</div>
+        <div class="desc">Révisions des chapitres 1 à 5 et questions-réponses.</div>
+        <div class="arrow">Ouvrir la séquence</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESSOURCES ============ -->
+<section class="section" id="ressources" style="background:var(--noir-2);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Ressources générales</div>
+        <h2>Documents et <em>outils</em></h2>
+      </div>
+    </div>
+
+    <div class="resources-grid">
+      <a href="evaluations/index.html" class="resource-card">
+        <span class="resource-icon">📊</span>
+        <h3>Évaluations et corrigés</h3>
+        <p>Tests, quiz et grilles d'évaluation pour toutes les séquences.</p>
+      </a>
+      <a href="ressources/index.html" class="resource-card">
+        <span class="resource-icon">📚</span>
+        <h3>Ressources générales</h3>
+        <p>Manuel, référentiel EC1c, documents complémentaires.</p>
+      </a>
+      <a href="sequence3/fiche-organigramme.html" class="resource-card">
+        <span class="resource-icon">📐</span>
+        <h3>Fiche organigramme</h3>
+        <p>Fiche vierge à imprimer pour créer des organigrammes.</p>
+      </a>
+      <a href="sequence3/cas-pratiques.html" class="resource-card">
+        <span class="resource-icon">💼</span>
+        <h3>Cas pratiques</h3>
+        <p>SportScents, GreenTech SA, EventScents — exercices interactifs.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÉVALUATIONS ============ -->
+<section class="section" id="evaluations">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Évaluation</div>
+        <h2>Modalités et <em>critères</em></h2>
+      </div>
+    </div>
+
+    <div class="resources-grid">
+      <a href="evaluations/index.html" class="resource-card">
+        <span class="resource-icon">🎯</span>
+        <h3>Plan d'évaluation</h3>
+        <p>Vue d'ensemble des évaluations formatives et sommatives.</p>
+      </a>
+      <a href="evaluations/index.html" class="resource-card">
+        <span class="resource-icon">📋</span>
+        <h3>Grilles de notation</h3>
+        <p>Critères objectifs pour chaque type d'évaluation.</p>
+      </a>
+      <a href="evaluations/index.html" class="resource-card">
+        <span class="resource-icon">📝</span>
+        <h3>Tests et corrigés</h3>
+        <p>Tests de validation et corrigés réservés à l'enseignante.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">CFC 1A · Entreprise</div>
+    <p class="footer-text">
+      École Schulz Genève · Semestre 1 · 2026-2027<br>
+      Enseignante : Tatiana Mbi
+    </p>
+    <div class="footer-links">
+      <a href="#sequences">Séquences</a>
+      <a href="#ressources">Ressources</a>
+      <a href="#evaluations">Évaluations</a>
+      <a href="mailto:mbi.tatiana@gmail.com">Contact</a>
+    </div>
+    <div class="footer-copy">
+      © 2026-2027 · CFC 1A · Tous droits réservés
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth scroll pour les ancres
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const href = a.getAttribute('href');
+      if(href === '#' || href.length < 2) return;
+      const target = document.querySelector(href);
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+
+  // Animation au scroll
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('fade-in');
+      }
+    });
+  }, {threshold:.1});
+
+  document.querySelectorAll('.sequence-card, .resource-card').forEach(el=>{
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

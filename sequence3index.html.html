@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Séquence 3 — Organisation structurelle | CFC 1A</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --gris-900:#1F1F1F;
+    --gris-800:#2A2A2A; --gris-700:#3A3A3A; --gris-600:#555;
+    --gris-500:#777; --gris-400:#999; --gris-300:#BBB;
+    --gris-200:#D4D4D4; --gris-100:#E8E8E8; --gris-50:#F4F4F4;
+    --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--noir); color:var(--blanc);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb{
+    padding:6rem 2rem 2rem;
+    max-width:1200px; margin:0 auto;
+    font-size:.8rem;
+    color:var(--gris-500);
+  }
+  .breadcrumb a{
+    color:var(--gris-400); text-decoration:none;
+    transition:color .3s;
+  }
+  .breadcrumb a:hover{color:var(--blanc);}
+  .breadcrumb span{margin:0 .8rem; color:var(--gris-700);}
+
+  /* Header */
+  .seq-header{
+    max-width:1200px; margin:0 auto;
+    padding:2rem 2rem 4rem;
+    border-bottom:1px solid var(--gris-800);
+  }
+  .seq-eyebrow{
+    font-size:.72rem; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--accent);
+    margin-bottom:1.5rem; font-weight:600;
+  }
+  .seq-header h1{
+    font-family:var(--serif); font-size:clamp(2rem, 5vw, 4rem);
+    font-weight:500; line-height:1.1; letter-spacing:-.02em;
+    margin-bottom:1.5rem;
+  }
+  .seq-header h1 em{font-style:italic; color:var(--gris-400); font-weight:400;}
+  .seq-header p{
+    font-size:1.05rem; color:var(--gris-400);
+    max-width:60ch; line-height:1.7;
+  }
+  .seq-meta{
+    display:flex; gap:2.5rem; flex-wrap:wrap;
+    margin-top:2.5rem;
+  }
+  .seq-meta-item .label{
+    font-size:.68rem; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--gris-500);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .seq-meta-item .value{
+    font-family:var(--serif); font-size:1rem;
+    color:var(--blanc); font-weight:500;
+  }
+
+  /* Contenu */
+  .container{
+    max-width:1200px; margin:0 auto;
+    padding:4rem 2rem 6rem;
+  }
+
+  .section-title{
+    font-family:var(--serif); font-size:2rem;
+    font-weight:500; margin-bottom:1rem;
+    letter-spacing:-.01em;
+  }
+  .section-title em{font-style:italic; color:var(--gris-400);}
+  .section-sub{
+    color:var(--gris-400); font-size:.95rem;
+    max-width:60ch; margin-bottom:3rem;
+  }
+
+  /* Grille de fichiers */
+  .file-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:1.5rem;
+    margin-bottom:5rem;
+  }
+  .file-card{
+    background:var(--gris-900);
+    border:1px solid var(--gris-800);
+    padding:2rem;
+    text-decoration:none; color:inherit;
+    transition: all .35s;
+    position:relative; overflow:hidden;
+    min-height:200px;
+    display:flex; flex-direction:column;
+  }
+  .file-card::before{
+    content:"";
+    position:absolute; top:0; left:0;
+    width:100%; height:2px;
+    background:var(--accent);
+    transform:scaleX(0); transform-origin:left;
+    transition:transform .5s;
+  }
+  .file-card:hover::before{transform:scaleX(1);}
+  .file-card:hover{
+    background:var(--gris-800);
+    border-color:var(--gris-600);
+    transform:translateY(-3px);
+  }
+  .file-card .type{
+    font-size:.68rem; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--gris-500);
+    margin-bottom:1rem; font-weight:600;
+  }
+  .file-card h3{
+    font-family:var(--serif); font-size:1.35rem;
+    color:var(--blanc); margin-bottom:.8rem;
+    font-weight:500; line-height:1.2;
+  }
+  .file-card p{
+    font-size:.88rem; color:var(--gris-400);
+    line-height:1.6; flex:1;
+  }
+  .file-card .arrow{
+    display:flex; align-items:center; gap:.6rem;
+    margin-top:1.5rem;
+    font-size:.72rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gris-500);
+    font-weight:600; transition:all .3s;
+  }
+  .file-card:hover .arrow{color:var(--blanc); gap:1rem;}
+  .file-card .arrow::after{content:"→"; font-size:.9rem;}
+
+  /* Objectifs */
+  .objectives{
+    background:var(--gris-900);
+    border-left:3px solid var(--accent);
+    padding:2rem 2.5rem;
+    margin-bottom:4rem;
+  }
+  .objectives h3{
+    font-family:var(--serif); font-size:1.3rem;
+    margin-bottom:1.2rem; font-weight:500;
+  }
+  .objectives ul{
+    list-style:none;
+  }
+  .objectives li{
+    padding:.6rem 0;
+    font-size:.95rem; color:var(--gris-300);
+    display:flex; align-items:flex-start; gap:.8rem;
+  }
+  .objectives li::before{
+    content:"→"; color:var(--accent);
+    font-weight:600; flex:0 0 auto;
+  }
+
+  /* Navigation séquence */
+  .seq-nav{
+    display:flex; justify-content:space-between;
+    gap:2rem; padding-top:3rem;
+    border-top:1px solid var(--gris-800);
+    margin-top:4rem;
+  }
+  .seq-nav a{
+    text-decoration:none; color:var(--gris-400);
+    font-size:.85rem; letter-spacing:.1em;
+    text-transform:uppercase;
+    transition:color .3s;
+    display:flex; align-items:center; gap:.6rem;
+  }
+  .seq-nav a:hover{color:var(--blanc);}
+
+  @media (max-width:800px){
+    .breadcrumb, .seq-header, .container{padding-left:1.2rem; padding-right:1.2rem;}
+    .file-grid{grid-template-columns:1fr;}
+    .objectives{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="../index.html">Accueil</a>
+  <span>/</span>
+  <a href="#séquence">Séquences</a>
+  <span>/</span>
+  <strong style="color:var(--gris-300);">Séquence 3</strong>
+</div>
+
+<header class="seq-header">
+  <div class="seq-eyebrow">Séquence 03 · Chapitre 1 · Domaine 1</div>
+  <h1>Organisation structurelle<br>et <em>fonctionnelle</em></h1>
+  <p>
+    Explorer les deux volets de l'organisation d'une entreprise — structurel et procédural — 
+    à travers les notions d'organigramme, de fonctions et de types de structures.
+  </p>
+
+  <div class="seq-meta">
+    <div class="seq-meta-item">
+      <span class="label">Durée</span>
+      <span class="value">1h30</span>
+    </div>
+    <div class="seq-meta-item">
+      <span class="label">Références</span>
+      <span class="value">EC1c04 · 05 · 06</span>
+    </div>
+    <div class="seq-meta-item">
+      <span class="label">Projet lié</span>
+      <span class="value">Sortie aux Automnales</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Objectifs -->
+  <div class="objectives">
+    <h3>🎯 Objectifs de la séquence</h3>
+    <ul>
+      <li><strong>Connaître</strong> les avantages d'une organisation structurée</li>
+      <li><strong>Comprendre</strong> la différence entre organisation structurelle et procédurale</li>
+      <li><strong>Identifier</strong> les 9 fonctions de l'entreprise et leurs rôles</li>
+      <li><strong>Appliquer</strong> ces notions à travers des cas pratiques concrets</li>
+      <li><strong>Créer</strong> un organigramme simple à partir d'une situation donnée</li>
+    </ul>
+  </div>
+
+  <!-- Supports -->
+  <h2 class="section-title">Supports de la <em>séquence</em></h2>
+  <p class="section-sub">Documents, exercices et fiches à utiliser en classe et à la maison.</p>
+
+  <div class="file-grid">
+
+    <a href="cours.html" class="file-card">
+      <div class="type">📖 Cours</div>
+      <h3>Cours complet</h3>
+      <p>Les notions clés : 4 éléments, structurelle vs procédurale, 9 fonctions, liens, types de structures.</p>
+      <div class="arrow">Lire le cours</div>
+    </a>
+
+    <a href="exercices.html" class="file-card">
+      <div class="type">📝 Exercices interactifs</div>
+      <h3>Exercices HTML</h3>
+      <p>QCM, vrai/faux, classement, association et texte à trous. Envoi automatique des résultats.</p>
+      <div class="arrow">Faire les exercices</div>
+    </a>
+
+    <a href="cas-pratiques.html" class="file-card">
+      <div class="type">💼 Cas pratiques</div>
+      <h3>SportScents, GreenTech, EventScents</h3>
+      <p>3 cas pratiques avec questions intégrées et fiches organigramme à compléter.</p>
+      <div class="arrow">Ouvrir les cas</div>
+    </a>
+
+    <a href="fiche-organigramme.html" class="file-card">
+      <div class="type">📐 Fiche à imprimer</div>
+      <h3>Fiche organigramme</h3>
+      <p>Fiche vierge avec grille et légende pour dessiner un organigramme à la main.</p>
+      <div class="arrow">Ouvrir la fiche</div>
+    </a>
+
+  </div>
+
+  <!-- Navigation séquence -->
+  <nav class="seq-nav">
+    <a href="../sequence2/index.html">← Séquence 2</a>
+    <a href="../sequence4/index.html">Séquence 4 →</a>
+  </nav>
+
+</div>
+
+</body>
+</html>
