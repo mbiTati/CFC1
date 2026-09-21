@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Exercices supplémentaires — Séquence 1 — CFC 1A</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F; --gris-800:#2A2A2A; --gris-700:#3A3A3A;
+    --gris-600:#555; --gris-500:#777; --gris-400:#999;
+    --gris-300:#BBB; --gris-200:#D4D4D4; --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4; --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--blanc-casse); color:var(--noir);
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:var(--noir); color:var(--blanc);
+    padding:5rem 2rem 4rem;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .header::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.04), transparent 60%);
+  }
+  .header .header-eyebrow{
+    font-size:.7rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:1.4rem; position:relative;
+  }
+  .header h1{
+    font-family:var(--serif); font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--blanc); position:relative; font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .header p{
+    color:var(--gris-400); margin-top:1rem; position:relative;
+    max-width:60ch; margin-left:auto; margin-right:auto;
+    font-size:.95rem; letter-spacing:.02em;
+  }
+  .container{max-width:920px; margin:0 auto; padding:3.5rem 1.5rem 7rem;}
+  .exercise{
+    background:var(--blanc); padding:2.6rem;
+    margin-bottom:2.5rem;
+    border:1px solid var(--gris-200);
+    opacity:0; transform:translateY(30px);
+    transition: all .9s cubic-bezier(.4,0,.2,1);
+  }
+  .exercise.visible{opacity:1; transform:translateY(0);}
+  .exercise .badge{
+    display:inline-block; color:var(--gris-600);
+    font-size:.68rem; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; padding:0 0 .5rem 0;
+    border-bottom:1px solid var(--noir); margin-bottom:1.2rem;
+  }
+  .exercise h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--noir);
+    margin-bottom:.7rem; font-weight:500;
+  }
+  .exercise .consigne{
+    background:var(--gris-50); padding:1.2rem 1.4rem;
+    font-size:.92rem; margin-bottom:1.8rem; color:var(--gris-700);
+    border-left:2px solid var(--noir);
+  }
+  .exercise .consigne strong{color:var(--noir); font-weight:600;}
+
+  /* ============ EX 1 : ASSOCIATION ============ */
+  .match-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--gris-200); margin-top:1.5rem;
+  }
+  .match-col{
+    background:var(--blanc); padding:1.5rem;
+  }
+  .match-col h4{
+    font-family:var(--serif); font-size:1rem;
+    color:var(--noir); margin-bottom:1rem;
+    padding-bottom:.6rem; border-bottom:1px solid var(--gris-200);
+    font-weight:500; letter-spacing:.02em;
+  }
+  .match-item{
+    padding:.9rem 1.1rem; margin-bottom:.6rem;
+    background:var(--gris-50); border:1px solid var(--gris-200);
+    cursor:pointer; font-size:.88rem;
+    transition:.25s; color:var(--noir);
+    display:flex; justify-content:space-between;
+    align-items:center; gap:.6rem;
+  }
+  .match-item:hover{border-color:var(--noir); background:var(--blanc);}
+  .match-item.selected{
+    background:var(--noir); color:var(--blanc);
+    border-color:var(--noir);
+  }
+  .match-item.matched{
+    background:rgba(10,10,10,.08);
+    border-color:var(--noir);
+    color:var(--gris-600);
+    cursor:default;
+    text-decoration:line-through;
+  }
+  .match-item.matched::after{content:"✓"; color:var(--noir); text-decoration:none;}
+  .match-item .num-tag{
+    font-family:var(--serif); font-weight:600;
+    font-size:.9rem;
+  }
+
+  /* ============ EX 2 : CHOIX MULTIPLE AVEC JUSTIFICATION ============ */
+  .scenario{
+    background:var(--gris-50); padding:1.4rem;
+    margin-bottom:1.4rem; border-left:2px solid var(--noir);
+  }
+  .scenario .scenario-title{
+    font-size:.72rem; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--gris-500);
+    font-weight:600; margin-bottom:.6rem;
+  }
+  .scenario .scenario-text{
+    font-family:var(--serif); font-size:1.1rem;
+    color:var(--noir); margin-bottom:1rem; font-weight:500;
+    line-height:1.5;
+  }
+  .scenario .scenario-options{
+    display:flex; flex-direction:column; gap:.5rem;
+  }
+  .scenario-opt{
+    padding:.85rem 1.1rem; background:var(--blanc);
+    border:1px solid var(--gris-200); cursor:pointer;
+    font-size:.88rem; transition:.25s;
+    text-align:left; color:var(--noir);
+    font-family:var(--sans); border-radius:0;
+  }
+  .scenario-opt:hover{border-color:var(--noir); background:var(--gris-50);}
+  .scenario-opt.correct{
+    background:var(--noir); color:var(--blanc);
+    border-color:var(--noir); font-weight:500;
+  }
+  .scenario-opt.incorrect{
+    background:var(--gris-100); color:var(--gris-600);
+    border-color:var(--gris-400); text-decoration:line-through;
+  }
+  .scenario-opt:disabled{cursor:default;}
+
+  /* ============ EX 3 : ORDONNER LES ÉTAPES ============ */
+  .order-list{
+    display:flex; flex-direction:column; gap:.5rem;
+    margin-top:1.2rem;
+  }
+  .order-item{
+    padding:1rem 1.2rem; background:var(--gris-50);
+    border:1px solid var(--gris-200); cursor:grab;
+    font-size:.9rem; transition:.25s; color:var(--noir);
+    display:flex; align-items:center; gap:1rem;
+    user-select:none;
+  }
+  .order-item:hover{border-color:var(--noir);}
+  .order-item.dragging{opacity:.4;}
+  .order-item .handle{
+    color:var(--gris-400); font-size:1.1rem;
+    font-family:var(--serif); font-weight:600;
+  }
+  .order-item.correct{
+    background:var(--noir); color:var(--blanc);
+    border-color:var(--noir);
+  }
+  .order-item.correct .handle{color:var(--gris-400);}
+  .order-item.incorrect{
+    background:var(--gris-100); border-color:var(--gris-400);
+  }
+
+  /* ============ EX 4 : ANALYSE DE CAS ============ */
+  .case-study{
+    background:var(--gris-50); padding:1.8rem;
+    border-left:2px solid var(--noir); margin-bottom:1.6rem;
+  }
+  .case-study h4{
+    font-family:var(--serif); font-size:1.2rem;
+    color:var(--noir); margin-bottom:.8rem; font-weight:500;
+  }
+  .case-study p{font-size:.92rem; color:var(--gris-700); margin-bottom:1rem; line-height:1.7;}
+  .case-study textarea{
+    width:100%; min-height:120px; padding:1rem;
+    border:1px solid var(--gris-200); background:var(--blanc);
+    font-family:var(--sans); font-size:.9rem;
+    color:var(--noir); resize:vertical; border-radius:0;
+    outline:none; transition:.25s;
+  }
+  .case-study textarea:focus{border-color:var(--noir);}
+
+  /* ============ BOUTONS ============ */
+  .btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:600;
+    padding:1rem 1.8rem; border:1px solid var(--noir); cursor:pointer;
+    background:var(--noir); color:var(--blanc);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+  }
+  .btn:hover{background:transparent; color:var(--noir);}
+  .btn.ghost{background:transparent; color:var(--noir); border:1px solid var(--gris-400);}
+  .btn.ghost:hover{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .btn-row{display:flex; gap:.8rem; margin-top:1.8rem; flex-wrap:wrap;}
+
+  .feedback{
+    margin-top:1.2rem; padding:1.1rem 1.4rem;
+    font-size:.88rem; display:none;
+    letter-spacing:.02em;
+  }
+  .feedback.show{display:block; animation: slideDown .4s;}
+  .feedback.success{background:var(--noir); color:var(--blanc); border-left:3px solid var(--noir);}
+  .feedback.error{background:var(--gris-100); color:var(--gris-700); border-left:3px solid var(--gris-500);}
+  @keyframes slideDown{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
+
+  .score-box{
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    background:var(--noir); color:var(--blanc);
+    padding:1.1rem 1.6rem;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    font-family:var(--serif); z-index:50;
+    display:flex; align-items:center; gap:1.2rem;
+    border:1px solid var(--gris-800);
+  }
+  .score-box .score-num{font-size:1.9rem; color:var(--blanc); font-weight:500;}
+  .score-box .score-label{
+    font-size:.65rem; opacity:.65; letter-spacing:.24em;
+    text-transform:uppercase; font-family:var(--sans);
+  }
+
+  @media (max-width:700px){
+    .match-grid{grid-template-columns:1fr;}
+    .container{padding:2rem 1rem 7rem;}
+    .exercise{padding:1.8rem;}
+    .score-box{bottom:1rem; right:1rem; padding:.9rem 1.2rem;}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-eyebrow">CFC 1A · Séquence 1 · Chapitre 1</div>
+  <h1>Exercices supplémentaires</h1>
+  <p>Quatre exercices avancés pour approfondir la notion d'organisation de l'entreprise.</p>
+</header>
+
+<div class="container">
+
+  <!-- ============ EXERCICE 1 : ASSOCIATION ============ -->
+  <section class="exercise" data-ex="5">
+    <span class="badge">Exercice 05 · Association</span>
+    <h2>Associer fonction et mission</h2>
+    <div class="consigne">
+      <strong>Consigne :</strong> Cliquez sur une <em>fonction</em> à gauche, puis sur sa <em>mission</em> à droite. Si c'est correct, la paire se valide.
+    </div>
+
+    <div class="match-grid">
+      <div class="match-col">
+        <h4>Fonctions</h4>
+        <div id="matchLeft"></div>
+      </div>
+      <div class="match-col">
+        <h4>Missions</h4>
+        <div id="matchRight"></div>
+      </div>
+    </div>
+
+    <div class="feedback" id="fb5"></div>
+  </section>
+
+  <!-- ============ EXERCICE 2 : SCÉNARIOS ============ -->
+  <section class="exercise" data-ex="6">
+    <span class="badge">Exercice 06 · Mise en situation</span>
+    <h2>Quelle fonction intervient ?</h2>
+    <div class="consigne">
+      <strong>Consigne :</strong> Pour chaque situation, identifiez la fonction de l'entreprise la plus concernée.
+    </div>
+    <div id="scenarios"></div>
+    <div class="feedback" id="fb6"></div>
+  </section>
+
+  <!-- ============ EXERCICE 3 : ORDONNER ============ -->
+  <section class="exercise" data-ex="7">
+    <span class="badge">Exercice 07 · Ordonner</span>
+    <h2>Remettre les étapes dans l'ordre</h2>
+    <div class="consigne">
+      <strong>Consigne :</strong> Glissez les étapes pour reconstituer le processus de création d'une entreprise, du début à la fin.
+    </div>
+    <div class="order-list" id="orderList"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="checkOrder()">Vérifier l'ordre</button>
+    </div>
+    <div class="feedback" id="fb7"></div>
+  </section>
+
+  <!-- ============ EXERCICE 4 : ANALYSE ============ -->
+  <section class="exercise" data-ex="8">
+    <span class="badge">Exercice 08 · Analyse de cas</span>
+    <h2>SportScents — Diagnostic organisationnel</h2>
+    <div class="consigne">
+      <strong>Consigne :</strong> Lisez le cas ci-dessous, puis répondez aux questions par écrit. Cliquez sur « Voir une réponse type » pour comparer.
+    </div>
+
+    <div class="case-study">
+      <h4>Le cas SportScents</h4>
+      <p>SportScents est une jeune entreprise de parfums sportifs. Elle vient de passer de 5 à 40 employés en 6 mois. Le directeur général, M. Duval, continue de tout gérer seul : les commandes, les plannings, les recrutements, les budgets et la communication. Résultat : les commandes sont livrées en retard, deux employés ont démissionné, et la comptabilité n'est plus à jour depuis 3 mois.</p>
+      <p><strong>Question 1 :</strong> Quel est le problème principal de SportScents ?</p>
+      <p><strong>Question 2 :</strong> Quelle structure d'organisation lui recommandez-vous ? Pourquoi ?</p>
+      <p><strong>Question 3 :</strong> Quelles fonctions devraient être créées en priorité ?</p>
+    </div>
+
+    <textarea id="caseAnswer" placeholder="Écrivez votre analyse ici..."></textarea>
+
+    <div class="btn-row">
+      <button class="btn" onclick="showCaseAnswer()">Voir une réponse type</button>
+    </div>
+
+    <div class="feedback" id="fb8"></div>
+  </section>
+
+</div>
+
+<div class="score-box">
+  <div>
+    <div class="score-label">Score global</div>
+    <div class="score-num" id="globalScore">0 / 4</div>
+  </div>
+</div>
+
+<script>
+/* ============ SCROLL ============ */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold:.15});
+document.querySelectorAll('.exercise').forEach(el=>observer.observe(el));
+
+/* ============ SCORE ============ */
+let completed = new Set();
+function updateScore(){
+  document.getElementById('globalScore').textContent = `${completed.size} / 4`;
+}
+function showFeedback(id, ok, msg){
+  const fb = document.getElementById(id);
+  fb.innerHTML = msg;
+  fb.className = 'feedback show ' + (ok ? 'success' : 'error');
+}
+
+/* ============ EX 5 : ASSOCIATION ============ */
+const matchData = [
+  {id:"direction", label:"Direction", mission:"Fixer les objectifs et la stratégie globale de l'entreprise"},
+  {id:"finance", label:"Finance", mission:"Gérer la comptabilité, la trésorerie et la fiscalité"},
+  {id:"rh", label:"Ressources Humaines", mission:"Recruter, former et motiver les collaborateurs"},
+  {id:"marketing", label:"Marketing", mission:"Étudier le marché et promouvoir les produits"},
+  {id:"logistique", label:"Logistique", mission:"Gérer les stocks, les livraisons et la maintenance"},
+  {id:"production", label:"Production", mission:"Fabriquer les biens ou services vendus"}
+];
+
+let selectedLeft = null;
+let matchedPairs = 0;
+
+function renderMatch(){
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+
+  left.innerHTML = matchData.map(m=>`
+    <div class="match-item ${m.matched ? 'matched' : ''}" data-id="${m.id}" onclick="selectLeft('${m.id}', this)">
+      <span class="num-tag">${m.label}</span>
+    </div>
+  `).join('');
+
+  // Shuffle right
+  const shuffled = [...matchData].sort(()=>Math.random()-.5);
+  right.innerHTML = shuffled.map(m=>`
+    <div class="match-item ${m.matched ? 'matched' : ''}" data-id="${m.id}" onclick="selectRight('${m.id}', this)">
+      <span>${m.mission}</span>
+    </div>
+  `).join('');
+}
+
+function selectLeft(id, el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLeft = id;
+}
+
+function selectRight(id, el){
+  if(el.classList.contains('matched')) return;
+  if(!selectedLeft){
+    showFeedback('fb5', false, 'Sélectionnez d\'abord une fonction à gauche.');
+    return;
+  }
+  if(selectedLeft === id){
+    // Correct
+    matchData.find(m=>m.id === id).matched = true;
+    matchedPairs++;
+    selectedLeft = null;
+    renderMatch();
+    if(matchedPairs === matchData.length){
+      showFeedback('fb5', true, '🎉 Parfait ! Toutes les associations sont correctes.');
+      if(!completed.has(5)){completed.add(5); updateScore();}
+    } else {
+      showFeedback('fb5', true, `✓ Correct ! ${matchedPairs}/${matchData.length} associations trouvées.`);
+    }
+  } else {
+    // Incorrect
+    el.style.borderColor = 'var(--gris-400)';
+    el.style.background = 'var(--gris-100)';
+    setTimeout(()=>{
+      el.style.borderColor = '';
+      el.style.background = '';
+    }, 600);
+    showFeedback('fb5', false, '✗ Mauvaise association. Réessayez.');
+  }
+}
+
+/* ============ EX 6 : SCÉNARIOS ============ */
+const scenarios = [
+  {
+    title: "Situation 01",
+    text: "Une entreprise veut lancer un nouveau parfum. Elle doit d'abord analyser les attentes des clients et la concurrence.",
+    options: ["Marketing", "Finance", "Production", "RH"],
+    correct: 0
+  },
+  {
+    title: "Situation 02",
+    text: "L'entreprise doit recruter un nouveau chef d'atelier et organiser sa formation.",
+    options: ["Achat", "RH", "Logistique", "Direction"],
+    correct: 1
+  },
+  {
+    title: "Situation 03",
+    text: "Les stocks de matières premières sont presque épuisés. Il faut passer commande chez un fournisseur.",
+    options: ["Achat", "Marketing", "Production", "Communication"],
+    correct: 0
+  },
+  {
+    title: "Situation 04",
+    text: "Un client se plaint d'un retard de livraison. L'équipe doit réorganiser les tournées de camions.",
+    options: ["Finance", "Logistique", "RH", "Direction"],
+    correct: 1
+  },
+  {
+    title: "Situation 05",
+    text: "L'entreprise doit publier un communiqué de presse pour annoncer un partenariat.",
+    options: ["Production", "Communication", "Achat", "Finance"],
+    correct: 1
+  },
+  {
+    title: "Situation 06",
+    text: "Le directeur général prépare le budget annuel et fixe les objectifs de croissance.",
+    options: ["Direction", "Marketing", "Logistique", "RH"],
+    correct: 0
+  }
+];
+
+let scenarioScore = 0;
+let scenarioAnswered = 0;
+
+function renderScenarios(){
+  const c = document.getElementById('scenarios');
+  c.innerHTML = scenarios.map((s, si)=>`
+    <div class="scenario">
+      <div class="scenario-title">${s.title}</div>
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-options">
+        ${s.options.map((o, oi)=>`
+          <button class="scenario-opt" onclick="answerScenario(${si}, ${oi}, this)">
+            ${o}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function answerScenario(si, oi, btn){
+  const s = scenarios[si];
+  const parent = btn.parentElement;
+  const buttons = parent.querySelectorAll('.scenario-opt');
+  buttons.forEach(b=>b.disabled = true);
+  if(oi === s.correct){
+    btn.classList.add('correct');
+    scenarioScore++;
+  } else {
+    btn.classList.add('incorrect');
+    buttons[s.correct].classList.add('correct');
+  }
+  scenarioAnswered++;
+  if(scenarioAnswered === scenarios.length){
+    const ok = scenarioScore >= 5;
+    showFeedback('fb6', ok, `${scenarioScore}/${scenarios.length} bonnes réponses. ${ok ? 'Très bien.' : 'Relisez les fonctions de l\'entreprise.'}`);
+    if(ok && !completed.has(6)){completed.add(6); updateScore();}
+  }
+}
+
+/* ============ EX 7 : ORDONNER ============ */
+const orderItems = [
+  {id: "idea", label: "Émergence de l'idée entrepreneuriale", order: 1},
+  {id: "study", label: "Étude de marché et analyse de faisabilité", order: 2},
+  {id: "plan", label: "Rédaction du business plan", order: 3},
+  {id: "legal", label: "Création juridique (statuts, inscription)", order: 4},
+  {id: "finance", label: "Recherche de financements (banque, investisseurs)", order: 5},
+  {id: "structure", label: "Mise en place de la structure et recrutement", order: 6},
+  {id: "launch", label: "Lancement de l'activité commerciale", order: 7}
+];
+
+// Shuffle initial
+let currentOrder = [...orderItems].sort(()=>Math.random()-.5);
+
+function renderOrder(){
+  const c = document.getElementById('orderList');
+  c.innerHTML = currentOrder.map((item, i)=>`
+    <div class="order-item" draggable="true" data-id="${item.id}" data-order="${item.order}"
+         ondragstart="dragOrder(event, ${i})"
+         ondragover="event.preventDefault()"
+         ondrop="dropOrder(event, ${i})">
+      <span class="handle">${i+1}</span>
+      <span>${item.label}</span>
+    </div>
+  `).join('');
+}
+
+let dragIndex = null;
+function dragOrder(e, i){
+  dragIndex = i;
+  e.target.classList.add('dragging');
+}
+function dropOrder(e, i){
+  e.preventDefault();
+  if(dragIndex === null || dragIndex === i) return;
+  const item = currentOrder.splice(dragIndex, 1)[0];
+  currentOrder.splice(i, 0, item);
+  dragIndex = null;
+  renderOrder();
+}
+
+function checkOrder(){
+  const items = document.querySelectorAll('.order-item');
+  let correctCount = 0;
+  items.forEach((el, i)=>{
+    const expectedOrder = i+1;
+    if(parseInt(el.dataset.order) === expectedOrder){
+      el.classList.add('correct');
+      el.classList.remove('incorrect');
+      correctCount++;
+    } else {
+      el.classList.add('incorrect');
+      el.classList.remove('correct');
+    }
+  });
+  const ok = correctCount === orderItems.length;
+  showFeedback('fb7', ok, `${correctCount}/${orderItems.length} étapes à la bonne place. ${ok ? '🎉 Parfait !' : 'Continuez à réorganiser.'}`);
+  if(ok && !completed.has(7)){completed.add(7); updateScore();}
+}
+
+/* ============ EX 8 : ANALYSE DE CAS ============ */
+function showCaseAnswer(){
+  const answer = document.getElementById('caseAnswer').value;
+  if(answer.length < 50){
+    showFeedback('fb8', false, '✏️ Écrivez d\'abord votre analyse (au moins quelques lignes).');
+    return;
+  }
+  const responseType = `
+    <strong>Réponse type — Éléments attendus :</strong><br><br>
+    <strong>1. Problème principal :</strong> SportScents est une entreprise <em>sous-organisée</em>. La croissance rapide (5 → 40 employés) n'a pas été accompagnée d'une restructuration. Le dirigeant est en surcharge et aucune délégation n'a été mise en place.<br><br>
+    <strong>2. Structure recommandée :</strong> Une <em>structure fonctionnelle</em> est la plus adaptée dans un premier temps, car l'entreprise est encore de taille moyenne et probablement monoproduit (parfums sportifs). Elle permettra de répartir les responsabilités par fonction (finance, RH, production, etc.). À terme, une structure divisionnelle pourrait être envisagée si SportScents diversifie sa gamme.<br><br>
+    <strong>3. Fonctions à créer en priorité :</strong><br>
+    • <em>Finance</em> — pour remettre la comptabilité à jour et gérer la trésorerie.<br>
+    • <em>RH</em> — pour recruter, fidéliser et former les employés.<br>
+    • <em>Logistique / Production</em> — pour résoudre les retards de livraison.<br>
+    • <em>Administration</em> — pour soutenir les autres fonctions.<br><br>
+    <em>Bonus :</em> la <em>Direction</em> doit déléguer et nommer des responsables de département.
+  `;
+  showFeedback('fb8', true, responseType);
+  if(!completed.has(8)){completed.add(8); updateScore();}
+}
+
+/* ============ INIT ============ */
+renderMatch();
+renderScenarios();
+renderOrder();
+</script>
+</body>
+</html>

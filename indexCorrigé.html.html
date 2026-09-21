@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Corrigés — Séquence 1 — CFC 1A</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F; --gris-800:#2A2A2A; --gris-700:#3A3A3A;
+    --gris-600:#555; --gris-500:#777; --gris-400:#999;
+    --gris-300:#BBB; --gris-200:#D4D4D4; --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4; --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--blanc-casse); color:var(--noir);
+    line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:var(--noir); color:var(--blanc);
+    padding:5rem 2rem 4rem;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .header::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 70% 50%, rgba(255,255,255,.04), transparent 60%);
+  }
+  .header .header-eyebrow{
+    font-size:.7rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:1.4rem; position:relative;
+  }
+  .header h1{
+    font-family:var(--serif); font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--blanc); position:relative; font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .header p{
+    color:var(--gris-400); margin-top:1rem; position:relative;
+    max-width:60ch; margin-left:auto; margin-right:auto;
+    font-size:.95rem; letter-spacing:.02em;
+  }
+  .header .warning{
+    display:inline-block; margin-top:1.8rem;
+    border:1px solid var(--accent); color:var(--accent);
+    padding:.6rem 1.4rem; font-size:.72rem;
+    letter-spacing:.22em; text-transform:uppercase;
+    font-weight:600;
+  }
+  .container{max-width:920px; margin:0 auto; padding:3.5rem 1.5rem 7rem;}
+  .section{
+    background:var(--blanc); padding:2.6rem;
+    margin-bottom:2.5rem;
+    border:1px solid var(--gris-200);
+  }
+  .section .badge{
+    display:inline-block; color:var(--gris-600);
+    font-size:.68rem; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; padding:0 0 .5rem 0;
+    border-bottom:1px solid var(--noir); margin-bottom:1.2rem;
+  }
+  .section h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--noir);
+    margin-bottom:.7rem; font-weight:500;
+  }
+  .section .intro{
+    background:var(--gris-50); padding:1.1rem 1.4rem;
+    font-size:.9rem; margin-bottom:1.8rem; color:var(--gris-700);
+    border-left:2px solid var(--noir);
+  }
+  .q{
+    margin-bottom:1.6rem; padding-bottom:1.4rem;
+    border-bottom:1px dashed var(--gris-200);
+  }
+  .q:last-child{border-bottom:none;}
+  .q .q-label{
+    font-size:.7rem; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--gris-500); font-weight:600; margin-bottom:.6rem;
+  }
+  .q .q-text{
+    font-family:var(--serif); font-size:1.15rem; color:var(--noir);
+    margin-bottom:1rem; font-weight:500;
+  }
+  .answer{
+    background:var(--noir); color:var(--blanc);
+    padding:1.2rem 1.4rem; font-size:.92rem;
+    letter-spacing:.01em; display:flex; gap:1rem;
+    align-items:flex-start;
+  }
+  .answer .check{
+    color:var(--blanc); font-weight:700; flex:0 0 auto;
+    font-size:1.05rem; line-height:1.4;
+  }
+  .answer .answer-text{line-height:1.65;}
+  .answer .answer-text strong{font-weight:600;}
+  .answer .answer-text em{
+    color:var(--gris-400); font-style:italic;
+    font-size:.85rem; display:block; margin-top:.6rem;
+  }
+  .justification{
+    background:var(--gris-50); padding:1rem 1.3rem;
+    font-size:.85rem; color:var(--gris-700);
+    margin-top:.7rem; border-left:2px solid var(--gris-400);
+    line-height:1.65;
+  }
+  .justification strong{color:var(--noir); font-weight:600;}
+
+  /* Tableau de synthèse */
+  .synth-table{
+    width:100%; border-collapse:collapse; margin-top:1.5rem;
+    font-size:.88rem;
+  }
+  .synth-table th{
+    background:var(--noir); color:var(--blanc);
+    padding:.9rem 1rem; text-align:left;
+    font-weight:600; letter-spacing:.05em;
+    font-size:.78rem; text-transform:uppercase;
+  }
+  .synth-table td{
+    padding:.9rem 1rem; border-bottom:1px solid var(--gris-200);
+    vertical-align:top;
+  }
+  .synth-table tr:last-child td{border-bottom:none;}
+  .synth-table tr:nth-child(even){background:var(--gris-50);}
+
+  @media (max-width:700px){
+    .container{padding:2rem 1rem 7rem;}
+    .section{padding:1.8rem;}
+    .synth-table{font-size:.8rem;}
+    .synth-table th, .synth-table td{padding:.7rem .6rem;}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-eyebrow">CFC 1A · Séquence 1 · Chapitre 1</div>
+  <h1>Corrigé enseignant</h1>
+  <p>Réponses complètes aux exercices interactifs et supplémentaires — L'entreprise, un ensemble organisé.</p>
+  <div class="warning">Document réservé à l'enseignante</div>
+</header>
+
+<div class="container">
+
+  <!-- ============ PARTIE 1 : QUIZ INTERACTIF ============ -->
+  <section class="section">
+    <span class="badge">Partie 01 · Quiz interactif (présentation)</span>
+    <h2>Quiz — 6 questions</h2>
+    <div class="intro">Quiz intégré à la slide 11 de la présentation.</div>
+
+    <div class="q">
+      <div class="q-label">Question 01</div>
+      <div class="q-text">Quels sont les éléments qui composent une entreprise ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Collaborateurs, tâches, moyens matériels, informations</strong>
+          <em>Ces 4 éléments sont définis dans l'introduction à l'entreprise (p.3 du PPT).</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 02</div>
+      <div class="q-text">Quel est le but de l'organisation d'une entreprise ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Efficacité, stabilité, cohérence</strong>
+          <em>Trois piliers de l'organisation selon le cours. On recherche un degré optimal (ni sous-organisée, ni sur-organisée).</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 03</div>
+      <div class="q-text">Que signifie une entreprise « sous-organisée » ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Elle manque de structure et d'organisation</strong>
+          <em>Conséquences : désordre, perte de temps, conflits, inefficacité. À l'inverse, une entreprise sur-organisée étouffe l'initiative par trop de règles.</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 04</div>
+      <div class="q-text">Quelle fonction gère le recrutement et la motivation ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Ressources Humaines</strong>
+          <em>La fonction RH gère : recrutement, formation continue, rémunération, motivation, dialogue social.</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 05</div>
+      <div class="q-text">Que représente un lien vertical dans un organigramme ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Une relation de subordination (autorité)</strong>
+          <em>Lien vertical = autorité hiérarchique. Lien horizontal = collaboration entre pairs. Lien de conseil = expertise sans autorité.</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 06</div>
+      <div class="q-text">Quelle structure est adaptée aux grandes entreprises diversifiées ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          <strong>Matricielle</strong>
+          <em>La structure matricielle combine plusieurs critères (fonctions, produits, marchés, régions). Elle est adaptée aux grandes entreprises diversifiées. La divisionnelle est aussi possible mais la matricielle est la plus complète.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTIE 2 : EXERCICES HTML ============ -->
+  <section class="section">
+    <span class="badge">Partie 02 · Exercices interactifs (exercices.html)</span>
+    <h2>Corrigé des 4 exercices</h2>
+    <div class="intro">Réponses aux exercices QCM, Vrai/Faux, Texte à trous et Drag & Drop.</div>
+
+    <!-- EX 1 : QCM -->
+    <h3 style="font-family:var(--serif); font-size:1.3rem; margin:1.6rem 0 1rem; color:var(--noir);">Exercice 01 — QCM (5 questions)</h3>
+
+    <div class="q">
+      <div class="q-label">Question 1</div>
+      <div class="q-text">Qu'est-ce qu'une entreprise ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">Un ensemble d'éléments organisés vers un objectif commercial</div>
+      </div>
+      <div class="justification"><strong>Justification :</strong> Définition exacte du cours. Les autres réponses sont incomplètes ou fausses (une entreprise n'est pas qu'un bâtiment, ni une association).</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 2</div>
+      <div class="q-text">Quel est le but de l'organisation ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">Efficacité, stabilité, cohérence</div>
+      </div>
+      <div class="justification"><strong>Justification :</strong> Les trois objectifs de l'organisation. Le profit est une conséquence, pas le but premier de l'organisation.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 3</div>
+      <div class="q-text">Combien de fonctions principales avons-nous vues ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">8</div>
+      </div>
+      <div class="justification"><strong>Justification :</strong> Direction, Communication, Finance, Achat, Production, Marketing, RH, Logistique (+ Administration qui est parfois comptée séparément → 9).</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 4</div>
+      <div class="q-text">Quelle fonction gère la trésorerie ?</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">Finance</div>
+      </div>
+      <div class="justification"><strong>Justification :</strong> La fonction Finance s'occupe de la comptabilité, la facturation, la trésorerie et la fiscalité.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Question 5</div>
+      <div class="q-text">Un lien horizontal dans un organigramme représente :</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">Une collaboration entre pairs</div>
+      </div>
+      <div class="justification"><strong>Justification :</strong> Le lien horizontal relie des postes de même niveau hiérarchique qui collaborent (ex : Finance et Achat).</div>
+    </div>
+
+    <!-- EX 2 : VRAI/FAUX -->
+    <h3 style="font-family:var(--serif); font-size:1.3rem; margin:2.4rem 0 1rem; color:var(--noir);">Exercice 02 — Vrai/Faux (5 affirmations)</h3>
+
+    <div class="q">
+      <div class="q-label">Affirmation 1</div>
+      <div class="q-text">L'entreprise est un ensemble d'éléments organisés.</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text"><strong>VRAI</strong></div>
+      </div>
+      <div class="justification">Définition exacte du cours.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Affirmation 2</div>
+      <div class="q-text">Une entreprise sur-organisée est toujours plus efficace.</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text"><strong>FAUX</strong></div>
+      </div>
+      <div class="justification"><strong>Correction :</strong> Une entreprise sur-organisée étouffe l'initiative, ralentit les décisions et démotive. L'objectif est un degré <em>optimal</em> d'organisation.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Affirmation 3</div>
+      <div class="q-text">La fonction RH gère le recrutement et la formation.</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text"><strong>VRAI</strong></div>
+      </div>
+      <div class="justification">La RH gère : recrutement, formation continue, rémunération, motivation, dialogue social.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Affirmation 4</div>
+      <div class="q-text">Un lien de conseil implique une autorité hiérarchique.</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text"><strong>FAUX</strong></div>
+      </div>
+      <div class="justification"><strong>Correction :</strong> Le lien de conseil est une relation d'expertise <em>sans</em> autorité hiérarchique. Ex : le service juridique conseille sans commander.</div>
+    </div>
+
+    <div class="q">
+      <div class="q-label">Affirmation 5</div>
+      <div class="q-text">La structure divisionnelle est adaptée aux grandes entreprises diversifiées.</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text"><strong>VRAI</strong></div>
+      </div>
+      <div class="justification">La structure divisionnelle est adoptée lors de diversification (produits/marchés) ou d'internationalisation (régions).</div>
+    </div>
+
+    <!-- EX 3 : TEXTE À TROUS -->
+    <h3 style="font-family:var(--serif); font-size:1.3rem; margin:2.4rem 0 1rem; color:var(--noir);">Exercice 03 — Texte à trous</h3>
+
+    <div class="q">
+      <div class="q-label">Texte complet corrigé</div>
+      <div class="q-text">Définition de l'entreprise</div>
+      <div class="answer">
+        <span class="check">✓</span>
+        <div class="answer-text">
+          Une entreprise est un ensemble d'éléments <strong>organisés</strong> orienté vers un objectif commercial. Ses éléments sont les <strong>collaborateurs</strong>, les tâches, les moyens matériels et les <strong>informations</strong>. Le but de l'organisation est l'<strong>efficacité</strong>, la stabilité et la <strong>cohérence</strong>.
+        </div>
+      </div>
+      <div class="justification">
+        <strong>Mots dans l'ordre :</strong> organisés — collaborateurs — informations — efficacité — cohérence
+      </div>
+    </div>
+
+    <!-- EX 4 : DRAG & DROP -->
+    <h3 style="font-family:var(--serif); font-size:1.3rem; margin:2.4rem 0 1rem; color:var(--noir);">Exercice 04 — Drag & Drop (classement)</h3>
+
+    <div class="q">
+      <div class="q-label">Répartition correcte</div>
+      <div class="q-text">Organisation structurelle vs procédurale</div>
+    </div>
+
+    <table class="synth-table">
+      <thead>
+        <tr>
+          <th>Élément</th>
+          <th>Catégorie</th>
+          <th>Pourquoi ?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Direction</td>
+          <td><strong>Structurelle</strong></td>
+          <td>Poste de travail (élément de structure)</td>
+        </tr>
+        <tr>
+          <td>Organigramme</td>
+          <td><strong>Structurelle</strong></td>
+          <td>Représentation des postes et liens</td>
+        </tr>
+        <tr>
+          <td>Départements</td>
+          <td><strong>Structurelle</strong></td>
+          <td>Regroupement de fonctions</td>
+        </tr>
+        <tr>
+          <td>Postes de travail</td>
+          <td><strong>Structurelle</strong></td>
+          <td>Unité de base de la structure</td>
+        </tr>
+        <tr>
+          <td>Processus de travail</td>
+          <td><strong>Procédurale</strong></td>
+          <td>Enchaînement d'actions dans le temps</td>
+        </tr>
+        <tr>
+          <td>Procédures internes</td>
+          <td><strong>Procédurale</strong></td>
+          <td>Règles de fonctionnement</td>
+        </tr>
+        <tr>
+          <td>Flux d'informations</td>
+          <td><strong>Procédurale</strong></td>
+          <td>Circulation des données</td>
+        </tr>
+        <tr>
+          <td>Méthodes de travail</td>
+          <td><strong>Procédurale</strong></td>
+          <td>Manuel de bonnes pratiques</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="justification" style="margin-top:1.5rem;">
+      <strong>Rappel clé :</strong> L'organisation <em>structurelle</em> = « qui fait quoi » (postes, services, organigramme). L'organisation <em>procédurale</em> = « comment on le fait » (procédures, processus, flux).
+    </div>
+  </section>
+
+  <!-- ============ PARTIE 3 : SYNTHÈSE ============ -->
+  <section class="section">
+    <span class="badge">Partie 03 · Synthèse</span>
+    <h2>Récapitulatif des notions clés</h2>
+    <div class="intro">À retenir absolument pour le test de validation du chapitre 1.</div>
+
+    <table class="synth-table">
+      <thead>
+        <tr>
+          <th>Notion</th>
+          <th>Définition / Contenu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Entreprise</strong></td>
+          <td>Ensemble d'éléments organisés vers un objectif commercial</td>
+        </tr>
+        <tr>
+          <td><strong>4 éléments</strong></td>
+          <td>Collaborateurs, tâches, moyens matériels, informations</td>
+        </tr>
+        <tr>
+          <td><strong>But de l'organisation</strong></td>
+          <td>Efficacité, stabilité, cohérence</td>
+        </tr>
+        <tr>
+          <td><strong>Degré optimal</strong></td>
+          <td>Ni sous-organisée (désordre), ni sur-organisée (étouffement)</td>
+        </tr>
+        <tr>
+          <td><strong>Organisation structurelle</strong></td>
+          <td>Qui fait quoi : postes, départements, organigramme</td>
+        </tr>
+        <tr>
+          <td><strong>Organisation procédurale</strong></td>
+          <td>Comment on le fait : processus, procédures, flux</td>
+        </tr>
+        <tr>
+          <td><strong>8 fonctions</strong></td>
+          <td>Direction, Communication, Finance, Achat, Production, Marketing, RH, Logistique (+ Administration)</td>
+        </tr>
+        <tr>
+          <td><strong>Lien vertical</strong></td>
+          <td>Subordination / autorité hiérarchique</td>
+        </tr>
+        <tr>
+          <td><strong>Lien horizontal</strong></td>
+          <td>Collaboration entre pairs</td>
+        </tr>
+        <tr>
+          <td><strong>Lien de conseil</strong></td>
+          <td>Expertise sans autorité</td>
+        </tr>
+        <tr>
+          <td><strong>Structure fonctionnelle</strong></td>
+          <td>Petite/moyenne entreprise, monoproduit</td>
+        </tr>
+        <tr>
+          <td><strong>Structure divisionnelle</strong></td>
+          <td>Diversification, internationalisation (produits / marchés / régions)</td>
+        </tr>
+        <tr>
+          <td><strong>Structure matricielle</strong></td>
+          <td>Grande entreprise diversifiée, double ligne hiérarchique</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+</body>
+</html>

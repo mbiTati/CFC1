@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Séquence 3 — Organisation structurelle et fonctionnelle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F; --gris-800:#2A2A2A; --gris-700:#3A3A3A;
+    --gris-600:#555; --gris-500:#777; --gris-400:#999;
+    --gris-300:#BBB; --gris-200:#D4D4D4; --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4; --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--blanc-casse); color:var(--noir);
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:var(--noir); color:var(--blanc);
+    padding:5rem 2rem 4rem;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .header::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.04), transparent 60%);
+  }
+  .header .header-eyebrow{
+    font-size:.7rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:1.4rem; position:relative;
+  }
+  .header h1{
+    font-family:var(--serif); font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--blanc); position:relative; font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .header p{
+    color:var(--gris-400); margin-top:1rem; position:relative;
+    max-width:60ch; margin-left:auto; margin-right:auto;
+    font-size:.95rem; letter-spacing:.02em;
+  }
+
+  /* ============ BANDEAU IDENTIFICATION ============ */
+  .ident-bar{
+    background:var(--gris-50); border-bottom:1px solid var(--gris-200);
+    padding:1.5rem 2rem; position:sticky; top:0; z-index:40;
+    backdrop-filter:blur(10px); background:rgba(244,244,244,.95);
+  }
+  .ident-inner{
+    max-width:920px; margin:0 auto;
+    display:flex; gap:1rem; flex-wrap:wrap; align-items:center;
+    justify-content:space-between;
+  }
+  .ident-fields{
+    display:flex; gap:1rem; flex-wrap:wrap; flex:1;
+  }
+  .ident-field{
+    display:flex; flex-direction:column; gap:.3rem; min-width:180px;
+  }
+  .ident-field label{
+    font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--gris-500); font-weight:600;
+  }
+  .ident-field input{
+    border:none; border-bottom:1.5px solid var(--noir);
+    background:transparent; padding:.4rem 0;
+    font-family:var(--sans); font-size:.9rem;
+    color:var(--noir); outline:none;
+    font-weight:500;
+  }
+  .ident-field input:focus{border-bottom-width:2.5px;}
+  .ident-status{
+    font-size:.75rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--gris-600); font-weight:600;
+    padding:.5rem 1rem; border:1px solid var(--gris-300);
+    background:var(--blanc);
+  }
+  .ident-status.ok{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .ident-status.missing{background:#FEF2F2; color:#991B1B; border-color:#FCA5A5;}
+
+  .container{max-width:920px; margin:0 auto; padding:3.5rem 1.5rem 10rem;}
+  .exercise{
+    background:var(--blanc); padding:2.6rem;
+    margin-bottom:2.5rem;
+    border:1px solid var(--gris-200);
+    opacity:0; transform:translateY(30px);
+    transition: all .9s cubic-bezier(.4,0,.2,1);
+  }
+  .exercise.visible{opacity:1; transform:translateY(0);}
+  .exercise .badge{
+    display:inline-block; color:var(--gris-600);
+    font-size:.68rem; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; padding:0 0 .5rem 0;
+    border-bottom:1px solid var(--noir); margin-bottom:1.2rem;
+  }
+  .exercise h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--noir);
+    margin-bottom:.7rem; font-weight:500;
+  }
+  .exercise .consigne{
+    background:var(--gris-50); padding:1.2rem 1.4rem;
+    font-size:.92rem; margin-bottom:1.8rem; color:var(--gris-700);
+    border-left:2px solid var(--noir);
+  }
+  .exercise .consigne strong{color:var(--noir); font-weight:600;}
+
+  /* QCM */
+  .qcm-q{margin-bottom:1.6rem; padding:1.4rem; background:var(--gris-50);}
+  .qcm-q .q-text{font-weight:600; margin-bottom:1rem; color:var(--noir); font-size:.95rem;}
+  .qcm-opt{
+    display:block; width:100%; text-align:left;
+    padding:.9rem 1.1rem; margin-bottom:.5rem;
+    background:var(--blanc); border:1px solid var(--gris-200);
+    cursor:pointer; font-family:var(--sans);
+    font-size:.9rem; transition:.25s; color:var(--noir);
+    border-radius:0;
+  }
+  .qcm-opt:hover{border-color:var(--noir); background:var(--gris-50);}
+  .qcm-opt.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc); font-weight:500;}
+  .qcm-opt.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600); text-decoration:line-through;}
+  .qcm-opt:disabled{cursor:default; opacity:.85;}
+
+  /* VRAI/FAUX */
+  .vf-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.1rem 1.4rem; background:var(--gris-50);
+    margin-bottom:.6rem; gap:1rem;
+  }
+  .vf-item .vf-text{flex:1; font-size:.92rem; color:var(--noir);}
+  .vf-btns{display:flex; gap:.4rem; flex:0 0 auto;}
+  .vf-btn{
+    padding:.5rem 1.1rem; border:1px solid var(--gris-300);
+    background:var(--blanc); cursor:pointer; font-family:var(--sans);
+    font-size:.75rem; font-weight:600; transition:.25s;
+    text-transform:uppercase; letter-spacing:.1em; color:var(--noir);
+    border-radius:0;
+  }
+  .vf-btn:hover{border-color:var(--noir);}
+  .vf-btn.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc);}
+  .vf-btn.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600);}
+  .vf-btn:disabled{cursor:default;}
+
+  /* DRAG & DROP */
+  .dnd-container{display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1.2rem;}
+  .dnd-zone{
+    min-height:200px; border:1px dashed var(--gris-400);
+    padding:1.2rem; background:var(--gris-50);
+  }
+  .dnd-zone h4{
+    font-family:var(--serif); color:var(--noir); margin-bottom:1rem;
+    font-size:1.05rem; text-align:center; font-weight:500;
+    letter-spacing:.02em;
+  }
+  .dnd-items{display:flex; flex-wrap:wrap; gap:.5rem;}
+  .dnd-item{
+    background:var(--blanc); border:1px solid var(--gris-300);
+    padding:.6rem 1.1rem; cursor:grab;
+    font-size:.82rem; transition:.25s; user-select:none;
+    color:var(--noir); border-radius:0;
+  }
+  .dnd-item:hover{border-color:var(--noir); background:var(--noir); color:var(--blanc);}
+  .dnd-item.dragging{opacity:.4;}
+
+  /* ASSOCIATION */
+  .match-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--gris-200); margin-top:1.5rem;
+  }
+  .match-col{background:var(--blanc); padding:1.5rem;}
+  .match-col h4{
+    font-family:var(--serif); font-size:1rem;
+    color:var(--noir); margin-bottom:1rem;
+    padding-bottom:.6rem; border-bottom:1px solid var(--gris-200);
+    font-weight:500; letter-spacing:.02em;
+  }
+  .match-item{
+    padding:.9rem 1.1rem; margin-bottom:.6rem;
+    background:var(--gris-50); border:1px solid var(--gris-200);
+    cursor:pointer; font-size:.88rem;
+    transition:.25s; color:var(--noir);
+    display:flex; justify-content:space-between;
+    align-items:center; gap:.6rem;
+  }
+  .match-item:hover{border-color:var(--noir); background:var(--blanc);}
+  .match-item.selected{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .match-item.matched{
+    background:rgba(10,10,10,.08); border-color:var(--noir);
+    color:var(--gris-600); cursor:default; text-decoration:line-through;
+  }
+  .match-item.matched::after{content:"✓"; color:var(--noir); text-decoration:none;}
+
+  /* TEXTE À TROUS */
+  .fill-text{
+    font-size:1rem; line-height:2.4; padding:1.6rem;
+    background:var(--gris-50); color:var(--noir);
+  }
+  .fill-input{
+    border:none; border-bottom:1px solid var(--noir);
+    background:transparent; padding:.2rem .5rem;
+    font-family:var(--sans); font-size:.92rem;
+    color:var(--noir); min-width:130px; text-align:center;
+    font-weight:600; outline:none; transition:.25s;
+  }
+  .fill-input:focus{border-bottom-width:2px; background:rgba(10,10,10,.03);}
+  .fill-input.correct{border-bottom-color:var(--noir); background:rgba(10,10,10,.05);}
+  .fill-input.incorrect{border-bottom-color:var(--gris-400); color:var(--gris-500); text-decoration:line-through;}
+
+  /* BOUTONS */
+  .btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:600;
+    padding:1rem 1.8rem; border:1px solid var(--noir); cursor:pointer;
+    background:var(--noir); color:var(--blanc);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+  }
+  .btn:hover{background:transparent; color:var(--noir);}
+  .btn.ghost{background:transparent; color:var(--noir); border:1px solid var(--gris-400);}
+  .btn.ghost:hover{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .btn-row{display:flex; gap:.8rem; margin-top:1.8rem; flex-wrap:wrap;}
+
+  .feedback{
+    margin-top:1.2rem; padding:1.1rem 1.4rem;
+    font-size:.88rem; display:none;
+    letter-spacing:.02em;
+  }
+  .feedback.show{display:block; animation: slideDown .4s;}
+  .feedback.success{background:var(--noir); color:var(--blanc); border-left:3px solid var(--noir);}
+  .feedback.error{background:var(--gris-100); color:var(--gris-700); border-left:3px solid var(--gris-500);}
+  @keyframes slideDown{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ============ BARRE DE SCORE + ENVOI ============ */
+  .action-bar{
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--noir); color:var(--blanc);
+    padding:1.2rem 2rem;
+    box-shadow:0 -10px 30px rgba(0,0,0,.3);
+    z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1.5rem; flex-wrap:wrap;
+  }
+  .score-display{
+    display:flex; align-items:center; gap:1.2rem;
+  }
+  .score-display .score-num{
+    font-family:var(--serif); font-size:1.9rem;
+    color:var(--blanc); font-weight:500;
+  }
+  .score-display .score-label{
+    font-size:.65rem; opacity:.65; letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  .send-btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:700;
+    padding:1rem 2rem; border:1px solid var(--blanc);
+    cursor:pointer; background:var(--blanc); color:var(--noir);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+    display:flex; align-items:center; gap:.7rem;
+  }
+  .send-btn:hover{background:transparent; color:var(--blanc);}
+  .send-btn:disabled{opacity:.4; cursor:not-allowed;}
+  .send-btn.sent{background:#16A34A; border-color:#16A34A; color:var(--blanc);}
+  .send-btn.sent:hover{background:#16A34A; color:var(--blanc);}
+
+  /* ============ MODALE DE CONFIRMATION ============ */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,10,10,.85);
+    z-index:100; display:none; align-items:center; justify-content:center;
+    padding:2rem; backdrop-filter:blur(8px);
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--blanc); max-width:520px; width:100%;
+    padding:2.5rem; text-align:center;
+    border:1px solid var(--gris-200);
+  }
+  .modal-box h3{
+    font-family:var(--serif); font-size:1.6rem;
+    color:var(--noir); margin-bottom:1rem;
+  }
+  .modal-box p{
+    color:var(--gris-600); font-size:.9rem;
+    line-height:1.7; margin-bottom:1.5rem;
+  }
+  .modal-box .btn-row{justify-content:center;}
+
+  @media (max-width:700px){
+    .match-grid, .dnd-container{grid-template-columns:1fr;}
+    .container{padding:2rem 1rem 12rem;}
+    .exercise{padding:1.8rem;}
+    .action-bar{padding:1rem;}
+    .score-display .score-num{font-size:1.5rem;}
+    .send-btn{padding:.8rem 1.4rem; font-size:.7rem;}
+    .ident-inner{flex-direction:column; align-items:stretch;}
+    .ident-field{min-width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ BANDEAU IDENTIFICATION ============ -->
+<div class="ident-bar">
+  <div class="ident-inner">
+    <div class="ident-fields">
+      <div class="ident-field">
+        <label>Nom</label>
+        <input type="text" id="studentName" placeholder="Votre nom" required>
+      </div>
+      <div class="ident-field">
+        <label>Prénom</label>
+        <input type="text" id="studentFirstName" placeholder="Votre prénom" required>
+      </div>
+      <div class="ident-field">
+        <label>Classe</label>
+        <input type="text" id="studentClass" value="CFC 1A" readonly>
+      </div>
+    </div>
+    <div class="ident-status" id="identStatus">Identifiez-vous</div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-eyebrow">CFC 1A · Chapitre 1 · Séquence 3</div>
+  <h1>Organisation structurelle et fonctionnelle</h1>
+  <p>5 exercices interactifs. Complétez tous les exercices puis cliquez sur <strong>« Envoyer à Mme Mbi »</strong> en bas de page.</p>
+</header>
+
+<div class="container">
+
+  <!-- EXERCICE 1 : QCM -->
+  <section class="exercise" data-ex="1">
+    <span class="badge">Exercice 01 · QCM</span>
+    <h2>Connaître les bases</h2>
+    <div class="consigne">Répondez aux 6 questions suivantes. Cliquez sur la bonne réponse.</div>
+    <div id="qcm1"></div>
+    <div class="feedback" id="fb1"></div>
+  </section>
+
+  <!-- EXERCICE 2 : VRAI/FAUX -->
+  <section class="exercise" data-ex="2">
+    <span class="badge">Exercice 02 · Vrai ou Faux</span>
+    <h2>Distinguer le vrai du faux</h2>
+    <div class="consigne">Indiquez si chaque affirmation est vraie ou fausse.</div>
+    <div id="vf1"></div>
+    <div class="feedback" id="fb2"></div>
+  </section>
+
+  <!-- EXERCICE 3 : DRAG & DROP -->
+  <section class="exercise" data-ex="3">
+    <span class="badge">Exercice 03 · Classement</span>
+    <h2>Structurelle ou procédurale ?</h2>
+    <div class="consigne">Glissez chaque élément dans la bonne catégorie.</div>
+    <div class="dnd-container">
+      <div class="dnd-zone" data-cat="structurelle" ondragover="event.preventDefault()" ondrop="dropItem(event, 'structurelle')">
+        <h4>🏛️ Organisation structurelle</h4>
+        <div class="dnd-items" id="zone-structurelle"></div>
+      </div>
+      <div class="dnd-zone" data-cat="procedurale" ondragover="event.preventDefault()" ondrop="dropItem(event, 'procedurale')">
+        <h4>⚙️ Organisation procédurale</h4>
+        <div class="dnd-items" id="zone-procedurale"></div>
+      </div>
+    </div>
+    <div style="margin-top:1.8rem;">
+      <div style="font-size:.72rem; color:var(--gris-500); margin-bottom:.8rem; letter-spacing:.2em; text-transform:uppercase;">Éléments à classer</div>
+      <div class="dnd-items" id="pool-items"></div>
+    </div>
+    <div class="feedback" id="fb3"></div>
+  </section>
+
+  <!-- EXERCICE 4 : ASSOCIATION -->
+  <section class="exercise" data-ex="4">
+    <span class="badge">Exercice 04 · Association</span>
+    <h2>Associer fonction et mission</h2>
+    <div class="consigne">Cliquez sur une <strong>fonction</strong> à gauche, puis sur sa <strong>mission</strong> à droite.</div>
+    <div class="match-grid">
+      <div class="match-col">
+        <h4>Fonctions</h4>
+        <div id="matchLeft"></div>
+      </div>
+      <div class="match-col">
+        <h4>Missions</h4>
+        <div id="matchRight"></div>
+      </div>
+    </div>
+    <div class="feedback" id="fb4"></div>
+  </section>
+
+  <!-- EXERCICE 5 : TEXTE À TROUS -->
+  <section class="exercise" data-ex="5">
+    <span class="badge">Exercice 05 · Texte à trous</span>
+    <h2>Compléter la synthèse</h2>
+    <div class="consigne">Complétez le texte avec les mots suivants : <strong>structurelle, procédurale, verticaux, horizontaux, conseil, efficacité</strong>.</div>
+    <div class="fill-text">
+      L'organisation d'une entreprise comprend deux volets : l'organisation <input class="fill-input" data-answer="structurelle" placeholder="?"> qui répond à la question « qui fait quoi ? », et l'organisation <input class="fill-input" data-answer="procédurale" placeholder="?"> qui répond à la question « comment on le fait ? ». Dans un organigramme, on distingue trois types de liens : les liens <input class="fill-input" data-answer="verticaux" placeholder="?"> qui représentent l'autorité, les liens <input class="fill-input" data-answer="horizontaux" placeholder="?"> qui représentent la collaboration, et les liens de <input class="fill-input" data-answer="conseil" placeholder="?"> qui représentent l'expertise sans autorité. Le but de l'organisation est l'<input class="fill-input" data-answer="efficacité" placeholder="?">, la stabilité et la cohérence.
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="checkFill()">Vérifier mes réponses</button>
+    </div>
+    <div class="feedback" id="fb5"></div>
+  </section>
+
+</div>
+
+<!-- ============ BARRE D'ACTION ============ -->
+<div class="action-bar">
+  <div class="score-display">
+    <div>
+      <div class="score-label">Score global</div>
+      <div class="score-num" id="globalScore">0 / 5</div>
+    </div>
+  </div>
+  <button class="send-btn" id="sendBtn" onclick="sendByEmail()" disabled>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Envoyer à Mme Mbi
+  </button>
+</div>
+
+<!-- ============ MODALE DE CONFIRMATION ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h3>Confirmer l'envoi</h3>
+    <p>Vos réponses vont être envoyées à <strong>mbi.tatiana@gmail.com</strong>. Vérifiez que votre nom et prénom sont bien remplis.</p>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="closeModal()">Annuler</button>
+      <button class="btn" onclick="confirmSend()">Confirmer l'envoi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ EMAIL DESTINATAIRE ============ */
+const TEACHER_EMAIL = 'mbi.tatiana@gmail.com';
+
+/* ============ SCROLL ANIMATION ============ */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold:.15});
+document.querySelectorAll('.exercise').forEach(el=>observer.observe(el));
+
+/* ============ SCORE ============ */
+let completed = new Set();
+let results = {
+  qcm: {score: 0, total: 6, answers: []},
+  vf: {score: 0, total: 6, answers: []},
+  dnd: {score: 0, total: 8, answers: {}},
+  match: {score: 0, total: 6, answers: []},
+  fill: {score: 0, total: 6, answers: []}
+};
+
+function updateScore(){
+  document.getElementById('globalScore').textContent = `${completed.size} / 5`;
+  updateSendButton();
+}
+
+function updateSendButton(){
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  const allDone = completed.size === 5;
+  const hasIdentity = name.length > 0 && firstName.length > 0;
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = !(allDone && hasIdentity);
+  const status = document.getElementById('identStatus');
+  if(!hasIdentity){
+    status.textContent = 'Identifiez-vous';
+    status.className = 'ident-status missing';
+  } else if(!allDone){
+    status.textContent = `Progression : ${completed.size}/5`;
+    status.className = 'ident-status';
+  } else {
+    status.textContent = 'Prêt à envoyer';
+    status.className = 'ident-status ok';
+  }
+}
+
+/* Écoute des champs d'identité */
+document.getElementById('studentName').addEventListener('input', updateSendButton);
+document.getElementById('studentFirstName').addEventListener('input', updateSendButton);
+
+function showFeedback(id, ok, msg){
+  const fb = document.getElementById(id);
+  fb.innerHTML = msg;
+  fb.className = 'feedback show ' + (ok ? 'success' : 'error');
+}
+
+/* ============ EXERCICE 1 : QCM ============ */
+const qcmData = [
+  {q:"Quels sont les 4 éléments qui composent une entreprise ?",
+   opts:["Collaborateurs, tâches, moyens matériels, informations","Produits, clients, fournisseurs, argent","Patrons, employés, syndicats, machines","Bâtiments, machines, argent, clients"],
+   correct:0},
+  {q:"Quel est le but de l'organisation d'une entreprise ?",
+   opts:["Maximiser les profits uniquement","Efficacité, stabilité, cohérence","Réduire le nombre d'employés","Augmenter les horaires de travail"],
+   correct:1},
+  {q:"Quelle est la question à laquelle répond l'organisation structurelle ?",
+   opts:["Comment on le fait ?","Qui fait quoi ?","Pourquoi on le fait ?","Quand on le fait ?"],
+   correct:1},
+  {q:"Que représente un lien vertical dans un organigramme ?",
+   opts:["Une collaboration entre collègues","Une relation de subordination (autorité)","Un conseil sans autorité","Une amitié entre employés"],
+   correct:1},
+  {q:"Quelle structure est adaptée aux grandes entreprises diversifiées ?",
+   opts:["Fonctionnelle","Divisionnelle","Matricielle","Linéaire"],
+   correct:2},
+  {q:"Quelle fonction gère le recrutement et la motivation ?",
+   opts:["Finance","Marketing","Ressources Humaines","Logistique"],
+   correct:2}
+];
+
+let qcmScore = 0;
+let qcmAnswered = 0;
+
+function renderQCM(){
+  const c = document.getElementById('qcm1');
+  c.innerHTML = qcmData.map((q, qi)=>`
+    <div class="qcm-q">
+      <div class="q-text">${qi+1}. ${q.q}</div>
+      ${q.opts.map((o, oi)=>`
+        <button class="qcm-opt" onclick="answerQCM(${qi}, ${oi}, this)">${o}</button>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function answerQCM(qi, oi, btn){
+  const q = qcmData[qi];
+  const parent = btn.parentElement;
+  const buttons = parent.querySelectorAll('.qcm-opt');
+  buttons.forEach(b=>b.disabled = true);
+  const isCorrect = oi === q.correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    qcmScore++;
+  } else {
+    btn.classList.add('incorrect');
+    buttons[q.correct].classList.add('correct');
+  }
+  results.qcm.answers.push({
+    question: q.q,
+    reponse: q.opts[oi],
+    correcte: q.opts[q.correct],
+    juste: isCorrect
+  });
+  qcmAnswered++;
+  if(qcmAnswered === qcmData.length){
+    results.qcm.score = qcmScore;
+    const ok = qcmScore >= 5;
+    showFeedback('fb1', ok, `${qcmScore}/${qcmData.length} bonnes réponses. ${ok ? '🎉 Excellent !' : '📚 Relisez le cours.'}`);
+    if(ok && !completed.has(1)){completed.add(1); updateScore();}
+  }
+}
+
+/* ============ EXERCICE 2 : VRAI/FAUX ============ */
+const vfData = [
+  {t:"Une entreprise sur-organisée est toujours plus efficace.", v:false},
+  {t:"L'organisation structurelle répond à la question « qui fait quoi ? ».", v:true},
+  {t:"Un lien de conseil implique une autorité hiérarchique.", v:false},
+  {t:"La fonction RH gère le recrutement et la formation.", v:true},
+  {t:"La structure divisionnelle est adaptée aux petites entreprises monoproduit.", v:false},
+  {t:"Un lien horizontal représente une collaboration entre pairs.", v:true}
+];
+
+let vfScore = 0, vfAnswered = 0;
+
+function renderVF(){
+  const c = document.getElementById('vf1');
+  c.innerHTML = vfData.map((item, i)=>`
+    <div class="vf-item">
+      <div class="vf-text">${i+1}. ${item.t}</div>
+      <div class="vf-btns">
+        <button class="vf-btn" onclick="answerVF(${i}, true, this)">Vrai</button>
+        <button class="vf-btn" onclick="answerVF(${i}, false, this)">Faux</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function answerVF(i, val, btn){
+  const item = vfData[i];
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.vf-btn').forEach(b=>b.disabled = true);
+  const isCorrect = val === item.v;
+  if(isCorrect){
+    btn.classList.add('correct');
+    vfScore++;
+  } else {
+    btn.classList.add('incorrect');
+    parent.querySelectorAll('.vf-btn').forEach(b=>{
+      if((b.textContent === 'Vrai' && item.v) || (b.textContent === 'Faux' && !item.v)){
+        b.classList.add('correct');
+      }
+    });
+  }
+  results.vf.answers.push({
+    affirmation: item.t,
+    reponse: val ? 'Vrai' : 'Faux',
+    correcte: item.v ? 'Vrai' : 'Faux',
+    juste: isCorrect
+  });
+  vfAnswered++;
+  if(vfAnswered === vfData.length){
+    results.vf.score = vfScore;
+    const ok = vfScore >= 5;
+    showFeedback('fb2', ok, `${vfScore}/${vfData.length} bonnes réponses. ${ok ? '🎉 Très bien !' : '📚 Courage, relisez les notions.'}`);
+    if(ok && !completed.has(2)){completed.add(2); updateScore();}
+  }
+}
+
+/* ============ EXERCICE 3 : DRAG & DROP ============ */
+const dndItems = [
+  {id:"direction", label:"Direction", cat:"structurelle"},
+  {id:"organigramme", label:"Organigramme", cat:"structurelle"},
+  {id:"departements", label:"Départements", cat:"structurelle"},
+  {id:"postes", label:"Postes de travail", cat:"structurelle"},
+  {id:"processus", label:"Processus de travail", cat:"procedurale"},
+  {id:"procedures", label:"Procédures internes", cat:"procedurale"},
+  {id:"flux", label:"Flux d'informations", cat:"procedurale"},
+  {id:"methodes", label:"Méthodes de travail", cat:"procedurale"}
+];
+
+let dndPlaced = {};
+function renderDND(){
+  const pool = document.getElementById('pool-items');
+  pool.innerHTML = dndItems.filter(it=>!dndPlaced[it.id]).map(it=>`
+    <div class="dnd-item" draggable="true" data-id="${it.id}" ondragstart="dragStart(event, '${it.id}')">
+      ${it.label}
+    </div>
+  `).join('') || '<span style="color:var(--gris-500); font-size:.82rem;">Tous les éléments sont classés.</span>';
+
+  ['structurelle','procedurale'].forEach(cat=>{
+    const zone = document.getElementById('zone-'+cat);
+    zone.innerHTML = '';
+    dndItems.filter(it=>dndPlaced[it.id] === cat).forEach(it=>{
+      const div = document.createElement('div');
+      div.className = 'dnd-item';
+      div.textContent = it.label;
+      div.style.cursor = 'default';
+      div.style.background = 'var(--noir)';
+      div.style.color = 'var(--blanc)';
+      div.style.borderColor = 'var(--noir)';
+      zone.appendChild(div);
+    });
+  });
+}
+
+function dragStart(e, id){
+  e.dataTransfer.setData('text/plain', id);
+  e.target.classList.add('dragging');
+}
+
+function dropItem(e, cat){
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  const item = dndItems.find(it=>it.id === id);
+  if(!item) return;
+  if(item.cat === cat){
+    dndPlaced[id] = cat;
+    results.dnd.answers[id] = {label: item.label, categorie: cat, juste: true};
+    renderDND();
+    if(Object.keys(dndPlaced).length === dndItems.length){
+      results.dnd.score = dndItems.length;
+      showFeedback('fb3', true, '🎉 Bravo ! Vous avez correctement classé tous les éléments.');
+      if(!completed.has(3)){completed.add(3); updateScore();}
+    }
+  } else {
+    showFeedback('fb3', false, '❌ Cet élément n\'appartient pas à cette catégorie. Réessayez !');
+  }
+}
+
+/* ============ EXERCICE 4 : ASSOCIATION ============ */
+const matchData = [
+  {id:"direction", label:"Direction", mission:"Fixer les objectifs et la stratégie globale de l'entreprise"},
+  {id:"finance", label:"Finance", mission:"Gérer la comptabilité, la trésorerie et la fiscalité"},
+  {id:"rh", label:"Ressources Humaines", mission:"Recruter, former et motiver les collaborateurs"},
+  {id:"marketing", label:"Marketing", mission:"Étudier le marché et promouvoir les produits"},
+  {id:"logistique", label:"Logistique", mission:"Gérer les stocks, les livraisons et la maintenance"},
+  {id:"production", label:"Production", mission:"Fabriquer les biens ou services vendus"}
+];
+
+let selectedLeft = null;
+let matchedPairs = 0;
+
+function renderMatch(){
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+
+  left.innerHTML = matchData.map(m=>`
+    <div class="match-item ${m.matched ? 'matched' : ''}" data-id="${m.id}" onclick="selectLeft('${m.id}', this)">
+      <span>${m.label}</span>
+    </div>
+  `).join('');
+
+  const shuffled = [...matchData].sort(()=>Math.random()-.5);
+  right.innerHTML = shuffled.map(m=>`
+    <div class="match-item ${m.matched ? 'matched' : ''}" data-id="${m.id}" onclick="selectRight('${m.id}', this)">
+      <span>${m.mission}</span>
+    </div>
+  `).join('');
+}
+
+function selectLeft(id, el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLeft = id;
+}
+
+function selectRight(id, el){
+  if(el.classList.contains('matched')) return;
+  if(!selectedLeft){
+    showFeedback('fb4', false, 'Sélectionnez d\'abord une fonction à gauche.');
+    return;
+  }
+  if(selectedLeft === id){
+    matchData.find(m=>m.id === id).matched = true;
+    matchedPairs++;
+    results.match.answers.push({
+      fonction: matchData.find(m=>m.id === id).label,
+      mission: matchData.find(m=>m.id === id).mission,
+      juste: true
+    });
+    selectedLeft = null;
+    renderMatch();
+    if(matchedPairs === matchData.length){
+      results.match.score = matchData.length;
+      showFeedback('fb4', true, '🎉 Parfait ! Toutes les associations sont correctes.');
+      if(!completed.has(4)){completed.add(4); updateScore();}
+    } else {
+      showFeedback('fb4', true, `✓ Correct ! ${matchedPairs}/${matchData.length} associations trouvées.`);
+    }
+  } else {
+    el.style.borderColor = 'var(--gris-400)';
+    el.style.background = 'var(--gris-100)';
+    setTimeout(()=>{
+      el.style.borderColor = '';
+      el.style.background = '';
+    }, 600);
+    showFeedback('fb4', false, '✗ Mauvaise association. Réessayez.');
+  }
+}
+
+/* ============ EXERCICE 5 : TEXTE À TROUS ============ */
+function checkFill(){
+  const inputs = document.querySelectorAll('.fill-input');
+  let correct = 0;
+  results.fill.answers = [];
+  inputs.forEach(inp=>{
+    const ans = inp.dataset.answer.toLowerCase();
+    const val = inp.value.trim().toLowerCase();
+    const isCorrect = val === ans;
+    if(isCorrect){
+      inp.classList.add('correct');
+      inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect');
+      inp.classList.remove('correct');
+    }
+    results.fill.answers.push({
+      attendu: inp.dataset.answer,
+      saisi: inp.value.trim() || '(vide)',
+      juste: isCorrect
+    });
+  });
+  results.fill.score = correct;
+  const ok = correct === inputs.length;
+  showFeedback('fb5', ok, `${correct}/${inputs.length} bonnes réponses. ${ok ? '🎉 Parfait !' : '💡 Indice : relisez la synthèse du cours.'}`);
+  if(ok && !completed.has(5)){completed.add(5); updateScore();}
+}
+
+/* ============ ENVOI PAR EMAIL ============ */
+function sendByEmail(){
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  if(!name || !firstName){
+    alert('Veuillez renseigner votre nom et prénom en haut de page.');
+    return;
+  }
+  if(completed.size < 5){
+    alert('Veuillez compléter tous les exercices avant d\'envoyer.');
+    return;
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function confirmSend(){
+  closeModal();
+
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  const className = document.getElementById('studentClass').value.trim();
+
+  // Calcul du score total
+  const totalScore =
+    results.qcm.score +
+    results.vf.score +
+    results.dnd.score +
+    results.match.score +
+    results.fill.score;
+  const totalPossible = 6 + 6 + 8 + 6 + 6;
+  const pct = Math.round((totalScore / totalPossible) * 100);
+
+  // Construction du corps de l'email
+  const subject = `[CFC 1A] Séquence 3 — ${name} ${firstName} — Score : ${totalScore}/${totalPossible} (${pct}%)`;
+
+  let body = `RÉSULTATS — SÉQUENCE 3 : ORGANISATION STRUCTURELLE ET FONCTIONNELLE\n`;
+  body += `============================================================\n\n`;
+  body += `ÉLÈVE : ${name} ${firstName}\n`;
+  body += `CLASSE : ${className}\n`;
+  body += `DATE : ${new Date().toLocaleString('fr-CH')}\n\n`;
+  body += `SCORE GLOBAL : ${totalScore} / ${totalPossible} (${pct}%)\n\n`;
+  body += `------------------------------------------------------------\n\n`;
+
+  // Détail QCM
+  body += `📝 EXERCICE 1 — QCM (${results.qcm.score}/${results.qcm.total})\n`;
+  body += `------------------------------------------------------------\n`;
+  results.qcm.answers.forEach((a, i)=>{
+    body += `${i+1}. ${a.question}\n`;
+    body += `   Réponse : ${a.reponse} ${a.juste ? '✓' : '✗'}\n`;
+    if(!a.juste) body += `   Correct : ${a.correcte}\n`;
+    body += `\n`;
+  });
+
+  // Détail Vrai/Faux
+  body += `\n📝 EXERCICE 2 — VRAI/FAUX (${results.vf.score}/${results.vf.total})\n`;
+  body += `------------------------------------------------------------\n`;
+  results.vf.answers.forEach((a, i)=>{
+    body += `${i+1}. ${a.affirmation}\n`;
+    body += `   Réponse : ${a.reponse} ${a.juste ? '✓' : '✗'}\n`;
+    if(!a.juste) body += `   Correct : ${a.correcte}\n`;
+    body += `\n`;
+  });
+
+  // Détail Drag & Drop
+  body += `\n📝 EXERCICE 3 — CLASSEMENT (${results.dnd.score}/${results.dnd.total})\n`;
+  body += `------------------------------------------------------------\n`;
+  Object.values(results.dnd.answers).forEach(a=>{
+    body += `${a.label} → ${a.categorie === 'structurelle' ? 'Organisation structurelle' : 'Organisation procédurale'} ✓\n`;
+  });
+
+  // Détail Association
+  body += `\n📝 EXERCICE 4 — ASSOCIATION (${results.match.score}/${results.match.total})\n`;
+  body += `------------------------------------------------------------\n`;
+  results.match.answers.forEach((a, i)=>{
+    body += `${i+1}. ${a.fonction} → ${a.mission} ✓\n`;
+  });
+
+  // Détail Texte à trous
+  body += `\n📝 EXERCICE 5 — TEXTE À TROUS (${results.fill.score}/${results.fill.total})\n`;
+  body += `------------------------------------------------------------\n`;
+  results.fill.answers.forEach((a, i)=>{
+    body += `${i+1}. Attendu : "${a.attendu}" — Saisi : "${a.saisi}" ${a.juste ? '✓' : '✗'}\n`;
+  });
+
+  body += `\n------------------------------------------------------------\n`;
+  body += `Fin du rapport — Envoyé automatiquement depuis l'application HTML.\n`;
+
+  // Encodage pour mailto
+  const mailtoLink = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  // Ouverture du client mail
+  window.location.href = mailtoLink;
+
+  // Feedback visuel
+  const btn = document.getElementById('sendBtn');
+  btn.classList.add('sent');
+  btn.innerHTML = '✓ Envoyé';
+  setTimeout(()=>{
+    btn.classList.remove('sent');
+    btn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Envoyer à Mme Mbi
+    `;
+  }, 3000);
+}
+
+/* ============ INIT ============ */
+renderQCM();
+renderVF();
+renderDND();
+renderMatch();
+updateSendButton();
+</script>
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Cas pratiques — Séquence 3 — CFC 1A</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F; --gris-800:#2A2A2A; --gris-700:#3A3A3A;
+    --gris-600:#555; --gris-500:#777; --gris-400:#999;
+    --gris-300:#BBB; --gris-200:#D4D4D4; --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4; --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--blanc-casse); color:var(--noir);
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:var(--noir); color:var(--blanc);
+    padding:5rem 2rem 4rem;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .header::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.04), transparent 60%);
+  }
+  .header .header-eyebrow{
+    font-size:.7rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:1.4rem; position:relative;
+  }
+  .header h1{
+    font-family:var(--serif); font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--blanc); position:relative; font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .header p{
+    color:var(--gris-400); margin-top:1rem; position:relative;
+    max-width:60ch; margin-left:auto; margin-right:auto;
+    font-size:.95rem;
+  }
+
+  /* Bandeau identification */
+  .ident-bar{
+    background:rgba(244,244,244,.95);
+    border-bottom:1px solid var(--gris-200);
+    padding:1.5rem 2rem; position:sticky; top:0; z-index:40;
+    backdrop-filter:blur(10px);
+  }
+  .ident-inner{
+    max-width:920px; margin:0 auto;
+    display:flex; gap:1rem; flex-wrap:wrap; align-items:center;
+    justify-content:space-between;
+  }
+  .ident-fields{display:flex; gap:1rem; flex-wrap:wrap; flex:1;}
+  .ident-field{display:flex; flex-direction:column; gap:.3rem; min-width:180px;}
+  .ident-field label{
+    font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--gris-500); font-weight:600;
+  }
+  .ident-field input{
+    border:none; border-bottom:1.5px solid var(--noir);
+    background:transparent; padding:.4rem 0;
+    font-family:var(--sans); font-size:.9rem;
+    color:var(--noir); outline:none; font-weight:500;
+  }
+  .ident-status{
+    font-size:.75rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--gris-600); font-weight:600;
+    padding:.5rem 1rem; border:1px solid var(--gris-300);
+    background:var(--blanc);
+  }
+  .ident-status.ok{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .ident-status.missing{background:#FEF2F2; color:#991B1B; border-color:#FCA5A5;}
+
+  .container{max-width:920px; margin:0 auto; padding:3.5rem 1.5rem 10rem;}
+
+  /* Cas pratique */
+  .case{
+    background:var(--blanc); padding:2.6rem;
+    margin-bottom:2.5rem;
+    border:1px solid var(--gris-200);
+    opacity:0; transform:translateY(30px);
+    transition: all .9s cubic-bezier(.4,0,.2,1);
+  }
+  .case.visible{opacity:1; transform:translateY(0);}
+  .case .badge{
+    display:inline-block; color:var(--gris-600);
+    font-size:.68rem; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; padding:0 0 .5rem 0;
+    border-bottom:1px solid var(--noir); margin-bottom:1.2rem;
+  }
+  .case h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--noir);
+    margin-bottom:.7rem; font-weight:500;
+  }
+  .case .context{
+    background:var(--gris-50); padding:1.4rem 1.6rem;
+    font-size:.92rem; margin-bottom:1.8rem; color:var(--gris-700);
+    border-left:2px solid var(--noir); line-height:1.7;
+  }
+  .case .context strong{color:var(--noir); font-weight:600;}
+
+  /* Question */
+  .question{
+    margin-bottom:2rem; padding-bottom:1.8rem;
+    border-bottom:1px dashed var(--gris-200);
+  }
+  .question:last-child{border-bottom:none; padding-bottom:0; margin-bottom:0;}
+  .question .q-num{
+    font-family:var(--serif); font-size:1rem;
+    color:var(--gris-500); font-weight:600;
+    letter-spacing:.15em; text-transform:uppercase;
+    margin-bottom:.5rem;
+  }
+  .question .q-text{
+    font-size:1rem; color:var(--noir);
+    margin-bottom:1.2rem; line-height:1.6; font-weight:500;
+  }
+  .question .q-hint{
+    font-size:.85rem; color:var(--gris-500);
+    font-style:italic; margin-bottom:1rem;
+  }
+
+  /* Options QCM */
+  .options{display:flex; flex-direction:column; gap:.5rem;}
+  .option{
+    display:block; width:100%; text-align:left;
+    padding:.9rem 1.1rem; background:var(--blanc);
+    border:1px solid var(--gris-200);
+    cursor:pointer; font-family:var(--sans);
+    font-size:.9rem; transition:.25s; color:var(--noir);
+    border-radius:0;
+  }
+  .option:hover{border-color:var(--noir); background:var(--gris-50);}
+  .option.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc); font-weight:500;}
+  .option.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600); text-decoration:line-through;}
+  .option:disabled{cursor:default; opacity:.85;}
+
+  /* Zones de texte */
+  textarea, input[type="text"].free-input{
+    width:100%; padding:1rem 1.2rem;
+    border:1px solid var(--gris-200); background:var(--blanc);
+    font-family:var(--sans); font-size:.92rem;
+    color:var(--noir); resize:vertical; border-radius:0;
+    outline:none; transition:.25s;
+    line-height:1.6;
+  }
+  textarea{min-height:110px;}
+  textarea:focus, input[type="text"].free-input:focus{border-color:var(--noir);}
+
+  /* Liste à compléter */
+  .list-item{
+    display:flex; align-items:center; gap:.8rem;
+    padding:.7rem 0;
+  }
+  .list-item .bullet{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--noir); flex:0 0 auto;
+  }
+  .list-item input{
+    flex:1; border:none; border-bottom:1px dashed var(--gris-400);
+    background:transparent; padding:.5rem .3rem;
+    font-family:var(--sans); font-size:.92rem;
+    color:var(--noir); outline:none;
+  }
+  .list-item input:focus{border-bottom-color:var(--noir); border-bottom-style:solid;}
+  .list-item input.correct{border-bottom-color:#16A34A; color:#16A34A; font-weight:600;}
+  .list-item input.incorrect{border-bottom-color:#DC2626; color:#DC2626;}
+
+  /* Boutons */
+  .btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:600;
+    padding:1rem 1.8rem; border:1px solid var(--noir); cursor:pointer;
+    background:var(--noir); color:var(--blanc);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+  }
+  .btn:hover{background:transparent; color:var(--noir);}
+  .btn.ghost{background:transparent; color:var(--noir); border:1px solid var(--gris-400);}
+  .btn.ghost:hover{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .btn-row{display:flex; gap:.8rem; margin-top:1.8rem; flex-wrap:wrap;}
+
+  /* Feedback */
+  .feedback{
+    margin-top:1.2rem; padding:1.1rem 1.4rem;
+    font-size:.88rem; display:none; letter-spacing:.02em;
+  }
+  .feedback.show{display:block; animation: slideDown .4s;}
+  .feedback.success{background:var(--noir); color:var(--blanc); border-left:3px solid var(--noir);}
+  .feedback.error{background:var(--gris-100); color:var(--gris-700); border-left:3px solid var(--gris-500);}
+  .feedback.info{background:var(--gris-50); color:var(--gris-700); border-left:3px solid var(--gris-400);}
+  @keyframes slideDown{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
+
+  /* Barre d'action */
+  .action-bar{
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--noir); color:var(--blanc);
+    padding:1.2rem 2rem;
+    box-shadow:0 -10px 30px rgba(0,0,0,.3);
+    z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1.5rem; flex-wrap:wrap;
+  }
+  .score-display{display:flex; align-items:center; gap:1.2rem;}
+  .score-display .score-num{
+    font-family:var(--serif); font-size:1.9rem;
+    color:var(--blanc); font-weight:500;
+  }
+  .score-display .score-label{
+    font-size:.65rem; opacity:.65; letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  .send-btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:700;
+    padding:1rem 2rem; border:1px solid var(--blanc);
+    cursor:pointer; background:var(--blanc); color:var(--noir);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+    display:flex; align-items:center; gap:.7rem;
+  }
+  .send-btn:hover{background:transparent; color:var(--blanc);}
+  .send-btn:disabled{opacity:.4; cursor:not-allowed;}
+  .send-btn.sent{background:#16A34A; border-color:#16A34A; color:var(--blanc);}
+
+  /* Modale */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,10,10,.85);
+    z-index:100; display:none; align-items:center; justify-content:center;
+    padding:2rem; backdrop-filter:blur(8px);
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--blanc); max-width:520px; width:100%;
+    padding:2.5rem; text-align:center;
+  }
+  .modal-box h3{
+    font-family:var(--serif); font-size:1.6rem;
+    color:var(--noir); margin-bottom:1rem;
+  }
+  .modal-box p{
+    color:var(--gris-600); font-size:.9rem;
+    line-height:1.7; margin-bottom:1.5rem;
+  }
+  .modal-box .btn-row{justify-content:center;}
+
+  /* Encadré organigramme */
+  .organigramme-box{
+    background:var(--gris-50); border:2px dashed var(--gris-400);
+    padding:2rem; text-align:center; margin:1.5rem 0;
+  }
+  .organigramme-box .org-icon{
+    font-size:2.5rem; margin-bottom:.8rem;
+  }
+  .organigramme-box h4{
+    font-family:var(--serif); font-size:1.2rem;
+    color:var(--noir); margin-bottom:.6rem; font-weight:500;
+  }
+  .organigramme-box p{
+    font-size:.9rem; color:var(--gris-600);
+    line-height:1.6; max-width:50ch; margin:0 auto 1rem;
+  }
+  .organigramme-box .download-btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding:.8rem 1.4rem; background:var(--noir); color:var(--blanc);
+    border:1px solid var(--noir); cursor:pointer;
+    font-family:var(--sans); font-size:.78rem; font-weight:600;
+    letter-spacing:.15em; text-transform:uppercase;
+    transition:.3s; text-decoration:none;
+  }
+  .organigramme-box .download-btn:hover{background:var(--blanc); color:var(--noir);}
+
+  @media (max-width:700px){
+    .container{padding:2rem 1rem 12rem;}
+    .case{padding:1.8rem;}
+    .action-bar{padding:1rem;}
+    .score-display .score-num{font-size:1.5rem;}
+    .send-btn{padding:.8rem 1.4rem; font-size:.7rem;}
+    .ident-inner{flex-direction:column; align-items:stretch;}
+    .ident-field{min-width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Bandeau identification -->
+<div class="ident-bar">
+  <div class="ident-inner">
+    <div class="ident-fields">
+      <div class="ident-field">
+        <label>Nom</label>
+        <input type="text" id="studentName" placeholder="Votre nom" required>
+      </div>
+      <div class="ident-field">
+        <label>Prénom</label>
+        <input type="text" id="studentFirstName" placeholder="Votre prénom" required>
+      </div>
+      <div class="ident-field">
+        <label>Classe</label>
+        <input type="text" id="studentClass" value="CFC 1A" readonly>
+      </div>
+    </div>
+    <div class="ident-status" id="identStatus">Identifiez-vous</div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-eyebrow">CFC 1A · Chapitre 1 · Séquence 3</div>
+  <h1>Cas pratiques — SportScents</h1>
+  <p>3 cas pratiques pour appliquer les notions d'organisation structurelle et fonctionnelle. À me retourner une fois complétés.</p>
+</header>
+
+<div class="container">
+
+  <!-- ============ CAS 1 : SPORTSCENTS ============ -->
+  <section class="case" data-case="1">
+    <span class="badge">Cas 01 · Analyse d'organisation</span>
+    <h2>SportScents — La jeune entreprise qui grandit</h2>
+
+    <div class="context">
+      <strong>Contexte :</strong> SportScents est une jeune entreprise de parfums sportifs créée il y a 2 ans à Genève. Elle compte aujourd'hui <strong>12 employés</strong> et vend ses produits en Suisse romande. Son fondateur, M. Duval, a tout construit seul au départ. Aujourd'hui, il se rend compte que la communication interne est difficile et que certaines tâches sont faites en double.
+      <br><br>
+      Voici les informations que M. Duval vous transmet :
+      <br>• Il assure seul la direction générale et la stratégie
+      <br>• Il y a 2 assistantes administratives qui gèrent aussi la comptabilité
+      <br>• 4 personnes s'occupent de la fabrication des parfums
+      <br>• 3 commerciaux vendent les produits
+      <br>• 1 personne gère les réseaux sociaux et le site web
+      <br>• 1 personne s'occupe des commandes de matières premières
+    </div>
+
+    <!-- Question 1.1 -->
+    <div class="question">
+      <div class="q-num">Question 1.1</div>
+      <div class="q-text">Identifiez les 4 éléments constitutifs de l'entreprise SportScents.</div>
+      <div class="q-hint">💡 Rappel : collaborateurs, tâches, moyens matériels, informations.</div>
+      <textarea id="q1_1" placeholder="Écrivez votre réponse ici..."></textarea>
+      <div class="btn-row">
+        <button class="btn ghost" onclick="showHint('hint1_1')">Voir un indice</button>
+      </div>
+      <div class="feedback" id="hint1_1">
+        <strong>Indice :</strong><br>
+        • Collaborateurs : les 12 employés et M. Duval<br>
+        • Tâches : direction, comptabilité, fabrication, vente, communication, achats<br>
+        • Moyens matériels : locaux, machines de fabrication, ordinateurs<br>
+        • Informations : données clients, commandes, stocks
+      </div>
+    </div>
+
+    <!-- Question 1.2 -->
+    <div class="question">
+      <div class="q-num">Question 1.2</div>
+      <div class="q-text">Classez chaque activité dans la bonne fonction de l'entreprise. Pour chaque activité, choisissez la fonction correspondante.</div>
+      <div id="cas1_fonctions"></div>
+    </div>
+
+    <!-- Question 1.3 -->
+    <div class="question">
+      <div class="q-num">Question 1.3</div>
+      <div class="q-text">Selon vous, quelle structure d'organisation serait la plus adaptée à SportScents aujourd'hui ? Justifiez votre réponse.</div>
+      <div class="options" id="q1_3_options">
+        <button class="option" onclick="answerCase1_3('fonctionnelle', this)">🏛️ Structure fonctionnelle</button>
+        <button class="option" onclick="answerCase1_3('divisionnelle', this)">🌍 Structure divisionnelle</button>
+        <button class="option" onclick="answerCase1_3('matricielle', this)">🔲 Structure matricielle</button>
+      </div>
+      <textarea id="q1_3_justif" placeholder="Justifiez votre choix en quelques lignes..." style="margin-top:1rem;"></textarea>
+      <div class="feedback" id="fb1_3"></div>
+    </div>
+
+    <!-- Question 1.4 -->
+    <div class="question">
+      <div class="q-num">Question 1.4</div>
+      <div class="q-text">Complétez l'organigramme de SportScents. Nommez les postes et indiquez les liens.</div>
+      <div class="organigramme-box">
+        <div class="org-icon">📐</div>
+        <h4>Créer l'organigramme de SportScents</h4>
+        <p>Téléchargez la fiche ci-dessous, dessinez l'organigramme à la main, puis déposez-le sur la plateforme ou rendez-le à Mme Mbi.</p>
+        <a href="#" onclick="downloadFiche(); return false;" class="download-btn">
+          ⬇ Télécharger la fiche organigramme
+        </a>
+      </div>
+      <textarea id="q1_4" placeholder="Décrivez ici les postes et les liens que vous avez identifiés (en complément de votre dessin)..."></textarea>
+    </div>
+  </section>
+
+  <!-- ============ CAS 2 : ANALYSE D'ORGANIGRAMME ============ -->
+  <section class="case" data-case="2">
+    <span class="badge">Cas 02 · Analyse d'organigramme</span>
+    <h2>GreenTech SA — L'organigramme à décoder</h2>
+
+    <div class="context">
+      <strong>Contexte :</strong> GreenTech SA est une entreprise spécialisée dans les panneaux solaires. Son organigramme est représenté ci-dessous. Analysez-le attentivement pour répondre aux questions.
+    </div>
+
+    <!-- Organigramme visuel -->
+    <div style="background:var(--gris-50); padding:2rem; margin:1.5rem 0; border:1px solid var(--gris-200); overflow-x:auto;">
+      <div style="min-width:600px; text-align:center; font-family:var(--sans); font-size:.85rem;">
+        <div style="display:inline-block; padding:.6rem 1.2rem; background:var(--noir); color:var(--blanc); font-weight:600;">Directeur Général</div>
+        <div style="height:20px; border-left:2px solid var(--noir); margin:0 auto; width:1px;"></div>
+        <div style="display:flex; justify-content:center; gap:2rem; margin-top:.5rem;">
+          <div style="border-top:2px solid var(--noir); width:100%; position:relative; top:-1px;"></div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:2rem; margin-top:1rem; flex-wrap:wrap;">
+          <div>
+            <div style="padding:.5rem 1rem; background:var(--gris-700); color:var(--blanc); font-weight:600;">Responsable Production</div>
+            <div style="margin-top:.5rem; display:flex; flex-direction:column; gap:.3rem;">
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Technicien 1</div>
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Technicien 2</div>
+            </div>
+          </div>
+          <div>
+            <div style="padding:.5rem 1rem; background:var(--gris-700); color:var(--blanc); font-weight:600;">Responsable Vente</div>
+            <div style="margin-top:.5rem; display:flex; flex-direction:column; gap:.3rem;">
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Commercial 1</div>
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Commercial 2</div>
+            </div>
+          </div>
+          <div>
+            <div style="padding:.5rem 1rem; background:var(--gris-700); color:var(--blanc); font-weight:600;">Responsable Admin & Finances</div>
+            <div style="margin-top:.5rem; display:flex; flex-direction:column; gap:.3rem;">
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Comptable</div>
+              <div style="padding:.4rem .8rem; background:var(--blanc); border:1px solid var(--gris-300);">Assistant RH</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:2rem; font-size:.75rem; color:var(--gris-500); font-style:italic;">
+          Lien de conseil (pointillé) : le juriste externe conseille tous les services
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 2.1 -->
+    <div class="question">
+      <div class="q-num">Question 2.1</div>
+      <div class="q-text">Quel type de structure cet organigramme représente-t-il ?</div>
+      <div class="options" id="q2_1_options">
+        <button class="option" onclick="answerCase2_1('fonctionnelle', this)">🏛️ Structure fonctionnelle</button>
+        <button class="option" onclick="answerCase2_1('divisionnelle', this)">🌍 Structure divisionnelle</button>
+        <button class="option" onclick="answerCase2_1('matricielle', this)">🔲 Structure matricielle</button>
+      </div>
+      <div class="feedback" id="fb2_1"></div>
+    </div>
+
+    <!-- Question 2.2 -->
+    <div class="question">
+      <div class="q-num">Question 2.2</div>
+      <div class="q-text">Identifiez 3 liens verticaux (relations de subordination) présents dans cet organigramme.</div>
+      <div id="cas2_liens"></div>
+      <div class="btn-row">
+        <button class="btn ghost" onclick="checkCase2_2()">Vérifier mes réponses</button>
+      </div>
+      <div class="feedback" id="fb2_2"></div>
+    </div>
+
+    <!-- Question 2.3 -->
+    <div class="question">
+      <div class="q-num">Question 2.3</div>
+      <div class="q-text">Le juriste externe entretient quel type de lien avec les services de GreenTech SA ?</div>
+      <div class="options" id="q2_3_options">
+        <button class="option" onclick="answerCase2_3('vertical', this)">Lien vertical (autorité)</button>
+        <button class="option" onclick="answerCase2_3('horizontal', this)">Lien horizontal (collaboration)</button>
+        <button class="option" onclick="answerCase2_3('conseil', this)">Lien de conseil (expertise sans autorité)</button>
+      </div>
+      <div class="feedback" id="fb2_3"></div>
+    </div>
+  </section>
+
+  <!-- ============ CAS 3 : CRÉATION D'ORGANIGRAMME ============ -->
+  <section class="case" data-case="3">
+    <span class="badge">Cas 03 · Création d'organigramme</span>
+    <h2>EventScents — À vous de jouer !</h2>
+
+    <div class="context">
+      <strong>Contexte :</strong> EventScents est une start-up événementielle qui organise des sorties et des séminaires d'entreprise. Son équipe compte <strong>15 personnes</strong> :
+      <br><br>
+      <strong>Direction :</strong> 1 directrice générale
+      <br><strong>Communication :</strong> 1 assistante communication, 1 assistante digitale, 1 assistante événementielle
+      <br><strong>Finance :</strong> 1 assistant finance
+      <br><strong>Achat :</strong> 1 assistant achat
+      <br><strong>Production :</strong> 1 assistant production, 1 assistant R&D
+      <br><strong>Marketing & Vente :</strong> 1 assistant marketing, 1 assistant vente, 1 assistant service client
+      <br><strong>Ressources Humaines :</strong> 1 assistant RH
+      <br><strong>Logistique :</strong> 1 assistant logistique, 1 assistant qualité
+      <br><strong>Administration :</strong> 1 assistant administration
+    </div>
+
+    <!-- Question 3.1 -->
+    <div class="question">
+      <div class="q-num">Question 3.1</div>
+      <div class="q-text">Combien de fonctions principales identifiez-vous dans cette entreprise ? Listez-les.</div>
+      <textarea id="q3_1" placeholder="Listez les fonctions que vous identifiez..."></textarea>
+    </div>
+
+    <!-- Question 3.2 -->
+    <div class="question">
+      <div class="q-num">Question 3.2</div>
+      <div class="q-text">Créez l'organigramme d'EventScents. Utilisez la fiche ci-dessous pour le dessiner à la main.</div>
+      <div class="organigramme-box">
+        <div class="org-icon">📐</div>
+        <h4>Créer l'organigramme d'EventScents</h4>
+        <p>Dessinez l'organigramme sur la fiche ci-dessous. Indiquez clairement les postes, les fonctions et les liens verticaux.</p>
+        <a href="#" onclick="downloadFiche(); return false;" class="download-btn">
+          ⬇ Télécharger la fiche organigramme
+        </a>
+      </div>
+      <textarea id="q3_2" placeholder="Décrivez votre organigramme (structure, postes, liens)..."></textarea>
+    </div>
+
+    <!-- Question 3.3 -->
+    <div class="question">
+      <div class="q-num">Question 3.3</div>
+      <div class="q-text">Quel type de structure serait le plus adapté à EventScents dans 2 ans si l'entreprise se diversifie (mariages, séminaires, événements sportifs) ?</div>
+      <textarea id="q3_3" placeholder="Développez votre réponse..."></textarea>
+      <div class="feedback" id="fb3_3">
+        <strong>Éléments de réponse attendus :</strong><br>
+        • Structure <strong>divisionnelle</strong> par type d'événement<br>
+        • Chaque division (mariages, séminaires, sport) aurait sa propre équipe<br>
+        • Plus d'autonomie et de réactivité<br>
+        • Attention à la duplication des ressources
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Barre d'action -->
+<div class="action-bar">
+  <div class="score-display">
+    <div>
+      <div class="score-label">Score global</div>
+      <div class="score-num" id="globalScore">0 / 10</div>
+    </div>
+  </div>
+  <button class="send-btn" id="sendBtn" onclick="sendByEmail()" disabled>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Envoyer à Mme Mbi
+  </button>
+</div>
+
+<!-- Modale -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h3>Confirmer l'envoi</h3>
+    <p>Vos réponses vont être envoyées à <strong>mbi.tatiana@gmail.com</strong>. Vérifiez que votre nom et prénom sont bien remplis.</p>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="closeModal()">Annuler</button>
+      <button class="btn" onclick="confirmSend()">Confirmer l'envoi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ EMAIL ============ */
+const TEACHER_EMAIL = 'mbi.tatiana@gmail.com';
+
+/* ============ SCROLL ============ */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold:.1});
+document.querySelectorAll('.case').forEach(el=>observer.observe(el));
+
+/* ============ ÉTAT GLOBAL ============ */
+let score = 0;
+const totalQuestions = 10;
+let answers = {};
+
+function updateScore(){
+  document.getElementById('globalScore').textContent = `${score} / ${totalQuestions}`;
+  updateSendButton();
+}
+
+function updateSendButton(){
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  const hasIdentity = name.length > 0 && firstName.length > 0;
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = !hasIdentity;
+  const status = document.getElementById('identStatus');
+  if(!hasIdentity){
+    status.textContent = 'Identifiez-vous';
+    status.className = 'ident-status missing';
+  } else if(score < totalQuestions){
+    status.textContent = `Progression : ${score}/${totalQuestions}`;
+    status.className = 'ident-status';
+  } else {
+    status.textContent = 'Prêt à envoyer';
+    status.className = 'ident-status ok';
+  }
+}
+
+document.getElementById('studentName').addEventListener('input', updateSendButton);
+document.getElementById('studentFirstName').addEventListener('input', updateSendButton);
+
+function showHint(id){
+  const fb = document.getElementById(id);
+  fb.classList.toggle('show');
+  fb.className = 'feedback ' + (fb.classList.contains('show') ? 'info show' : 'info');
+}
+
+/* ============ CAS 1 ============ */
+const cas1Fonctions = [
+  {id:"direction", text:"Assurer la direction générale et la stratégie", correct:"Direction"},
+  {id:"admin", text:"Gérer la comptabilité et les tâches administratives", correct:"Administration / Finance"},
+  {id:"production", text:"Fabriquer les parfums", correct:"Production"},
+  {id:"vente", text:"Vendre les produits aux clients", correct:"Marketing / Vente"},
+  {id:"communication", text:"Gérer les réseaux sociaux et le site web", correct:"Communication"},
+  {id:"achat", text:"Commander les matières premières", correct:"Achat"}
+];
+
+function renderCas1Fonctions(){
+  const c = document.getElementById('cas1_fonctions');
+  c.innerHTML = cas1Fonctions.map((f, i)=>`
+    <div class="list-item" style="flex-direction:column; align-items:stretch; padding:1rem 0; border-bottom:1px solid var(--gris-100);">
+      <div style="font-size:.9rem; margin-bottom:.6rem; font-weight:500;">${f.text}</div>
+      <select onchange="checkCas1Fonction(${i}, this)" style="width:100%; padding:.7rem 1rem; border:1px solid var(--gris-200); font-family:var(--sans); font-size:.9rem; background:var(--blanc); cursor:pointer;">
+        <option value="">-- Choisir une fonction --</option>
+        <option value="Direction">Direction</option>
+        <option value="Communication">Communication</option>
+        <option value="Finance">Finance</option>
+        <option value="Administration / Finance">Administration / Finance</option>
+        <option value="Achat">Achat</option>
+        <option value="Production">Production</option>
+        <option value="Marketing / Vente">Marketing / Vente</option>
+        <option value="Ressources Humaines">Ressources Humaines</option>
+        <option value="Logistique">Logistique</option>
+      </select>
+    </div>
+  `).join('');
+}
+
+function checkCas1Fonction(i, select){
+  const f = cas1Fonctions[i];
+  const val = select.value;
+  const isCorrect = val === f.correct;
+  select.style.borderColor = isCorrect ? '#16A34A' : '#DC2626';
+  select.style.background = isCorrect ? 'rgba(22,163,74,.1)' : 'rgba(220,38,38,.08)';
+  answers['cas1_fonc_'+i] = {question: f.text, reponse: val, correcte: f.correct, juste: isCorrect};
+  if(isCorrect){
+    if(!answers['cas1_fonc_'+i+'_scored']){
+      score++;
+      answers['cas1_fonc_'+i+'_scored'] = true;
+      updateScore();
+    }
+  } else {
+    if(answers['cas1_fonc_'+i+'_scored']){
+      score--;
+      delete answers['cas1_fonc_'+i+'_scored'];
+      updateScore();
+    }
+  }
+}
+
+/* Question 1.3 */
+function answerCase1_3(type, btn){
+  const correct = 'fonctionnelle';
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.option').forEach(b=>b.disabled = true);
+  const isCorrect = type === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    score++;
+    answers['cas1_3'] = {reponse: btn.textContent, juste: true};
+    updateScore();
+  } else {
+    btn.classList.add('incorrect');
+    parent.querySelectorAll('.option').forEach(b=>{
+      if(b.textContent.includes('fonctionnelle')) b.classList.add('correct');
+    });
+    answers['cas1_3'] = {reponse: btn.textContent, juste: false};
+  }
+  const fb = document.getElementById('fb1_3');
+  fb.className = 'feedback show ' + (isCorrect ? 'success' : 'error');
+  fb.innerHTML = isCorrect
+    ? '✓ Correct ! Structure fonctionnelle : adaptée aux PME, spécialisation par fonction.'
+    : '✗ Réponse incorrecte. La structure fonctionnelle est la plus adaptée à une PME comme SportScents.';
+}
+
+/* ============ CAS 2 ============ */
+const cas2Liens = [
+  {poste:"Directeur Général", subordonne:"Responsable Production"},
+  {poste:"Responsable Production", subordonne:"Technicien 1"},
+  {poste:"Responsable Vente", subordonne:"Commercial 1"}
+];
+
+function renderCas2Liens(){
+  const c = document.getElementById('cas2_liens');
+  c.innerHTML = cas2Liens.map((l, i)=>`
+    <div class="list-item">
+      <span class="bullet"></span>
+      <input type="text" placeholder="Poste supérieur..." data-correct="${l.poste}" data-type="poste" data-idx="${i}">
+      <span style="color:var(--gris-400); font-size:.85rem;">→</span>
+      <input type="text" placeholder="Subordonné..." data-correct="${l.subordonne}" data-type="sub" data-idx="${i}">
+    </div>
+  `).join('');
+}
+
+function checkCase2_2(){
+  const inputs = document.querySelectorAll('#cas2_liens input');
+  let correct = 0;
+  inputs.forEach(inp=>{
+    const expected = inp.dataset.correct.toLowerCase();
+    const val = inp.value.trim().toLowerCase();
+    const isCorrect = val === expected;
+    if(isCorrect){
+      inp.classList.add('correct');
+      inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect');
+      inp.classList.remove('correct');
+    }
+  });
+  const ok = correct === inputs.length;
+  const fb = document.getElementById('fb2_2');
+  fb.className = 'feedback show ' + (ok ? 'success' : 'error');
+  fb.innerHTML = ok ? '🎉 Bravo ! Tous les liens sont corrects.' : `${correct}/${inputs.length} champs corrects. Réessayez.`;
+}
+
+/* Question 2.1 */
+function answerCase2_1(type, btn){
+  const correct = 'fonctionnelle';
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.option').forEach(b=>b.disabled = true);
+  const isCorrect = type === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    score++;
+    updateScore();
+  } else {
+    btn.classList.add('incorrect');
+    parent.querySelectorAll('.option').forEach(b=>{
+      if(b.textContent.includes('fonctionnelle')) b.classList.add('correct');
+    });
+  }
+  const fb = document.getElementById('fb2_1');
+  fb.className = 'feedback show ' + (isCorrect ? 'success' : 'error');
+  fb.innerHTML = isCorrect
+    ? '✓ Correct ! La structure fonctionnelle regroupe les activités par fonction.'
+    : '✗ Réponse incorrecte. Il s\'agit d\'une structure fonctionnelle.';
+}
+
+/* Question 2.3 */
+function answerCase2_3(type, btn){
+  const correct = 'conseil';
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.option').forEach(b=>b.disabled = true);
+  const isCorrect = type === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    score++;
+    updateScore();
+  } else {
+    btn.classList.add('incorrect');
+    parent.querySelectorAll('.option').forEach(b=>{
+      if(b.textContent.includes('conseil')) b.classList.add('correct');
+    });
+  }
+  const fb = document.getElementById('fb2_3');
+  fb.className = 'feedback show ' + (isCorrect ? 'success' : 'error');
+  fb.innerHTML = isCorrect
+    ? '✓ Correct ! Un lien de conseil est une expertise sans autorité hiérarchique.'
+    : '✗ Réponse incorrecte. Un juriste externe entretient un lien de conseil.';
+}
+
+/* ============ CAS 3 ============ */
+function downloadFiche(){
+  // Génération d'une fiche vierge pour dessiner l'organigramme
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <title>Fiche organigramme — Séquence 3</title>
+      <style>
+        body { font-family: Georgia, serif; padding: 40px; color: #0A0A0A; }
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        h2 { font-size: 16px; color: #555; margin-bottom: 30px; font-weight: normal; }
+        .info { margin-bottom: 20px; font-size: 14px; }
+        .info label { display: inline-block; width: 100px; font-weight: bold; }
+        .info input { border: none; border-bottom: 1px solid #0A0A0A; width: 300px; padding: 4px; font-family: Georgia, serif; font-size: 14px; }
+        .frame { border: 2px solid #0A0A0A; height: 800px; padding: 20px; margin-top: 30px; position: relative; }
+        .frame::before {
+          content: "Zone de dessin — Créez votre organigramme ici";
+          position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+          color: #CCC; font-size: 20px; font-style: italic; pointer-events: none;
+        }
+        .grid { background-image: linear-gradient(#EEE 1px, transparent 1px), linear-gradient(90deg, #EEE 1px, transparent 1px); background-size: 40px 40px; height: 100%; }
+        .legend { margin-top: 30px; font-size: 13px; color: #555; }
+        @media print { body { padding: 20px; } }
+      </style>
+    </head>
+    <body>
+      <h1>Fiche — Création d'organigramme</h1>
+      <h2>Séquence 3 · Organisation structurelle et fonctionnelle</h2>
+      <div class="info">
+        <label>Nom :</label><input type="text"><br><br>
+        <label>Prénom :</label><input type="text"><br><br>
+        <label>Classe :</label><input type="text" value="CFC 1A"><br><br>
+        <label>Date :</label><input type="text"><br><br>
+        <label>Entreprise :</label><input type="text" placeholder="SportScents / EventScents / Autre">
+      </div>
+      <div class="frame">
+        <div class="grid"></div>
+      </div>
+      <div class="legend">
+        <strong>Légende :</strong> Utilisez des rectangles pour les postes, des lignes pleines pour les liens verticaux (autorité), des lignes pointillées pour les liens de conseil.
+      </div>
+    </body>
+    </html>
+  `;
+  const blob = new Blob([htmlContent], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Fiche_organigramme_sequence3.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ============ ENVOI EMAIL ============ */
+function sendByEmail(){
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  if(!name || !firstName){
+    alert('Veuillez renseigner votre nom et prénom en haut de page.');
+    return;
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function confirmSend(){
+  closeModal();
+
+  const name = document.getElementById('studentName').value.trim();
+  const firstName = document.getElementById('studentFirstName').value.trim();
+  const className = document.getElementById('studentClass').value.trim();
+
+  const subject = `[CFC 1A] Cas pratiques S3 — ${name} ${firstName} — Score : ${score}/${totalQuestions}`;
+
+  let body = `RÉSULTATS — CAS PRATIQUES SÉQUENCE 3\n`;
+  body += `============================================\n\n`;
+  body += `ÉLÈVE : ${name} ${firstName}\n`;
+  body += `CLASSE : ${className}\n`;
+  body += `DATE : ${new Date().toLocaleString('fr-CH')}\n\n`;
+  body += `SCORE : ${score} / ${totalQuestions}\n\n`;
+  body += `--------------------------------------------\n\n`;
+
+  // Cas 1
+  body += `📁 CAS 1 — SPORTSCENTS\n`;
+  body += `--------------------------------------------\n\n`;
+  body += `Q1.1 — Éléments constitutifs :\n${document.getElementById('q1_1').value || '(vide)'}\n\n`;
+
+  body += `Q1.2 — Fonctions identifiées :\n`;
+  cas1Fonctions.forEach((f, i)=>{
+    const ans = answers['cas1_fonc_'+i];
+    body += `  • ${f.text}\n    → ${ans ? ans.reponse : '(non répondu)'} ${ans && ans.juste ? '✓' : '✗'}\n`;
+  });
+  body += `\n`;
+
+  body += `Q1.3 — Structure recommandée :\n`;
+  body += `  Réponse : ${answers['cas1_3'] ? answers['cas1_3'].reponse : '(non répondu)'}\n`;
+  body += `  Justification : ${document.getElementById('q1_3_justif').value || '(vide)'}\n\n`;
+
+  body += `Q1.4 — Organigramme SportScents (description) :\n${document.getElementById('q1_4').value || '(vide)'}\n\n`;
+
+  // Cas 2
+  body += `\n📁 CAS 2 — GREENTECH SA\n`;
+  body += `--------------------------------------------\n\n`;
+  body += `Q2.1 — Type de structure : ${answers['cas2_1'] ? answers['cas2_1'].reponse : '(non répondu)'}\n\n`;
+  body += `Q2.2 — Liens verticaux identifiés :\n`;
+  document.querySelectorAll('#cas2_liens input').forEach(inp=>{
+    body += `  • ${inp.value || '(vide)'}\n`;
+  });
+  body += `\n`;
+  body += `Q2.3 — Lien du juriste : ${answers['cas2_3'] ? answers['cas2_3'].reponse : '(non répondu)'}\n\n`;
+
+  // Cas 3
+  body += `\n📁 CAS 3 — EVENTSCENTS\n`;
+  body += `--------------------------------------------\n\n`;
+  body += `Q3.1 — Fonctions identifiées :\n${document.getElementById('q3_1').value || '(vide)'}\n\n`;
+  body += `Q3.2 — Description organigramme :\n${document.getElementById('q3_2').value || '(vide)'}\n\n`;
+  body += `Q3.3 — Structure dans 2 ans :\n${document.getElementById('q3_3').value || '(vide)'}\n\n`;
+
+  body += `\n--------------------------------------------\n`;
+  body += `Fin du rapport — Envoyé depuis l'application HTML.\n`;
+
+  const mailtoLink = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoLink;
+
+  const btn = document.getElementById('sendBtn');
+  btn.classList.add('sent');
+  btn.innerHTML = '✓ Envoyé';
+  setTimeout(()=>{
+    btn.classList.remove('sent');
+    btn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:inline-block;">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Envoyer à Mme Mbi
+    `;
+  }, 3000);
+}
+
+/* ============ INIT ============ */
+renderCas1Fonctions();
+renderCas2Liens();
+updateScore();
+</script>
+</body>
+</html>

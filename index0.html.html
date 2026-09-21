@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CFC 1A — Organisation & Événementiel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A;
+    --noir-2:#141414;
+    --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F;
+    --gris-800:#2A2A2A;
+    --gris-700:#3A3A3A;
+    --gris-600:#555555;
+    --gris-500:#777777;
+    --gris-400:#999999;
+    --gris-300:#BBBBBB;
+    --gris-200:#D4D4D4;
+    --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4;
+    --blanc:#FFFFFF;
+    --blanc-casse:#FAFAFA;
+    --accent:#CE5078; /* accent rare */
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    height:100%; overflow:hidden;
+    font-family:var(--sans); color:var(--noir);
+    background:var(--noir);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ============ DECK & SLIDES ============ */
+  .deck{position:relative; width:100vw; height:100vh; overflow:hidden;}
+  .track{
+    display:flex; height:100%; width:100%;
+    transition: transform 1s cubic-bezier(.77,0,.175,1);
+  }
+  .slide{
+    flex:0 0 100vw; height:100vh; width:100vw;
+    display:flex; flex-direction:column; justify-content:center;
+    padding: 5vh 7vw; position:relative; overflow:hidden;
+  }
+  .slide > *{position:relative; z-index:2;}
+
+  /* ============ BACKGROUNDS ============ */
+  .bg-media{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; z-index:0;
+    filter: grayscale(100%) contrast(1.05);
+    animation: slowZoom 22s ease-in-out infinite alternate;
+  }
+  @keyframes slowZoom{
+    from{transform:scale(1);}
+    to{transform:scale(1.08);}
+  }
+  .bg-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(135deg, rgba(10,10,10,.96), rgba(20,20,20,.88) 50%, rgba(10,10,10,.97));
+  }
+  .bg-overlay.light{
+    background:linear-gradient(135deg, rgba(250,250,250,.98), rgba(244,244,244,.95));
+  }
+
+  /* ============ TYPO ============ */
+  .eyebrow{
+    font-size:.72rem; letter-spacing:.32em; font-weight:500;
+    text-transform:uppercase; margin-bottom:1.6rem;
+    display:flex; align-items:center; gap:1rem;
+    color:var(--gris-400);
+  }
+  .eyebrow::before{
+    content:""; width:32px; height:1px; background:var(--gris-500);
+    display:inline-block;
+  }
+  h1,h2,h3{font-family:var(--serif); font-weight:500; line-height:1.08;}
+  h1{font-size:clamp(2.6rem,6vw,5.2rem); letter-spacing:-.015em;}
+  h2{font-size:clamp(1.8rem,3.8vw,3.4rem); letter-spacing:-.01em;}
+  h3{font-size:clamp(1.1rem,1.6vw,1.4rem);}
+  p{font-size:clamp(.95rem,1.15vw,1.15rem); line-height:1.7; max-width:68ch;}
+
+  /* ============ THEMES ============ */
+  .theme-dark{background:var(--noir); color:var(--gris-100);}
+  .theme-dark h1,.theme-dark h2,.theme-dark h3{color:var(--blanc);}
+  .theme-dark .eyebrow{color:var(--gris-400);}
+  .theme-dark p{color:var(--gris-300);}
+  .theme-light{background:var(--blanc-casse); color:var(--noir);}
+  .theme-light .eyebrow{color:var(--gris-600);}
+  .theme-light h1,.theme-light h2,.theme-light h3{color:var(--noir);}
+
+  /* ============ SLIDE 1 : COVER ============ */
+  #s1{align-items:flex-start; justify-content:center;}
+  #s1 h1{
+    color:var(--blanc);
+    animation: fadeUp 1.2s .3s both;
+  }
+  #s1 h1 .accent-word{
+    font-style:italic;
+    color:var(--gris-400);
+    font-weight:400;
+  }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  #s1 .meta{
+    margin-top:2.6rem; display:flex; gap:2.6rem; font-size:.9rem;
+    opacity:0; animation: fadeUp 1s 1s both;
+    flex-wrap:wrap;
+  }
+  #s1 .meta span{
+    border-left:1px solid var(--gris-600);
+    padding-left:1rem;
+    color:var(--gris-400);
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    font-size:.78rem;
+  }
+  #s1 .start{
+    margin-top:3.2rem; opacity:0; animation: fadeUp 1s 1.4s both;
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    font-family:var(--sans); font-size:.82rem; font-weight:600;
+    letter-spacing:.18em; text-transform:uppercase;
+    padding:1.15rem 2.4rem; border-radius:0;
+    border:1px solid var(--blanc); cursor:pointer;
+    background:var(--blanc); color:var(--noir);
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    position:relative; overflow:hidden;
+  }
+  .btn:hover{background:transparent; color:var(--blanc);}
+  .btn.ghost{
+    background:transparent; color:var(--blanc);
+    border:1px solid var(--gris-600);
+  }
+  .btn.ghost:hover{border-color:var(--blanc); background:var(--blanc); color:var(--noir);}
+  .btn.on-light{
+    background:var(--noir); color:var(--blanc); border-color:var(--noir);
+  }
+  .btn.on-light:hover{background:transparent; color:var(--noir);}
+
+  /* ============ CARDS ============ */
+  .cards3{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:2.8rem; background:var(--gris-200);}
+  .card{
+    background:var(--blanc); padding:2.4rem 2rem;
+    transition: all .5s cubic-bezier(.4,0,.2,1);
+    position:relative; overflow:hidden;
+    opacity:0; animation: cardIn .9s both;
+    border:none;
+  }
+  .card:nth-child(1){animation-delay:.2s;}
+  .card:nth-child(2){animation-delay:.35s;}
+  .card:nth-child(3){animation-delay:.5s;}
+  @keyframes cardIn{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .card:hover{background:var(--noir); color:var(--blanc);}
+  .card:hover .num{color:var(--blanc);}
+  .card:hover h3{color:var(--blanc);}
+  .card:hover p{color:var(--gris-300);}
+  .card .num{
+    font-family:var(--serif); font-size:2.6rem; color:var(--noir);
+    font-weight:500; line-height:1;
+    transition: color .3s;
+  }
+  .card h3{
+    font-size:1.2rem; margin:1rem 0 .7rem; color:var(--noir);
+    transition: color .3s;
+  }
+  .card p{
+    font-size:.9rem; color:var(--gris-600); line-height:1.6;
+    transition: color .3s;
+  }
+
+  /* ============ PYRAMIDE ============ */
+  .pyramid{
+    margin-top:2.2rem; display:flex; flex-direction:column;
+    gap:2px; max-width:760px;
+  }
+  .prow{
+    display:flex; align-items:center; gap:1.2rem;
+    background:var(--gris-800);
+    border-left:2px solid var(--gris-500);
+    padding:1.05rem 1.4rem;
+    transition: all .3s;
+    opacity:0; animation: slideIn .6s both;
+  }
+  .prow:nth-child(1){animation-delay:.1s; width:100%;}
+  .prow:nth-child(2){animation-delay:.2s; width:95%;}
+  .prow:nth-child(3){animation-delay:.3s; width:90%;}
+  .prow:nth-child(4){animation-delay:.4s; width:85%;}
+  .prow:nth-child(5){animation-delay:.5s; width:80%;}
+  @keyframes slideIn{
+    from{opacity:0; transform:translateX(-30px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  .prow:hover{
+    background:var(--gris-700);
+    border-left-color:var(--blanc);
+    transform:translateX(8px);
+  }
+  .prow .dot{
+    width:5px; height:5px; border-radius:50%;
+    background:var(--gris-400); flex:0 0 auto;
+    transition: background .3s;
+  }
+  .prow:hover .dot{background:var(--blanc);}
+  .prow span{font-size:.95rem; color:var(--gris-200); letter-spacing:.01em;}
+
+  /* ============ SPLIT ============ */
+  .split{display:flex; gap:4.5rem; align-items:center; height:100%;}
+  .split .left{flex:1.15;}
+  .split .right{flex:1;}
+  .badge-loop{
+    display:inline-flex; align-items:center; gap:.8rem;
+    border:1px solid var(--gris-300); border-radius:0;
+    padding:.7rem 1.2rem; font-size:.75rem;
+    margin-top:2rem; color:var(--gris-600);
+    letter-spacing:.15em; text-transform:uppercase;
+    font-weight:500;
+  }
+  .badge-loop::before{
+    content:""; width:5px; height:5px; border-radius:50%;
+    background:var(--accent); animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:.3; transform:scale(1.6);}
+  }
+
+  /* ============ VOTE ============ */
+  .vote-wrap{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:2.6rem; background:var(--gris-200);}
+  .vote-card{
+    background:var(--blanc); overflow:hidden;
+    border:none; cursor:pointer;
+    transition: all .5s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .vote-card .vc-img{
+    width:100%; height:180px; object-fit:cover; display:block;
+    filter: grayscale(100%) contrast(1.05);
+    transition: all .7s;
+  }
+  .vote-card:hover .vc-img{filter:grayscale(0%) contrast(1);transform:scale(1.05);}
+  .vote-card .vc-body{padding:1.8rem 2rem 2.2rem;}
+  .vote-card:hover{background:var(--noir);}
+  .vote-card:hover h3, .vote-card:hover .infos, .vote-card:hover p, .vote-card:hover .tag{color:var(--blanc);}
+  .vote-card:hover .infos{color:var(--gris-400);}
+  .vote-card:hover p{color:var(--gris-300);}
+  .vote-card:hover .tag{color:var(--gris-400);}
+  .vote-card.chosen{
+    background:var(--noir);
+  }
+  .vote-card.chosen h3{color:var(--blanc);}
+  .vote-card.chosen .infos{color:var(--gris-400);}
+  .vote-card.chosen p{color:var(--gris-300);}
+  .vote-card.chosen .tag{color:var(--gris-400);}
+  .vote-card.chosen .vc-img{filter:grayscale(0%);}
+  .vote-card .tag{
+    font-size:.68rem; letter-spacing:.24em;
+    color:var(--gris-600); font-weight:600;
+    text-transform:uppercase;
+    transition: color .3s;
+  }
+  .vote-card h3{
+    font-size:1.6rem; margin:.5rem 0 .6rem;
+    color:var(--noir);
+    transition: color .3s;
+  }
+  .vote-card .infos{
+    font-size:.78rem; color:var(--gris-500); margin-bottom:.8rem;
+    letter-spacing:.08em; text-transform:uppercase;
+    transition: color .3s;
+  }
+  .vote-card p{font-size:.9rem; color:var(--gris-700); line-height:1.6; transition: color .3s;}
+  .vote-check{
+    position:absolute; top:1rem; right:1rem;
+    width:34px; height:34px; border-radius:50%;
+    background:var(--blanc); color:var(--noir);
+    display:none; align-items:center; justify-content:center;
+    font-weight:700; font-size:1rem;
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes popIn{
+    from{transform:scale(0);}
+    to{transform:scale(1);}
+  }
+  .vote-card.chosen .vote-check{display:flex; background:var(--accent); color:var(--blanc);}
+  .vote-hint{font-size:.78rem; color:var(--gris-500); margin-top:1.6rem; letter-spacing:.08em; text-transform:uppercase; font-weight:500;}
+  .vote-confirm{
+    margin-top:2rem; font-family:var(--serif);
+    font-size:1.35rem; color:var(--noir);
+    opacity:0; transform:translateY(8px);
+    transition:.5s ease all;
+  }
+  .vote-confirm.show{opacity:1; transform:translateY(0);}
+
+  /* ============ TIMELINE ============ */
+  .tl{display:flex; gap:0; margin-top:3rem; position:relative;}
+  .tl-step{flex:1; position:relative; padding-right:2rem;}
+  .tl-step:not(:last-child)::after{
+    content:""; position:absolute; top:20px; right:0;
+    width:2rem; height:1px;
+    background:var(--gris-600);
+  }
+  .tl-n{
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid var(--gris-600);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-size:1.1rem;
+    color:var(--gris-300); margin-bottom:1.3rem;
+    background:var(--noir);
+    transition: all .4s;
+  }
+  .tl-step:hover .tl-n{
+    background:var(--blanc); color:var(--noir);
+    border-color:var(--blanc);
+    transform:scale(1.1);
+  }
+  .tl-step.final .tl-n{
+    background:var(--blanc); color:var(--noir);
+    border-color:var(--blanc);
+  }
+  .tl-step h3{font-size:1rem; color:var(--blanc); margin:0 0 .5rem; letter-spacing:.01em;}
+  .tl-step p{font-size:.85rem; color:var(--gris-400); margin:0; line-height:1.55;}
+  .tl-step.final p{color:var(--gris-300);}
+  .note-eval{
+    margin-top:2.8rem; font-size:.82rem; color:var(--gris-400);
+    border-top:1px solid var(--gris-800);
+    padding-top:1.6rem; max-width:780px; line-height:1.7;
+    letter-spacing:.02em;
+  }
+
+  /* ============ TWO COL ============ */
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; margin-top:2.4rem;}
+  .col h3{
+    font-size:1.35rem; color:var(--noir);
+    margin-bottom:1.2rem; padding-bottom:.7rem;
+    border-bottom:1px solid var(--gris-300);
+    display:inline-block;
+  }
+  .col ul{list-style:none; padding:0;}
+  .col li{
+    font-size:.93rem; margin-bottom:.9rem; line-height:1.6;
+    padding-left:1.6rem; position:relative;
+    color:var(--gris-700);
+  }
+  .col li::before{
+    content:""; position:absolute; left:0; top:.7rem;
+    width:12px; height:1px; background:var(--noir);
+  }
+  .rule{
+    margin-top:2.2rem; background:var(--noir);
+    color:var(--blanc); padding:1.6rem 1.8rem;
+    font-size:.9rem; max-width:820px; line-height:1.7;
+    letter-spacing:.01em;
+  }
+
+  /* ============ AGENDA ============ */
+  .agenda{margin-top:2.4rem; display:flex; flex-direction:column; gap:0; max-width:780px;}
+  .arow{
+    display:flex; align-items:baseline; gap:1.6rem;
+    border-bottom:1px solid var(--gris-200);
+    padding:1.15rem .5rem;
+    transition: all .35s;
+    cursor:default;
+  }
+  .arow:hover{
+    background:var(--gris-50);
+    padding-left:1.4rem;
+    border-bottom-color:var(--noir);
+  }
+  .arow .time{
+    font-family:var(--serif); font-size:1.05rem;
+    color:var(--noir); width:6rem; flex:0 0 auto;
+    font-weight:600; letter-spacing:.02em;
+  }
+  .arow .what{font-size:.98rem; color:var(--gris-800);}
+
+  /* ============ CLOSING ============ */
+  #s14{align-items:flex-start; justify-content:center;}
+  #s14 .final-outing{
+    font-family:var(--serif); color:var(--gris-300);
+    font-size:1.2rem; margin-top:1rem; font-style:italic;
+  }
+
+  /* ============ NAV ============ */
+  .navdots{
+    position:fixed; left:2.4rem; bottom:2.4rem;
+    display:flex; gap:.7rem; z-index:20;
+  }
+  .navdots button{
+    width:6px; height:6px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.25);
+    cursor:pointer; padding:0; transition: all .4s;
+  }
+  .navdots button.active{
+    background:var(--blanc); width:32px; border-radius:0;
+  }
+  body.on-light .navdots button{background:rgba(10,10,10,.2);}
+  body.on-light .navdots button.active{background:var(--noir);}
+
+  .navarrows{
+    position:fixed; right:2.4rem; bottom:2.4rem;
+    display:flex; gap:.6rem; z-index:20;
+  }
+  .navarrows button{
+    width:50px; height:50px; border-radius:0;
+    border:1px solid var(--gris-500); background:transparent;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition: all .35s;
+  }
+  .navarrows button:hover:not(:disabled){
+    background:var(--blanc); border-color:var(--blanc);
+  }
+  .navarrows button:hover:not(:disabled) svg path{stroke:var(--noir);}
+  .navarrows svg{width:16px; height:16px;}
+  body.on-light .navarrows button{border-color:var(--gris-600);}
+  body.on-dark .navarrows svg path{stroke:var(--gris-300);}
+  body.on-light .navarrows svg path{stroke:var(--noir);}
+  .navarrows button:disabled{opacity:.2; cursor:default;}
+
+  .slidecount{
+    position:fixed; top:2.4rem; right:2.4rem;
+    font-size:.72rem; letter-spacing:.24em; z-index:20;
+    opacity:.6; font-weight:500;
+  }
+  body.on-dark .slidecount{color:var(--gris-300);}
+  body.on-light .slidecount{color:var(--noir);}
+
+  /* ============ PROGRESS BAR ============ */
+  .progress-bar{
+    position:fixed; top:0; left:0; height:2px;
+    background:var(--blanc);
+    z-index:30; transition: width .8s cubic-bezier(.77,0,.175,1);
+  }
+  body.on-light .progress-bar{background:var(--noir);}
+
+  /* ============ MENU BUTTON ============ */
+  .menu-btn{
+    position:fixed; top:2.2rem; left:2.4rem;
+    width:42px; height:42px; border-radius:0;
+    background:transparent;
+    border:1px solid var(--gris-500); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    z-index:25; transition: all .35s;
+  }
+  .menu-btn:hover{background:var(--blanc); border-color:var(--blanc);}
+  .menu-btn:hover svg path{stroke:var(--noir);}
+  body.on-dark .menu-btn svg path{stroke:var(--gris-300);}
+  body.on-light .menu-btn svg path{stroke:var(--noir);}
+  body.on-light .menu-btn{border-color:var(--gris-600);}
+  body.on-light .menu-btn:hover{background:var(--noir); border-color:var(--noir);}
+  body.on-light .menu-btn:hover svg path{stroke:var(--blanc);}
+
+  /* ============ MENU OVERLAY ============ */
+  .menu-overlay{
+    position:fixed; inset:0; background:rgba(10,10,10,.98);
+    z-index:100; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:.5s;
+    backdrop-filter: blur(12px);
+  }
+  .menu-overlay.open{opacity:1; pointer-events:auto;}
+  .menu-content{
+    max-width:1000px; width:90%; max-height:80vh; overflow-y:auto;
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+    gap:1px; padding:0; background:var(--gris-800);
+  }
+  .menu-item{
+    background:var(--noir-2);
+    padding:1.6rem 1.8rem;
+    cursor:pointer; transition: all .35s;
+    color:var(--gris-200);
+  }
+  .menu-item:hover{
+    background:var(--blanc); color:var(--noir);
+  }
+  .menu-item:hover .mi-num{color:var(--accent);}
+  .menu-item:hover .mi-title{color:var(--noir);}
+  .menu-item .mi-num{
+    font-family:var(--serif); font-size:1.5rem;
+    color:var(--gris-500); margin-bottom:.5rem;
+    transition: color .3s;
+  }
+  .menu-item .mi-title{font-size:.92rem; font-weight:400; letter-spacing:.02em; color:var(--gris-200);}
+  .menu-close{
+    position:absolute; top:2rem; right:2rem;
+    width:46px; height:46px; border-radius:0;
+    background:transparent; border:1px solid var(--gris-600);
+    color:var(--gris-300); cursor:pointer; font-size:1.4rem;
+    display:flex; align-items:center; justify-content:center;
+    transition: all .3s;
+  }
+  .menu-close:hover{border-color:var(--blanc); color:var(--blanc);}
+
+  /* ============ QUIZ ============ */
+  .quiz-opt{
+    text-align:left; padding:1.1rem 1.4rem;
+    border:1px solid var(--gris-700); background:transparent;
+    color:var(--gris-200); cursor:pointer; font-size:.95rem;
+    font-family:var(--sans); transition:.25s;
+    border-radius:0;
+  }
+  .quiz-opt:hover{background:var(--gris-800); border-color:var(--gris-400);}
+
+  /* ============ ORGANIGRAMME ============ */
+  .org-slot{
+    min-height:90px; border:1px dashed var(--gris-700);
+    display:flex; align-items:center; justify-content:center;
+    transition:.3s; padding:.5rem; border-radius:0;
+  }
+  .org-item{
+    background:transparent; border:1px solid var(--gris-500);
+    padding:.7rem 1.1rem; cursor:grab; color:var(--gris-200);
+    font-size:.85rem; transition:.25s; border-radius:0;
+  }
+  .org-item:hover{background:var(--blanc); color:var(--noir); border-color:var(--blanc);}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:900px){
+    .split{flex-direction:column; gap:2rem; align-items:flex-start;}
+    .vote-wrap, .two-col, .cards3{grid-template-columns:1fr;}
+    .tl{flex-direction:column; gap:1.8rem;}
+    .tl-step:not(:last-child)::after{display:none;}
+    .slide{padding: 8vh 6vw;}
+    .navdots{left:1.2rem; bottom:1.2rem;}
+    .navarrows{right:1.2rem; bottom:1.2rem;}
+    #s1 .meta{gap:1.4rem;}
+  }
+</style>
+</head>
+<body class="on-dark">
+
+<div class="progress-bar" id="progressBar"></div>
+<button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M3 6h18M3 12h18M3 18h18" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" onclick="toggleMenu()">×</button>
+  <div class="menu-content" id="menuContent"></div>
+</div>
+
+<div class="deck">
+  <div class="track" id="track">
+
+    <!-- ============ 1 : COVER ============ -->
+    <section class="slide theme-dark" id="s1">
+      <video class="bg-media" autoplay muted loop playsinline poster="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1920">
+        <source src="https://videos.pexels.com/video-files/3130284/3130284-uhd_2560_1440_30fps.mp4" type="video/mp4">
+      </video>
+      <div class="bg-overlay"></div>
+      <div class="eyebrow">École Schulz Genève · CFC 1A · Entreprise</div>
+      <h1>On n'improvise pas<br>une année.<br><span class="accent-word">On l'organise.</span></h1>
+      <div class="meta">
+        <span>Semestre 1 · 2026 – 2027</span>
+        <span>Tatiana Mbi</span>
+        <span>14 séquences</span>
+      </div>
+      <div class="start">
+        <button class="btn" onclick="go(1)">Commencer l'expérience</button>
+      </div>
+    </section>
+
+    <!-- ============ 2 : BRISE-GLACE ============ -->
+    <section class="slide theme-light" id="s2">
+      <div class="eyebrow">Pour commencer</div>
+      <h2>Brisons la glace</h2>
+      <p style="color:#555; margin-top:.8rem;">Chacun·e se présente en une phrase pour chaque carte.</p>
+      <div class="cards3">
+        <div class="card">
+          <div class="num">01</div>
+          <h3>Un fait sur moi</h3>
+          <p>Quelque chose que la classe ne devine pas.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3>Mon objectif pour l'année</h3>
+          <p>Ce que je veux réussir d'ici juin.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3>Mon mot-clé</h3>
+          <p>Le mot qui résume mon état d'esprit pour cette rentrée.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3 : POURQUOI ============ -->
+    <section class="slide theme-dark" id="s3">
+      <div class="eyebrow">Pourquoi ce cours</div>
+      <h2>Votre pyramide d'organisation</h2>
+      <p style="color:#999; margin-top:.8rem;">Savoir s'organiser est une compétence pour la vie. Plus tôt on la maîtrise, plus elle devient un atout — à l'école comme dans le monde professionnel qui vous attend.</p>
+      <div class="pyramid">
+        <div class="prow"><span class="dot"></span><span>Optimiser son temps — la clé pour éviter le stress</span></div>
+        <div class="prow"><span class="dot"></span><span>Établir des priorités — distinguer l'essentiel du secondaire</span></div>
+        <div class="prow"><span class="dot"></span><span>Améliorer la concentration — moins de distractions, plus de résultats</span></div>
+        <div class="prow"><span class="dot"></span><span>Réduire le stress — un esprit organisé est un esprit serein</span></div>
+        <div class="prow"><span class="dot"></span><span>Préparer l'avenir professionnel — discipline et responsabilité</span></div>
+      </div>
+    </section>
+
+    <!-- ============ 4 : FIL ROUGE ============ -->
+    <section class="slide theme-light" id="s4">
+      <div class="split">
+        <div class="left">
+          <div class="eyebrow">Notre fil rouge 2026-2027</div>
+          <h2>Cette année, on organise un vrai événement — pas un exercice sur papier.</h2>
+          <p style="color:#555; margin-top:1rem;">Chaque chapitre de ce semestre va nourrir un seul et même projet : organiser, de A à Z, une sortie de classe réelle. Vous allez appliquer ce que vous apprenez, pas seulement l'étudier.</p>
+          <div class="badge-loop">Travail transversal avec d'autres matières</div>
+        </div>
+        <div class="right">
+          <div class="pyramid" style="margin-top:0;">
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);">
+              <span class="dot" style="background:var(--noir);"></span>
+              <span style="color:var(--noir);">Ch.1 — Se situer dans l'organisation</span>
+            </div>
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);">
+              <span class="dot" style="background:var(--noir);"></span>
+              <span style="color:var(--noir);">Ch.2 — Planifier, prioriser, traiter les tâches</span>
+            </div>
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);">
+              <span class="dot" style="background:var(--noir);"></span>
+              <span style="color:var(--noir);">Ch.3 — Planifier et organiser un événement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5 : VOTE ============ -->
+    <section class="slide theme-light" id="s5">
+      <div class="eyebrow">Vote à main levée</div>
+      <h2>Quelle sera notre sortie ?</h2>
+      <div class="vote-wrap">
+        <div class="vote-card" data-outing="automnales" onclick="chooseOuting('automnales', this)">
+          <img class="vc-img" src="https://images.pexels.com/photos/14462535/pexels-photo-14462535.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Les Automnales">
+          <div class="vote-check">✓</div>
+          <div class="vc-body">
+            <div class="tag">Option A</div>
+            <h3>Les Automnales</h3>
+            <div class="infos">Palexpo, Genève · 6 – 15 novembre 2026</div>
+            <p>Dix jours de marché, gastronomie et animations grand public. Une vraie organisation événementielle à observer de l'intérieur : accueil, flux, stands, logistique.</p>
+          </div>
+        </div>
+        <div class="vote-card" data-outing="patek" onclick="chooseOuting('patek', this)">
+          <img class="vc-img" src="https://images.pexels.com/photos/8327871/pexels-photo-8327871.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Musée Patek Philippe">
+          <div class="vote-check">✓</div>
+          <div class="vc-body">
+            <div class="tag">Option B</div>
+            <h3>Musée Patek Philippe</h3>
+            <div class="infos">Plainpalais, Genève · visite pédagogique sur rendez-vous</div>
+            <p>500 ans d'histoire horlogère genevoise. Une organisation culturelle à décortiquer : médiation, accueil des groupes, gestion des visites.</p>
+          </div>
+        </div>
+      </div>
+      <div class="vote-hint">La classe vote à main levée — l'enseignante clique sur l'option gagnante.</div>
+      <div class="vote-confirm" id="voteConfirm"></div>
+    </section>
+
+    <!-- ============ 6 : TIMELINE ============ -->
+    <section class="slide theme-dark" id="s6">
+      <div class="eyebrow">Notre chemin jusqu'à la sortie</div>
+      <h2>De septembre à décembre</h2>
+      <div class="tl">
+        <div class="tl-step">
+          <div class="tl-n">1</div>
+          <h3>Se situer dans l'organisation</h3>
+          <p>Comprendre les structures et les rôles — pour savoir qui fait quoi sur notre projet.</p>
+        </div>
+        <div class="tl-step">
+          <div class="tl-n">2</div>
+          <h3>Planifier, prioriser</h3>
+          <p>ABC, ALPES, gestion du temps — pour construire un vrai planning de projet.</p>
+        </div>
+        <div class="tl-step">
+          <div class="tl-n">3</div>
+          <h3>Organiser un événement</h3>
+          <p>Les étapes d'un événement pro — appliquées directement à notre sortie.</p>
+        </div>
+        <div class="tl-step final">
+          <div class="tl-n">★</div>
+          <h3 class="sortie-name">Notre sortie</h3>
+          <p class="sortie-date">Date à confirmer selon le vote</p>
+        </div>
+      </div>
+      <div class="note-eval">Chaque chapitre est validé par une évaluation en cours (quiz, exercice, test) — un contrôle continu, étape par étape, jusqu'au jour J.</div>
+    </section>
+
+    <!-- ============ 7 : COMMENT ON TRAVAILLE ============ -->
+    <section class="slide theme-light" id="s7">
+      <div class="eyebrow">Comment on travaille</div>
+      <h2>Collaboratif et individuel</h2>
+      <div class="two-col">
+        <div class="col">
+          <h3>En groupe</h3>
+          <ul>
+            <li>Des équipes-projet (finance, logistique, communication…) pour préparer la sortie ensemble</li>
+            <li>Restitutions et corrections croisées entre groupes</li>
+            <li>Travail conjoint avec d'autres matières sur certaines étapes</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>En individuel</h3>
+          <ul>
+            <li>Auto-évaluations après chaque notion clé</li>
+            <li>Fiches personnelles (temps, priorités, observations)</li>
+            <li>Un quiz ou un test à chaque fin de chapitre</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rule">Pas un seul gros examen final : la note se construit chapitre après chapitre, jusqu'à la sortie qui en est l'aboutissement.</div>
+    </section>
+
+    <!-- ============ 8 : AGENDA ============ -->
+    <section class="slide theme-light" id="s8">
+      <div class="eyebrow">Aujourd'hui · 1h30</div>
+      <h2>Le premier cours</h2>
+      <div class="agenda">
+        <div class="arow"><div class="time">15 min</div><div class="what">Brise-glace</div></div>
+        <div class="arow"><div class="time">15 min</div><div class="what">Pourquoi ce cours — la pyramide de l'organisation</div></div>
+        <div class="arow"><div class="time">15 min</div><div class="what">Vote de classe — notre sortie de l'année</div></div>
+        <div class="arow"><div class="time">20 min</div><div class="what">Notre chemin jusqu'à la sortie + comment on travaille</div></div>
+        <div class="arow"><div class="time">25 min</div><div class="what">Lancement du chapitre 1 — se situer dans l'organisation</div></div>
+      </div>
+    </section>
+
+    <!-- ============ 9 : CHAPITRE 1 INTRO ============ -->
+    <section class="slide theme-dark" id="s9">
+      <img class="bg-media" src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Équipe">
+      <div class="bg-overlay"></div>
+      <div class="eyebrow">Chapitre 1 · Séquence 1</div>
+      <h1>L'entreprise,<br><span class="accent-word">un ensemble organisé.</span></h1>
+      <p style="color:#999; margin-top:1.2rem; max-width:60ch;">Découvrir comment une organisation fonctionne, quels sont ses éléments, et comment se situer au sein de sa propre entreprise.</p>
+      <div class="start" style="margin-top:2.4rem;">
+        <button class="btn" onclick="go(9)">Découvrir le chapitre</button>
+      </div>
+    </section>
+
+    <!-- ============ 10 : DEFINITION ============ -->
+    <section class="slide theme-light" id="s10">
+      <div class="split">
+        <div class="left">
+          <div class="eyebrow">Définition</div>
+          <h2>Qu'est-ce qu'une entreprise ?</h2>
+          <p style="color:#555; margin-top:1rem;">L'entreprise est un <strong style="color:var(--noir);">ensemble d'éléments organisés</strong> orienté vers un objectif commercial.</p>
+          <div class="pyramid" style="margin-top:1.8rem;">
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);"><span class="dot" style="background:var(--noir);"></span><span style="color:var(--noir);">Les collaborateurs</span></div>
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);"><span class="dot" style="background:var(--noir);"></span><span style="color:var(--noir);">Les tâches</span></div>
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);"><span class="dot" style="background:var(--noir);"></span><span style="color:var(--noir);">Les moyens matériels</span></div>
+            <div class="prow" style="background:#F4F4F4; border-left-color:var(--noir);"><span class="dot" style="background:var(--noir);"></span><span style="color:var(--noir);">Les informations</span></div>
+          </div>
+        </div>
+        <div class="right">
+          <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Entreprise" style="width:100%; filter:grayscale(100%) contrast(1.05);">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11 : QUIZ INTERACTIF ============ -->
+    <section class="slide theme-dark" id="s11">
+      <div class="eyebrow">Quiz interactif</div>
+      <h2>Testez vos connaissances</h2>
+      <p style="color:#999; margin-top:.8rem;">Répondez aux questions une par une. Votre score s'affiche à la fin.</p>
+      <div id="quizContainer" style="margin-top:2.4rem; max-width:820px;">
+        <!-- Quiz généré par JS -->
+      </div>
+    </section>
+
+    <!-- ============ 12 : FONCTIONS ============ -->
+    <section class="slide theme-light" id="s12">
+      <div class="eyebrow">Les fonctions de l'entreprise</div>
+      <h2>8 fonctions clés</h2>
+      <div class="cards3" style="grid-template-columns:repeat(4,1fr); gap:1px; margin-top:2.4rem; background:var(--gris-200);">
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">01</div>
+          <h3 style="font-size:1rem;">Direction</h3>
+          <p style="font-size:.82rem;">Pilotage global, stratégie, objectifs.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">02</div>
+          <h3 style="font-size:1rem;">Communication</h3>
+          <p style="font-size:.82rem;">Interne & externe, image de marque.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">03</div>
+          <h3 style="font-size:1rem;">Finance</h3>
+          <p style="font-size:.82rem;">Comptabilité, trésorerie, fiscalité.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">04</div>
+          <h3 style="font-size:1rem;">Achat</h3>
+          <p style="font-size:.82rem;">Fournisseurs, négociation, suivi.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">05</div>
+          <h3 style="font-size:1rem;">Production</h3>
+          <p style="font-size:.82rem;">Fabrication, qualité, inventaires.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">06</div>
+          <h3 style="font-size:1rem;">Marketing</h3>
+          <p style="font-size:.82rem;">Étude de marché, pub, SAV.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">07</div>
+          <h3 style="font-size:1rem;">RH</h3>
+          <p style="font-size:.82rem;">Recrutement, formation, motivation.</p>
+        </div>
+        <div class="card" style="padding:1.6rem 1.4rem;">
+          <div class="num" style="font-size:1.4rem;">08</div>
+          <h3 style="font-size:1rem;">Logistique</h3>
+          <p style="font-size:.82rem;">Flux, stocks, maintenance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 13 : ORGANIGRAMME INTERACTIF ============ -->
+    <section class="slide theme-dark" id="s13">
+      <div class="eyebrow">Exercice interactif</div>
+      <h2>Construisez l'organigramme</h2>
+      <p style="color:#999; margin-top:.8rem;">Glissez chaque fonction à la bonne place dans la structure fonctionnelle.</p>
+      <div id="orgContainer" style="margin-top:2.4rem;"></div>
+    </section>
+
+    <!-- ============ 14 : CLOSING ============ -->
+    <section class="slide theme-dark" id="s14">
+      <img class="bg-media" src="https://images.pexels.com/photos/32980057/pexels-photo-32980057.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Équipe">
+      <div class="bg-overlay"></div>
+      <div class="eyebrow">C'est parti</div>
+      <h1>Alors,<br><span class="accent-word">on commence ?</span></h1>
+      <div class="final-outing" id="finalOuting"></div>
+    </section>
+
+  </div>
+</div>
+
+<div class="slidecount" id="slidecount">01 / 14</div>
+<div class="navdots" id="navdots"></div>
+<div class="navarrows">
+  <button id="prevBtn" onclick="go(current-1)" aria-label="Précédent">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button id="nextBtn" onclick="go(current+1)" aria-label="Suivant">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<script>
+/* ============ NAVIGATION ============ */
+const slides = document.querySelectorAll('.slide');
+const track = document.getElementById('track');
+const dotsWrap = document.getElementById('navdots');
+const menuContent = document.getElementById('menuContent');
+const total = slides.length;
+let current = 0;
+
+const slideTitles = [
+  "Couverture",
+  "Brise-glace",
+  "Pourquoi ce cours",
+  "Notre fil rouge",
+  "Vote de la sortie",
+  "Notre chemin",
+  "Comment on travaille",
+  "Agenda du jour",
+  "Chapitre 1 — Intro",
+  "Définition entreprise",
+  "Quiz interactif",
+  "Les 8 fonctions",
+  "Organigramme interactif",
+  "Closing"
+];
+
+slides.forEach((s,i)=>{
+  const b = document.createElement('button');
+  if(i===0) b.classList.add('active');
+  b.onclick = ()=>go(i);
+  dotsWrap.appendChild(b);
+
+  const mi = document.createElement('div');
+  mi.className = 'menu-item';
+  mi.onclick = ()=>{go(i); toggleMenu();};
+  mi.innerHTML = `<div class="mi-num">${String(i+1).padStart(2,'0')}</div><div class="mi-title">${slideTitles[i]}</div>`;
+  menuContent.appendChild(mi);
+});
+
+function updateTheme(i){
+  document.body.classList.toggle('on-dark', slides[i].classList.contains('theme-dark'));
+  document.body.classList.toggle('on-light', slides[i].classList.contains('theme-light'));
+}
+
+function go(i){
+  if(i<0 || i>=total) return;
+  current = i;
+  track.style.transform = `translateX(-${i*100}vw)`;
+  [...dotsWrap.children].forEach((d,idx)=>d.classList.toggle('active', idx===i));
+  document.getElementById('slidecount').textContent = String(i+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').disabled = i===total-1;
+  document.getElementById('progressBar').style.width = ((i+1)/total*100) + '%';
+  updateTheme(i);
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='ArrowRight' || e.key===' ') {e.preventDefault(); go(current+1);}
+  if(e.key==='ArrowLeft'){e.preventDefault(); go(current-1);}
+  if(e.key==='Escape') toggleMenu();
+});
+
+function toggleMenu(){
+  document.getElementById('menuOverlay').classList.toggle('open');
+}
+
+/* ============ VOTE ============ */
+const outings = {
+  automnales: {
+    name: 'Les Automnales',
+    date: '6 – 15 novembre 2026 · Palexpo, Genève',
+    confirm: '✓ Les Automnales ont été choisies par la classe.'
+  },
+  patek: {
+    name: 'le Musée Patek Philippe',
+    date: 'Visite pédagogique · Plainpalais, Genève',
+    confirm: '✓ Le Musée Patek Philippe a été choisi par la classe.'
+  }
+};
+
+function chooseOuting(key, el){
+  document.querySelectorAll('.vote-card').forEach(c=>c.classList.remove('chosen'));
+  el.classList.add('chosen');
+  const o = outings[key];
+  document.querySelectorAll('.sortie-name').forEach(n=> n.textContent = o.name);
+  document.querySelectorAll('.sortie-date').forEach(n=> n.textContent = o.date);
+  document.getElementById('finalOuting').textContent = 'Direction : ' + o.name;
+  const conf = document.getElementById('voteConfirm');
+  conf.textContent = o.confirm;
+  conf.classList.add('show');
+  setTimeout(()=> go(current+1), 1600);
+}
+
+/* ============ QUIZ INTERACTIF ============ */
+const quizData = [
+  {
+    q: "Quels sont les éléments qui composent une entreprise ?",
+    options: ["Collaborateurs, tâches, moyens matériels, informations", "Produits, clients, fournisseurs", "Patrons, employés, syndicats", "Bâtiments, machines, argent"],
+    correct: 0
+  },
+  {
+    q: "Quel est le but de l'organisation d'une entreprise ?",
+    options: ["Maximiser les profits uniquement", "Efficacité, stabilité, cohérence", "Réduire le nombre d'employés", "Augmenter les horaires de travail"],
+    correct: 1
+  },
+  {
+    q: "Que signifie une entreprise 'sous-organisée' ?",
+    options: ["Elle a trop de règles", "Elle manque de structure et d'organisation", "Elle a trop de réunions", "Elle est trop grande"],
+    correct: 1
+  },
+  {
+    q: "Quelle fonction gère le recrutement et la motivation ?",
+    options: ["Finance", "Marketing", "Ressources Humaines", "Logistique"],
+    correct: 2
+  },
+  {
+    q: "Que représente un lien vertical dans un organigramme ?",
+    options: ["Une collaboration entre collègues", "Une relation de subordination (autorité)", "Un conseil sans autorité", "Une amitié entre employés"],
+    correct: 1
+  },
+  {
+    q: "Quelle structure est adaptée aux grandes entreprises diversifiées ?",
+    options: ["Fonctionnelle", "Divisionnelle", "Matricielle", "Linéaire"],
+    correct: 2
+  }
+];
+
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  if(quizIndex >= quizData.length){
+    const pct = Math.round((quizScore/quizData.length)*100);
+    let msg = '';
+    if(pct === 100) msg = "Parfait. Vous maîtrisez le chapitre 1.";
+    else if(pct >= 70) msg = "Très bien. Quelques révisions et c'est parfait.";
+    else if(pct >= 50) msg = "Pas mal. Relisez les notions clés.";
+    else msg = "Courage. Reprenez le chapitre à tête reposée.";
+    container.innerHTML = `
+      <div style="background:var(--gris-900); border:1px solid var(--gris-700); padding:3rem; text-align:center;">
+        <div style="font-family:var(--serif); font-size:4rem; color:var(--blanc); font-weight:500;">${pct}%</div>
+        <div style="font-size:1.2rem; margin:1rem 0; color:var(--gris-300); letter-spacing:.05em;">${quizScore} / ${quizData.length} bonnes réponses</div>
+        <p style="color:var(--gris-400); margin:1.4rem 0 2rem; font-size:.95rem;">${msg}</p>
+        <button class="btn ghost" onclick="resetQuiz()">Recommencer le quiz</button>
+      </div>
+    `;
+    return;
+  }
+  const q = quizData[quizIndex];
+  container.innerHTML = `
+    <div style="background:var(--gris-900); border:1px solid var(--gris-800); padding:2.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem;">
+        <span style="color:var(--gris-400); font-size:.72rem; letter-spacing:.24em; text-transform:uppercase;">Question ${quizIndex+1} / ${quizData.length}</span>
+        <span style="color:var(--gris-300); font-size:.78rem; letter-spacing:.1em;">SCORE ${quizScore}</span>
+      </div>
+      <div style="height:2px; background:var(--gris-800); margin-bottom:2rem; overflow:hidden;">
+        <div style="height:100%; width:${((quizIndex)/quizData.length)*100}%; background:var(--blanc); transition:.5s;"></div>
+      </div>
+      <h3 style="color:var(--blanc); font-size:1.25rem; margin-bottom:1.8rem; font-family:var(--sans); font-weight:400; line-height:1.5;">${q.q}</h3>
+      <div style="display:flex; flex-direction:column; gap:.7rem;">
+        ${q.options.map((opt, i)=>`
+          <button class="quiz-opt" onclick="answerQuiz(${i})">${opt}</button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  quizAnswered = false;
+}
+
+function answerQuiz(i){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q = quizData[quizIndex];
+  const buttons = document.querySelectorAll('.quiz-opt');
+  buttons.forEach((b, idx)=>{
+    if(idx === q.correct){
+      b.style.background = 'var(--blanc)';
+      b.style.color = 'var(--noir)';
+      b.style.borderColor = 'var(--blanc)';
+    } else if(idx === i && i !== q.correct){
+      b.style.background = 'var(--gris-700)';
+      b.style.color = 'var(--gris-300)';
+      b.style.borderColor = 'var(--gris-500)';
+      b.style.textDecoration = 'line-through';
+    } else {
+      b.style.opacity = '.35';
+    }
+  });
+  if(i === q.correct) quizScore++;
+  setTimeout(()=>{
+    quizIndex++;
+    renderQuiz();
+  }, 1500);
+}
+
+function resetQuiz(){
+  quizIndex = 0;
+  quizScore = 0;
+  renderQuiz();
+}
+
+/* ============ ORGANIGRAMME INTERACTIF ============ */
+const orgData = {
+  direction: { label: "Direction", emoji: "★" },
+  fonctions: [
+    { id: "finance", label: "Finance", emoji: "◆" },
+    { id: "rh", label: "Ressources Humaines", emoji: "◆" },
+    { id: "production", label: "Production", emoji: "◆" },
+    { id: "marketing", label: "Marketing", emoji: "◆" },
+    { id: "communication", label: "Communication", emoji: "◆" },
+    { id: "logistique", label: "Logistique", emoji: "◆" }
+  ]
+};
+
+let orgPlaced = {};
+
+function renderOrg(){
+  const container = document.getElementById('orgContainer');
+  const placedCount = Object.values(orgPlaced).filter(Boolean).length;
+  const totalFonctions = orgData.fonctions.length;
+
+  container.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.4rem;">
+      <span style="color:var(--gris-400); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;">Placez chaque fonction sous la Direction</span>
+      <span style="color:var(--gris-300); font-size:.78rem; letter-spacing:.1em;">${placedCount} / ${totalFonctions}</span>
+    </div>
+    <div style="background:var(--blanc); border:1px solid var(--blanc); padding:1.2rem; text-align:center; max-width:300px; margin:0 auto 0;">
+      <div style="font-size:1rem; color:var(--noir);">★</div>
+      <div style="font-family:var(--serif); font-size:1.3rem; color:var(--noir); margin-top:.3rem; font-weight:500;">${orgData.direction.label}</div>
+    </div>
+    <div style="height:40px; width:1px; background:var(--gris-600); margin:0 auto;"></div>
+    <div style="height:1px; background:var(--gris-600); margin:0 15%;"></div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:2rem; background:var(--gris-800);">
+      ${orgData.fonctions.map(f=>`
+        <div class="org-slot" data-id="${f.id}" 
+             ondragover="event.preventDefault(); this.style.borderColor='var(--blanc)'"
+             ondragleave="this.style.borderColor='var(--gris-700)'"
+             ondrop="dropOrg(event, '${f.id}')"
+             style="background:var(--gris-900);">
+          ${orgPlaced[f.id] ? `
+            <div style="text-align:center; color:var(--blanc);">
+              <div style="font-size:.9rem;">◆</div>
+              <div style="font-size:.82rem; margin-top:.4rem; letter-spacing:.05em;">${f.label}</div>
+            </div>
+          ` : `<span style="color:var(--gris-600); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;">Déposez ici</span>`}
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:2rem;">
+      <div style="color:var(--gris-400); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; margin-bottom:1rem;">Fonctions à placer</div>
+      <div style="display:flex; flex-wrap:wrap; gap:.6rem;">
+        ${orgData.fonctions.filter(f=>!orgPlaced[f.id]).map(f=>`
+          <div class="org-item" draggable="true" data-id="${f.id}"
+               ondragstart="dragOrg(event, '${f.id}')">
+            ◆ ${f.label}
+          </div>
+        `).join('') || '<span style="color:var(--gris-300); font-size:.85rem; letter-spacing:.05em;">Toutes les fonctions sont placées.</span>'}
+      </div>
+    </div>
+    ${placedCount === totalFonctions ? `
+      <div style="margin-top:2rem; padding:1.4rem; background:var(--blanc); color:var(--noir); text-align:center; letter-spacing:.05em; font-size:.9rem;">
+        Bravo. Vous avez construit l'organigramme fonctionnel de SportScents.
+      </div>
+    ` : ''}
+  `;
+}
+
+function dragOrg(e, id){
+  e.dataTransfer.setData('text/plain', id);
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function dropOrg(e, slotId){
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  if(id === slotId){
+    orgPlaced[id] = true;
+    renderOrg();
+  } else {
+    const slot = e.target.closest('.org-slot');
+    if(slot){
+      slot.style.borderColor = 'var(--gris-400)';
+      slot.style.background = 'var(--gris-700)';
+      setTimeout(()=>{
+        slot.style.borderColor = 'var(--gris-700)';
+        slot.style.background = 'var(--gris-900)';
+      }, 600);
+    }
+  }
+}
+
+/* ============ INIT ============ */
+go(0);
+renderQuiz();
+renderOrg();
+</script>
+</body>
+</html>

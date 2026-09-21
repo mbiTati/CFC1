@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Exercices — CFC 1A — Chapitre 1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0A0A0A; --noir-2:#141414; --noir-3:#1C1C1C;
+    --gris-900:#1F1F1F; --gris-800:#2A2A2A; --gris-700:#3A3A3A;
+    --gris-600:#555; --gris-500:#777; --gris-400:#999;
+    --gris-300:#BBB; --gris-200:#D4D4D4; --gris-100:#E8E8E8;
+    --gris-50:#F4F4F4; --blanc:#FFFFFF; --blanc-casse:#FAFAFA;
+    --accent:#CE5078;
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', Calibri, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--sans); background:var(--blanc-casse); color:var(--noir);
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:var(--noir); color:var(--blanc);
+    padding:5rem 2rem 4rem;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .header::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.04), transparent 60%);
+  }
+  .header h1{
+    font-family:var(--serif); font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--blanc); position:relative; font-weight:500;
+    letter-spacing:-.01em;
+  }
+  .header p{
+    color:var(--gris-400); margin-top:1rem; position:relative;
+    max-width:60ch; margin-left:auto; margin-right:auto;
+    font-size:.95rem; letter-spacing:.02em;
+  }
+  .header .header-eyebrow{
+    font-size:.7rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gris-500); margin-bottom:1.4rem; position:relative;
+  }
+  .container{max-width:920px; margin:0 auto; padding:3.5rem 1.5rem 7rem;}
+  .exercise{
+    background:var(--blanc); padding:2.6rem;
+    margin-bottom:2.5rem;
+    border:1px solid var(--gris-200);
+    opacity:0; transform:translateY(30px);
+    transition: all .9s cubic-bezier(.4,0,.2,1);
+  }
+  .exercise.visible{opacity:1; transform:translateY(0);}
+  .exercise h2{
+    font-family:var(--serif); font-size:1.7rem; color:var(--noir);
+    margin-bottom:.7rem; font-weight:500;
+  }
+  .exercise .badge{
+    display:inline-block; background:transparent; color:var(--gris-600);
+    font-size:.68rem; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; padding:0; margin-bottom:1.2rem;
+    border-bottom:1px solid var(--noir); padding-bottom:.5rem;
+  }
+  .exercise .consigne{
+    background:var(--gris-50); padding:1.2rem 1.4rem;
+    font-size:.92rem; margin-bottom:1.8rem; color:var(--gris-700);
+    border-left:2px solid var(--noir);
+  }
+
+  /* QCM */
+  .qcm-q{margin-bottom:1.6rem; padding:1.4rem; background:var(--gris-50);}
+  .qcm-q .q-text{font-weight:600; margin-bottom:1rem; color:var(--noir); font-size:.95rem;}
+  .qcm-opt{
+    display:block; width:100%; text-align:left;
+    padding:.9rem 1.1rem; margin-bottom:.5rem;
+    background:var(--blanc); border:1px solid var(--gris-200);
+    cursor:pointer; font-family:var(--sans);
+    font-size:.9rem; transition:.25s; color:var(--noir);
+    border-radius:0;
+  }
+  .qcm-opt:hover{border-color:var(--noir); background:var(--gris-50);}
+  .qcm-opt.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc); font-weight:500;}
+  .qcm-opt.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600); text-decoration:line-through;}
+  .qcm-opt:disabled{cursor:default; opacity:.85;}
+
+  /* VRAI/FAUX */
+  .vf-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.1rem 1.4rem; background:var(--gris-50);
+    margin-bottom:.6rem; gap:1rem;
+  }
+  .vf-item .vf-text{flex:1; font-size:.92rem; color:var(--noir);}
+  .vf-btns{display:flex; gap:.4rem; flex:0 0 auto;}
+  .vf-btn{
+    padding:.5rem 1.1rem; border:1px solid var(--gris-300);
+    background:var(--blanc); cursor:pointer; font-family:var(--sans);
+    font-size:.75rem; font-weight:600; transition:.25s;
+    text-transform:uppercase; letter-spacing:.1em; color:var(--noir);
+    border-radius:0;
+  }
+  .vf-btn:hover{border-color:var(--noir);}
+  .vf-btn.correct{background:var(--noir); border-color:var(--noir); color:var(--blanc);}
+  .vf-btn.incorrect{background:var(--gris-100); border-color:var(--gris-400); color:var(--gris-600);}
+  .vf-btn:disabled{cursor:default;}
+
+  /* TEXTE À TROUS */
+  .fill-text{
+    font-size:1rem; line-height:2.4; padding:1.6rem;
+    background:var(--gris-50); color:var(--noir);
+  }
+  .fill-input{
+    border:none; border-bottom:1px solid var(--noir);
+    background:transparent; padding:.2rem .5rem;
+    font-family:var(--sans); font-size:.92rem;
+    color:var(--noir); min-width:130px; text-align:center;
+    font-weight:600; outline:none; transition:.25s;
+  }
+  .fill-input:focus{border-bottom-width:2px; background:rgba(10,10,10,.03);}
+  .fill-input.correct{border-bottom-color:var(--noir); background:rgba(10,10,10,.05);}
+  .fill-input.incorrect{border-bottom-color:var(--gris-400); color:var(--gris-500); text-decoration:line-through;}
+
+  /* BOUTONS */
+  .btn{
+    font-family:var(--sans); font-size:.78rem; font-weight:600;
+    padding:1rem 1.8rem; border:1px solid var(--noir); cursor:pointer;
+    background:var(--noir); color:var(--blanc);
+    transition: all .3s; letter-spacing:.18em;
+    text-transform:uppercase; border-radius:0;
+  }
+  .btn:hover{background:transparent; color:var(--noir);}
+  .btn.ghost{background:transparent; color:var(--noir); border:1px solid var(--gris-400);}
+  .btn.ghost:hover{background:var(--noir); color:var(--blanc); border-color:var(--noir);}
+  .btn-row{display:flex; gap:.8rem; margin-top:1.8rem; flex-wrap:wrap;}
+
+  .feedback{
+    margin-top:1.2rem; padding:1.1rem 1.4rem;
+    font-size:.88rem; display:none;
+    letter-spacing:.02em;
+  }
+  .feedback.show{display:block; animation: slideDown .4s;}
+  .feedback.success{background:var(--noir); color:var(--blanc); border-left:3px solid var(--noir);}
+  .feedback.error{background:var(--gris-100); color:var(--gris-700); border-left:3px solid var(--gris-500);}
+  @keyframes slideDown{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
+
+  /* DRAG & DROP */
+  .dnd-container{display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1.2rem;}
+  .dnd-zone{
+    min-height:200px; border:1px dashed var(--gris-400);
+    padding:1.2rem; background:var(--gris-50);
+  }
+  .dnd-zone h4{
+    font-family:var(--serif); color:var(--noir); margin-bottom:1rem;
+    font-size:1.05rem; text-align:center; font-weight:500;
+    letter-spacing:.02em;
+  }
+  .dnd-items{display:flex; flex-wrap:wrap; gap:.5rem;}
+  .dnd-item{
+    background:var(--blanc); border:1px solid var(--gris-300);
+    padding:.6rem 1.1rem; cursor:grab;
+    font-size:.82rem; transition:.25s; user-select:none;
+    color:var(--noir); border-radius:0;
+  }
+  .dnd-item:hover{border-color:var(--noir); background:var(--noir); color:var(--blanc);}
+  .dnd-item.dragging{opacity:.4;}
+
+  .score-box{
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    background:var(--noir); color:var(--blanc);
+    padding:1.1rem 1.6rem;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    font-family:var(--serif); z-index:50;
+    display:flex; align-items:center; gap:1.2rem;
+    border:1px solid var(--gris-800);
+  }
+  .score-box .score-num{font-size:1.9rem; color:var(--blanc); font-weight:500;}
+  .score-box .score-label{font-size:.65rem; opacity:.65; letter-spacing:.24em; text-transform:uppercase; font-family:var(--sans);}
+
+  @media (max-width:700px){
+    .dnd-container{grid-template-columns:1fr;}
+    .container{padding:2rem 1rem 7rem;}
+    .exercise{padding:1.8rem;}
+    .score-box{bottom:1rem; right:1rem; padding:.9rem 1.2rem;}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-eyebrow">CFC 1A · Chapitre 1</div>
+  <h1>Exercices interactifs</h1>
+  <p>L'entreprise, un ensemble organisé. Quatre exercices progressifs pour tester votre compréhension.</p>
+</header>
+
+<div class="container">
+
+  <!-- EXERCICE 1 : QCM -->
+  <section class="exercise" data-ex="1">
+    <span class="badge">Exercice 01 · QCM</span>
+    <h2>Connaître les bases</h2>
+    <div class="consigne">Répondez aux 5 questions suivantes. Cliquez sur la bonne réponse.</div>
+    <div id="qcm1"></div>
+    <div class="feedback" id="fb1"></div>
+  </section>
+
+  <!-- EXERCICE 2 : VRAI/FAUX -->
+  <section class="exercise" data-ex="2">
+    <span class="badge">Exercice 02 · Vrai ou Faux</span>
+    <h2>Distinguer le vrai du faux</h2>
+    <div class="consigne">Indiquez si chaque affirmation est vraie ou fausse.</div>
+    <div id="vf1"></div>
+    <div class="feedback" id="fb2"></div>
+  </section>
+
+  <!-- EXERCICE 3 : TEXTE À TROUS -->
+  <section class="exercise" data-ex="3">
+    <span class="badge">Exercice 03 · Texte à trous</span>
+    <h2>Compléter la définition</h2>
+    <div class="consigne">Complétez le texte avec les mots suivants : <strong>organisés, collaborateurs, efficacité, informations, cohérence</strong>.</div>
+    <div class="fill-text">
+      Une entreprise est un ensemble d'éléments <input class="fill-input" data-answer="organisés" placeholder="?"> orienté vers un objectif commercial. Ses éléments sont les <input class="fill-input" data-answer="collaborateurs" placeholder="?">, les tâches, les moyens matériels et les <input class="fill-input" data-answer="informations" placeholder="?">. Le but de l'organisation est l'<input class="fill-input" data-answer="efficacité" placeholder="?">, la stabilité et la <input class="fill-input" data-answer="cohérence" placeholder="?">.
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="checkFill()">Vérifier mes réponses</button>
+    </div>
+    <div class="feedback" id="fb3"></div>
+  </section>
+
+  <!-- EXERCICE 4 : DRAG & DROP -->
+  <section class="exercise" data-ex="4">
+    <span class="badge">Exercice 04 · Classement</span>
+    <h2>Organisation structurelle vs procédurale</h2>
+    <div class="consigne">Glissez chaque élément dans la bonne catégorie.</div>
+    <div class="dnd-container">
+      <div class="dnd-zone" data-cat="structurelle" ondragover="event.preventDefault()" ondrop="dropItem(event, 'structurelle')">
+        <h4>Organisation structurelle</h4>
+        <div class="dnd-items" id="zone-structurelle"></div>
+      </div>
+      <div class="dnd-zone" data-cat="procedurale" ondragover="event.preventDefault()" ondrop="dropItem(event, 'procedurale')">
+        <h4>Organisation procédurale</h4>
+        <div class="dnd-items" id="zone-procedurale"></div>
+      </div>
+    </div>
+    <div style="margin-top:1.8rem;">
+      <div style="font-size:.72rem; color:var(--gris-500); margin-bottom:.8rem; letter-spacing:.2em; text-transform:uppercase;">Éléments à classer</div>
+      <div class="dnd-items" id="pool-items"></div>
+    </div>
+    <div class="feedback" id="fb4"></div>
+  </section>
+
+</div>
+
+<div class="score-box">
+  <div>
+    <div class="score-label">Score global</div>
+    <div class="score-num" id="globalScore">0 / 4</div>
+  </div>
+</div>
+
+<script>
+/* ============ SCROLL ANIMATION ============ */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold:.15});
+document.querySelectorAll('.exercise').forEach(el=>observer.observe(el));
+
+/* ============ SCORE ============ */
+let completed = new Set();
+function updateScore(){
+  document.getElementById('globalScore').textContent = `${completed.size} / 4`;
+}
+function showFeedback(id, ok, msg){
+  const fb = document.getElementById(id);
+  fb.textContent = msg;
+  fb.className = 'feedback show ' + (ok ? 'success' : 'error');
+}
+
+/* ============ EXERCICE 1 : QCM ============ */
+const qcmData = [
+  {q:"Qu'est-ce qu'une entreprise ?", opts:["Un ensemble d'éléments organisés vers un objectif commercial","Un bâtiment avec des employés","Une association à but non lucratif","Un groupe de personnes qui discutent"], correct:0},
+  {q:"Quel est le but de l'organisation ?", opts:["Réduire les coûts uniquement","Efficacité, stabilité, cohérence","Augmenter le nombre d'employés","Créer plus de réunions"], correct:1},
+  {q:"Combien de fonctions principales avons-nous vues ?", opts:["5","6","8","10"], correct:2},
+  {q:"Quelle fonction gère la trésorerie ?", opts:["Marketing","Finance","RH","Logistique"], correct:1},
+  {q:"Un lien horizontal dans un organigramme représente :", opts:["Une subordination","Une collaboration entre pairs","Un conseil","Une amitié"], correct:1}
+];
+
+let qcmScore = 0;
+let qcmAnswered = 0;
+
+function renderQCM(){
+  const c = document.getElementById('qcm1');
+  c.innerHTML = qcmData.map((q, qi)=>`
+    <div class="qcm-q">
+      <div class="q-text">${qi+1}. ${q.q}</div>
+      ${q.opts.map((o, oi)=>`
+        <button class="qcm-opt" data-q="${qi}" data-o="${oi}" onclick="answerQCM(${qi}, ${oi}, this)">${o}</button>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function answerQCM(qi, oi, btn){
+  const q = qcmData[qi];
+  const parent = btn.parentElement;
+  const buttons = parent.querySelectorAll('.qcm-opt');
+  buttons.forEach(b=>b.disabled = true);
+  if(oi === q.correct){
+    btn.classList.add('correct');
+    qcmScore++;
+  } else {
+    btn.classList.add('incorrect');
+    buttons[q.correct].classList.add('correct');
+  }
+  qcmAnswered++;
+  if(qcmAnswered === qcmData.length){
+    const ok = qcmScore >= 4;
+    showFeedback('fb1', ok, `${qcmScore}/5 bonnes réponses. ${ok ? 'Excellent.' : 'Relisez le chapitre.'}`);
+    if(ok && !completed.has(1)){completed.add(1); updateScore();}
+  }
+}
+
+/* ============ EXERCICE 2 : VRAI/FAUX ============ */
+const vfData = [
+  {t:"L'entreprise est un ensemble d'éléments organisés.", v:true},
+  {t:"Une entreprise sur-organisée est toujours plus efficace.", v:false},
+  {t:"La fonction RH gère le recrutement et la formation.", v:true},
+  {t:"Un lien de conseil implique une autorité hiérarchique.", v:false},
+  {t:"La structure divisionnelle est adaptée aux grandes entreprises diversifiées.", v:true}
+];
+
+let vfScore = 0, vfAnswered = 0;
+
+function renderVF(){
+  const c = document.getElementById('vf1');
+  c.innerHTML = vfData.map((item, i)=>`
+    <div class="vf-item">
+      <div class="vf-text">${i+1}. ${item.t}</div>
+      <div class="vf-btns">
+        <button class="vf-btn" onclick="answerVF(${i}, true, this)">Vrai</button>
+        <button class="vf-btn" onclick="answerVF(${i}, false, this)">Faux</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function answerVF(i, val, btn){
+  const item = vfData[i];
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.vf-btn').forEach(b=>b.disabled = true);
+  if(val === item.v){
+    btn.classList.add('correct');
+    vfScore++;
+  } else {
+    btn.classList.add('incorrect');
+    parent.querySelectorAll('.vf-btn').forEach(b=>{
+      if((b.textContent === 'Vrai' && item.v) || (b.textContent === 'Faux' && !item.v)){
+        b.classList.add('correct');
+      }
+    });
+  }
+  vfAnswered++;
+  if(vfAnswered === vfData.length){
+    const ok = vfScore >= 4;
+    showFeedback('fb2', ok, `${vfScore}/5 bonnes réponses. ${ok ? 'Très bien.' : 'Courage, relisez les notions.'}`);
+    if(ok && !completed.has(2)){completed.add(2); updateScore();}
+  }
+}
+
+/* ============ EXERCICE 3 : TEXTE À TROUS ============ */
+function checkFill(){
+  const inputs = document.querySelectorAll('.fill-input');
+  let correct = 0;
+  inputs.forEach(inp=>{
+    const ans = inp.dataset.answer.toLowerCase();
+    const val = inp.value.trim().toLowerCase();
+    if(val === ans){
+      inp.classList.add('correct');
+      inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect');
+      inp.classList.remove('correct');
+    }
+  });
+  const ok = correct === inputs.length;
+  showFeedback('fb3', ok, `${correct}/${inputs.length} bonnes réponses. ${ok ? 'Parfait.' : 'Indice : relisez la définition de l\'entreprise.'}`);
+  if(ok && !completed.has(3)){completed.add(3); updateScore();}
+}
+
+/* ============ EXERCICE 4 : DRAG & DROP ============ */
+const dndItems = [
+  {id:"direction", label:"Direction", cat:"structurelle"},
+  {id:"organigramme", label:"Organigramme", cat:"structurelle"},
+  {id:"departements", label:"Départements", cat:"structurelle"},
+  {id:"postes", label:"Postes de travail", cat:"structurelle"},
+  {id:"processus", label:"Processus de travail", cat:"procedurale"},
+  {id:"procedures", label:"Procédures internes", cat:"procedurale"},
+  {id:"flux", label:"Flux d'informations", cat:"procedurale"},
+  {id:"methodes", label:"Méthodes de travail", cat:"procedurale"}
+];
+
+let dndPlaced = {};
+function renderDND(){
+  const pool = document.getElementById('pool-items');
+  pool.innerHTML = dndItems.filter(it=>!dndPlaced[it.id]).map(it=>`
+    <div class="dnd-item" draggable="true" data-id="${it.id}" ondragstart="dragStart(event, '${it.id}')">
+      ${it.label}
+    </div>
+  `).join('') || '<span style="color:var(--gris-500); font-size:.82rem; letter-spacing:.05em;">Tous les éléments sont classés.</span>';
+
+  ['structurelle','procedurale'].forEach(cat=>{
+    const zone = document.getElementById('zone-'+cat);
+    zone.innerHTML = '';
+    dndItems.filter(it=>dndPlaced[it.id] === cat).forEach(it=>{
+      const div = document.createElement('div');
+      div.className = 'dnd-item';
+      div.textContent = it.label;
+      div.style.cursor = 'default';
+      div.style.background = 'var(--noir)';
+      div.style.color = 'var(--blanc)';
+      div.style.borderColor = 'var(--noir)';
+      zone.appendChild(div);
+    });
+  });
+}
+
+function dragStart(e, id){
+  e.dataTransfer.setData('text/plain', id);
+  e.target.classList.add('dragging');
+}
+
+function dropItem(e, cat){
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  const item = dndItems.find(it=>it.id === id);
+  if(!item) return;
+  if(item.cat === cat){
+    dndPlaced[id] = cat;
+    renderDND();
+    if(Object.keys(dndPlaced).length === dndItems.length){
+      showFeedback('fb4', true, 'Bravo. Vous avez correctement classé tous les éléments.');
+      if(!completed.has(4)){completed.add(4); updateScore();}
+    }
+  } else {
+    showFeedback('fb4', false, 'Cet élément n\'appartient pas à cette catégorie. Réessayez.');
+  }
+}
+
+/* ============ INIT ============ */
+renderQCM();
+renderVF();
+renderDND();
+</script>
+</body>
+</html>
